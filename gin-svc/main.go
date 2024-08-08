@@ -6,8 +6,17 @@
 
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+	"gin-svc/internal/ioc"
+)
+
+var configFile = flag.String("config", "etc/local.yaml", "配置文件路径")
 
 func main() {
-	fmt.Println("哈哈哈哈")
+	config := ioc.SetUpConfig(*configFile)
+	fmt.Println(config)
+
+	ioc.SetUpDB()
 }
