@@ -8,14 +8,19 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupWebEngine(userCtl controller.BaseController) *gin.Engine {
+func SetupWebEngine(userCtl, pubCtl controller.BaseController) *gin.Engine {
 	engine := gin.Default()
-	rg := engine.Group("/api/v1")
+	rg := engine.Group("")
 
 	publicGroup := rg.Group("/na")
-	publicGroup.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	{
-		userCtl.RegisterRoute(rg)
+		publicGroup.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+		pubCtl.RegisterRoute(publicGroup)
+	}
+
+	privateGroup := rg.Group("/api/v1")
+	{
+		userCtl.RegisterRoute(privateGroup)
 	}
 
 	return engine

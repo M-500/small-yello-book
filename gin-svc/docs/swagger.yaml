@@ -28,7 +28,7 @@ info:
   contact: {}
 paths:
   /api/v1/na/register:
-    get:
+    put:
       consumes:
       - application/json
       description: RegisterUser
@@ -50,4 +50,49 @@ paths:
       summary: RegisterUser
       tags:
       - NA Model
+  /api/v1/users:
+    post:
+      consumes:
+      - application/json
+      description: Update user info
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update user info
+      tags:
+      - User Model
+  /api/v1/users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete user
+      tags:
+      - User Model
 swagger: "2.0"

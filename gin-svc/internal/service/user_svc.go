@@ -9,6 +9,7 @@ import (
 
 type UserSvc interface {
 	RegisterUser(ctx context.Context, req types.UserForm) error
+	DeleteUser(ctx context.Context, req types.UserForm) error
 }
 
 func NewUserSvc(userRepo repo.UserRepoInterface) UserSvc {
@@ -21,6 +22,10 @@ type userSvcImpl struct {
 
 func (u *userSvcImpl) RegisterUser(ctx context.Context, req types.UserForm) error {
 	return u.userRepo.UpsertUser(ctx, u.reqToModel(&req))
+}
+
+func (u *userSvcImpl) DeleteUser(ctx context.Context, req types.UserForm) error {
+	return u.userRepo.DeleteUser(ctx, u.reqToModel(&req))
 }
 
 func (u *userSvcImpl) reqToModel(req *types.UserForm) *models.UserModel {

@@ -8,6 +8,7 @@ import (
 
 type UserRepoInterface interface {
 	UpsertUser(ctx context.Context, user *models.UserModel) error
+	DeleteUser(ctx context.Context, user *models.UserModel) error
 }
 
 func NewUserRepoInterface(userDao dao.UserDao) UserRepoInterface {
@@ -20,4 +21,8 @@ type userRepo struct {
 
 func (u *userRepo) UpsertUser(ctx context.Context, user *models.UserModel) error {
 	return u.dao.Upsert(ctx, user)
+}
+
+func (u *userRepo) DeleteUser(ctx context.Context, user *models.UserModel) error {
+	return u.dao.Delete(ctx, int(user.ID))
 }

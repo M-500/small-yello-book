@@ -30,7 +30,8 @@ func main() {
 		return
 	}
 	userCtl := NewUserController(db)
-	engine := web.SetupWebEngine(userCtl)
+	pubController := NewPubController(db)
+	engine := web.SetupWebEngine(userCtl, pubController)
 	err = engine.Run(":8122")
 	if err != nil {
 		panic(err)
@@ -42,4 +43,11 @@ func NewUserController(db *gorm.DB) controller.BaseController {
 	userRepo := repo.NewUserRepoInterface(userDao)
 	userSvc := service.NewUserSvc(userRepo)
 	return controller.NewUserController(userSvc)
+}
+
+func NewPubController(db *gorm.DB) controller.BaseController {
+	userDao := dao.NewUserDao(db)
+	userRepo := repo.NewUserRepoInterface(userDao)
+	userSvc := service.NewUserSvc(userRepo)
+	return controller.NewPublicController(userSvc)
 }

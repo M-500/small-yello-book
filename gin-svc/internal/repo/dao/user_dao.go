@@ -10,6 +10,7 @@ import (
 
 type UserDao interface {
 	Upsert(ctx context.Context, user *models.UserModel) error
+	Delete(ctx context.Context, id int) error
 }
 
 func NewUserDao(db *gorm.DB) UserDao {
@@ -18,6 +19,10 @@ func NewUserDao(db *gorm.DB) UserDao {
 
 type userDaoImpl struct {
 	db *gorm.DB
+}
+
+func (u *userDaoImpl) Delete(ctx context.Context, id int) error {
+	return u.db.WithContext(ctx).Delete(&models.UserModel{}, id).Error
 }
 
 func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error {
