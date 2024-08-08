@@ -11,6 +11,12 @@ import (
 	"fmt"
 	"gin-svc/internal/ioc"
 	"gin-svc/internal/models"
+	"gin-svc/internal/repo"
+	"gin-svc/internal/repo/dao"
+	"gin-svc/internal/service"
+	"gin-svc/internal/web"
+	"gin-svc/internal/web/controller"
+	"gorm.io/gorm"
 )
 
 var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
@@ -23,4 +29,17 @@ func main() {
 	if err != nil {
 		return
 	}
+	userCtl := NewUserController(db)
+	engine := web.SetupWebEngine(userCtl)
+	err = engine.Run(":8122")
+	if err != nil {
+		panic(err)
+	}
+}
+
+func NewUserController(db *gorm.DB) controller.BaseController {
+	userDao := dao.NewUserDao(db)
+	userRepo := repo.NewUserRepoInterface(userDao)
+	userSvc := service.NewUserSvc(userRepo)
+	return controller.NewUserController(userSvc)
 }

@@ -11,8 +11,10 @@ type userController struct {
 	userSvc service.UserSvc
 }
 
-func NewUserController() BaseController {
-	return &userController{}
+func NewUserController(userSvc service.UserSvc) BaseController {
+	return &userController{
+		userSvc: userSvc,
+	}
 }
 
 func (ctl *userController) Upsert(ctx *gin.Context, req types.UserForm) (result ginx.JsonResult, err error) {

@@ -5,11 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SetupWebEngine() *gin.Engine {
+func SetupWebEngine(userCtl controller.BaseController) *gin.Engine {
 	engine := gin.Default()
 	rg := engine.Group("/api/v1")
 	{
-		controller.NewUserController().RegisterRoute(rg)
+		userCtl.RegisterRoute(rg)
 	}
 
 	return engine
