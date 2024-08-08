@@ -1,0 +1,55 @@
+# 系统启动所有需要的依赖都用这个来启动
+version: '3.0'
+
+services:
+  mysql8:
+    image: mysql:8.0
+    restart: always
+    command:
+      #      - 加入参数，设置 binlog 和主节点
+      - --default_authentication_plugin=mysql_native_password
+      - --binlog-format=ROW
+      - --server-id=1
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+#    volumes:
+#      #      设置初始化脚本
+#      - ./script/mysql/:/docker-entrypoint-initdb.d/
+    ports:
+      - "13306:3306"
+  redis:
+    image: 'bitnami/redis:7.2'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - '16379:6379'
+  etcd:
+    image: 'bitnami/etcd:3.5'
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+    ports:
+      - 12379:2379
+  kafka:
+    image: 'bitnami/kafka:3.6.0'
+    ports:
+      - '9092:9092'
+      - '9094:9094'
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      #      - 允许自动创建 topic，线上不要开启
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://:9093,EXTERNAL://0.0.0.0:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
+    ports:
+      - 18080:8080
+    depends_on:
+      - kafka
+    environment:
+      DYNAMIC_CONFIG_ENABLED: "TRUE"

@@ -17,6 +17,5 @@ var configFile = flag.String("config", "etc/local.yaml", "配置文件路径")
 func main() {
 	config := ioc.SetUpConfig(*configFile)
 	fmt.Println(config)
-
-	ioc.SetUpDB()
+	ioc.SetUpDB(&config.Database)
 }
