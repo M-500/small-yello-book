@@ -8,6 +8,7 @@ import (
 type UserModel struct {
 	gorm.Model
 	GlobalNumber  string    `json:"global_number" gorm:"column:global_number;type:varchar(64);comment:全局编号"`
+	UserName      string    `json:"user_name" gorm:"column:user_name;type:varchar(128);comment:用户名,可以修改,默认生成"`
 	NickName      string    `json:"nick_name" gorm:"column:nick_name;type:varchar(128);comment:昵称"`
 	IPAddr        string    `json:"ip_addr" gorm:"column:ip_addr;type:varchar(100);comment:IP归属地"`
 	Avatar        string    `json:"avatar" gorm:"column:avatar;type:varchar(255);comment:头像"`

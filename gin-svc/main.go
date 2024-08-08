@@ -10,12 +10,17 @@ import (
 	"flag"
 	"fmt"
 	"gin-svc/internal/ioc"
+	"gin-svc/internal/models"
 )
 
-var configFile = flag.String("config", "etc/local.yaml", "配置文件路径")
+var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
 
 func main() {
 	config := ioc.SetUpConfig(*configFile)
 	fmt.Println(config)
-	ioc.SetUpDB(&config.Database)
+	db := ioc.SetUpDB(&config.Database)
+	err := models.InitTables(db)
+	if err != nil {
+		return
+	}
 }
