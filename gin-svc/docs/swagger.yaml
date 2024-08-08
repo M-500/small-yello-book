@@ -1,0 +1,53 @@
+definitions:
+  types.UserForm:
+    properties:
+      addr:
+        type: string
+      avatar:
+        type: string
+      birthDay:
+        type: string
+      male:
+        type: string
+      nick_name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      profession:
+        type: string
+      school:
+        type: string
+      signature:
+        type: string
+      user_name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/na/register:
+    get:
+      consumes:
+      - application/json
+      description: RegisterUser
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: RegisterUser
+      tags:
+      - NA Model
+swagger: "2.0"

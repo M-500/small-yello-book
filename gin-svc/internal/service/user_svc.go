@@ -8,7 +8,7 @@ import (
 )
 
 type UserSvc interface {
-	UpsertUser(ctx context.Context, req types.UserForm) error
+	RegisterUser(ctx context.Context, req types.UserForm) error
 }
 
 func NewUserSvc(userRepo repo.UserRepoInterface) UserSvc {
@@ -19,7 +19,7 @@ type userSvcImpl struct {
 	userRepo repo.UserRepoInterface
 }
 
-func (u *userSvcImpl) UpsertUser(ctx context.Context, req types.UserForm) error {
+func (u *userSvcImpl) RegisterUser(ctx context.Context, req types.UserForm) error {
 	return u.userRepo.UpsertUser(ctx, u.reqToModel(&req))
 }
 
