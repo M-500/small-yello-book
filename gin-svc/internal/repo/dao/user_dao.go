@@ -11,6 +11,7 @@ import (
 type UserDao interface {
 	Upsert(ctx context.Context, user *models.UserModel) error
 	Delete(ctx context.Context, id int) error
+	FindByUserName(ctx context.Context, userName string) (*models.UserModel, error)
 }
 
 func NewUserDao(db *gorm.DB) UserDao {
@@ -52,4 +53,16 @@ func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error 
 			"level":          user.Level,
 		}),
 	}).Create(user).Error
+}
+
+func (u *userDaoImpl) FindByUserName(ctx context.Context, userName string) (*models.UserModel, error) {
+	user := &models.UserModel{}
+	query := u.db.WithContext(ctx).Where("user_name = ?", userName).First(user)
+	if err := query.Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return user, nil
 }

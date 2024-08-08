@@ -15,3 +15,8 @@ type UserForm struct {
 	Profession string    `json:"profession"`
 	School     string    `json:"school"`
 }
+
+type LoginForm struct {
+	UserName string `json:"user_name"`
+	Password string `json:"password"`
+}

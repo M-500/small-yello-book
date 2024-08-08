@@ -15,8 +15,43 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/na/login": {
+            "post": {
+                "description": "LoginCtl",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NA Model"
+                ],
+                "summary": "LoginCtl",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.LoginForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/na/register": {
-            "put": {
+            "post": {
                 "description": "RegisterUser",
                 "consumes": [
                     "application/json"
@@ -51,7 +86,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/users": {
-            "post": {
+            "put": {
                 "description": "Update user info",
                 "consumes": [
                     "application/json"
@@ -120,6 +155,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "types.LoginForm": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "user_name": {
+                    "type": "string"
+                }
+            }
+        },
         "types.UserForm": {
             "type": "object",
             "properties": {

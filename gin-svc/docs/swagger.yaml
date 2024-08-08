@@ -1,4 +1,11 @@
 definitions:
+  types.LoginForm:
+    properties:
+      password:
+        type: string
+      user_name:
+        type: string
+    type: object
   types.UserForm:
     properties:
       addr:
@@ -27,8 +34,31 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/v1/na/login:
+    post:
+      consumes:
+      - application/json
+      description: LoginCtl
+      parameters:
+      - description: user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/types.LoginForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: LoginCtl
+      tags:
+      - NA Model
   /api/v1/na/register:
-    put:
+    post:
       consumes:
       - application/json
       description: RegisterUser
@@ -51,7 +81,7 @@ paths:
       tags:
       - NA Model
   /api/v1/users:
-    post:
+    put:
       consumes:
       - application/json
       description: Update user info

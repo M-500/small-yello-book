@@ -25,7 +25,7 @@ func NewUserController(userSvc service.UserSvc) BaseController {
 // @Produce json
 // @Param user body types.UserForm true "user"
 // @Success 200 {object} map[string]any
-// @Router /api/v1/users [post]
+// @Router /api/v1/users [put]
 func (ctl *userController) UpdateUserInfo(ctx *gin.Context, req types.UserForm) (result ginx.JsonResult, err error) {
 	err = ctl.userSvc.RegisterUser(ctx, req)
 	if err != nil {
@@ -52,6 +52,6 @@ func (ctl *userController) DeleteUserCtl(ctx *gin.Context, req types.UserForm) (
 }
 
 func (ctl *userController) RegisterRoute(group *gin.RouterGroup) {
-	group.POST("/users", ginx.WrapJsonBody[types.UserForm](ctl.UpdateUserInfo))
+	group.PUT("/users", ginx.WrapJsonBody[types.UserForm](ctl.UpdateUserInfo))
 	group.DELETE("/users/:id", ginx.WrapJsonBody[types.UserForm](ctl.DeleteUserCtl))
 }
