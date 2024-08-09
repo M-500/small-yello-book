@@ -37,3 +37,21 @@ type SysMenuModel struct {
 func (SysMenuModel) TableName() string {
 	return "sys_menu"
 }
+
+type UserRoleModel struct {
+	UserID int `json:"userId" gorm:"column:user_id;type:int;comment:用户ID"`
+	RoleID int `json:"roleId" gorm:"column:role_id;type:int;comment:角色ID"`
+}
+
+func (UserRoleModel) TableName() string {
+	return "sys_user_role"
+}
+
+type RolePermissionModel struct {
+	RoleID int `json:"roleId" gorm:"column:role_id;type:int;comment:角色ID"`
+	PerID  int `json:"perId" gorm:"column:per_id;type:int;comment:权限ID"`
+}
+
+func (RolePermissionModel) TableName() string {
+	return "sys_role_permission"
+}

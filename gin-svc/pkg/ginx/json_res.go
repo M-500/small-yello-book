@@ -8,6 +8,14 @@ func Success() JsonResult {
 	}
 }
 
+func SuccessJson(data any) JsonResult {
+	return JsonResult{
+		Code: 0,
+		Msg:  "OK",
+		Data: data,
+	}
+}
+
 func SuccessItemList(data any) JsonResult {
 	return JsonResult{
 		Code: 0,

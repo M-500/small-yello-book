@@ -36,3 +36,14 @@ func WrapQueryBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.
 		ctx.JSON(http.StatusOK, res)
 	}
 }
+
+func WrapResponse(fn func(*gin.Context) (JsonResult, error)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		res, err := fn(ctx)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, res)
+			return
+		}
+		ctx.JSON(http.StatusOK, res)
+	}
+}

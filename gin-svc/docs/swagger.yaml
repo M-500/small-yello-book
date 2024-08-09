@@ -1,4 +1,21 @@
 definitions:
+  domain.Permission:
+    properties:
+      action:
+        type: string
+      id:
+        type: integer
+      mark:
+        type: string
+      path:
+        type: string
+      perKey:
+        type: string
+      status:
+        type: boolean
+      title:
+        type: string
+    type: object
   domain.Role:
     properties:
       createTime:
@@ -14,6 +31,15 @@ definitions:
       status:
         type: boolean
     type: object
+  domain.RoleDetail:
+    properties:
+      perList:
+        items:
+          $ref: '#/definitions/domain.Permission'
+        type: array
+      roleBase:
+        $ref: '#/definitions/domain.Role'
+    type: object
   ginx.JsonResult:
     properties:
       code:
@@ -21,6 +47,30 @@ definitions:
       data: {}
       msg:
         type: string
+    type: object
+  types.CreateRoleReq:
+    properties:
+      perIds:
+        description: 权限ID列表
+        items:
+          type: integer
+        type: array
+      roleKey:
+        description: 角色key
+        type: string
+      roleName:
+        description: 角色名
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        description: 角色状态
+        type: boolean
+    required:
+    - roleKey
+    - roleName
+    - status
     type: object
   types.LoginForm:
     properties:
@@ -43,6 +93,29 @@ definitions:
       status:
         description: 角色状态
         type: boolean
+    type: object
+  types.UpdateRoleReq:
+    properties:
+      id:
+        description: 角色ID
+        type: integer
+      perIds:
+        description: 权限ID列表
+        items:
+          type: integer
+        type: array
+      roleName:
+        description: 角色名
+        type: string
+      sort:
+        description: 排序
+        type: integer
+      status:
+        description: 角色状态
+        type: boolean
+    required:
+    - id
+    - roleName
     type: object
   types.UserForm:
     properties:
@@ -122,7 +195,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: 获取权限列表
+      description: 获取角色列表
       parameters:
       - description: RolePageListReq
         in: body
@@ -143,7 +216,90 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ginx.JsonResult'
-      summary: 获取权限列表
+      summary: 获取角色列表
+      tags:
+      - 角色模块
+    post:
+      consumes:
+      - application/json
+      description: 创建角色
+      parameters:
+      - description: CreateRoleReq
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.CreateRoleReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.JsonResult'
+      summary: 创建角色
+      tags:
+      - 角色模块
+    put:
+      consumes:
+      - application/json
+      description: 更新角色
+      parameters:
+      - description: UpdateRoleReq
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/types.UpdateRoleReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.JsonResult'
+      summary: 更新角色
+      tags:
+      - 角色模块
+  /api/v1/roles/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除角色
+      parameters:
+      - description: 角色ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.JsonResult'
+      summary: 删除角色
+      tags:
+      - 角色模块
+    get:
+      consumes:
+      - application/json
+      description: 查询角色详情
+      parameters:
+      - description: 角色ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.RoleDetail'
+      summary: 查询角色详情
       tags:
       - 角色模块
   /api/v1/users:

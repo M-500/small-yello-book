@@ -10,3 +10,19 @@ type Role struct {
 	Status     bool       `json:"status"`
 	CreateTime *time.Time `json:"createTime"`
 }
+
+type Permission struct {
+	Id     int    `json:"id"`
+	Title  string `json:"title"`
+	Action string `json:"action"`
+	PerKey string `json:"perKey"`
+	Mark   string `json:"mark"`
+	Path   string `json:"path"`
+	Type   string `json:"-"`
+	Status bool   `json:"status"`
+}
+
+type RoleDetail struct {
+	RoleBase Role         `json:"roleBase"`
+	PerList  []Permission `json:"perList"`
+}

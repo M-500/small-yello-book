@@ -31,7 +31,8 @@ func main() {
 	}
 	userCtl := NewUserController(db)
 	pubController := NewPubController(db)
-	roleCtl := controller.NewRoleController()
+	roleSvc := service.NewRoleService()
+	roleCtl := controller.NewRoleController(roleSvc)
 	engine := web.SetupWebEngine(
 		userCtl,
 		pubController,

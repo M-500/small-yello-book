@@ -87,7 +87,7 @@ const docTemplate = `{
         },
         "/api/v1/roles": {
             "get": {
-                "description": "获取权限列表",
+                "description": "获取角色列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -97,7 +97,7 @@ const docTemplate = `{
                 "tags": [
                     "角色模块"
                 ],
-                "summary": "获取权限列表",
+                "summary": "获取角色列表",
                 "parameters": [
                     {
                         "description": "RolePageListReq",
@@ -121,6 +121,132 @@ const docTemplate = `{
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.JsonResult"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "更新角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色模块"
+                ],
+                "summary": "更新角色",
+                "parameters": [
+                    {
+                        "description": "UpdateRoleReq",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.UpdateRoleReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.JsonResult"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "创建角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色模块"
+                ],
+                "summary": "创建角色",
+                "parameters": [
+                    {
+                        "description": "CreateRoleReq",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.CreateRoleReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/roles/{id}": {
+            "get": {
+                "description": "查询角色详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色模块"
+                ],
+                "summary": "查询角色详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.RoleDetail"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除角色",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色模块"
+                ],
+                "summary": "删除角色",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "角色ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/ginx.JsonResult"
                         }
@@ -198,6 +324,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domain.Permission": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "mark": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "perKey": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "domain.Role": {
             "type": "object",
             "properties": {
@@ -221,6 +373,20 @@ const docTemplate = `{
                 }
             }
         },
+        "domain.RoleDetail": {
+            "type": "object",
+            "properties": {
+                "perList": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Permission"
+                    }
+                },
+                "roleBase": {
+                    "$ref": "#/definitions/domain.Role"
+                }
+            }
+        },
         "ginx.JsonResult": {
             "type": "object",
             "properties": {
@@ -230,6 +396,39 @@ const docTemplate = `{
                 "data": {},
                 "msg": {
                     "type": "string"
+                }
+            }
+        },
+        "types.CreateRoleReq": {
+            "type": "object",
+            "required": [
+                "roleKey",
+                "roleName",
+                "status"
+            ],
+            "properties": {
+                "perIds": {
+                    "description": "权限ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "roleKey": {
+                    "description": "角色key",
+                    "type": "string"
+                },
+                "roleName": {
+                    "description": "角色名",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "排序",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "角色状态",
+                    "type": "boolean"
                 }
             }
         },
@@ -257,6 +456,38 @@ const docTemplate = `{
                 },
                 "size": {
                     "description": "页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "角色状态",
+                    "type": "boolean"
+                }
+            }
+        },
+        "types.UpdateRoleReq": {
+            "type": "object",
+            "required": [
+                "id",
+                "roleName"
+            ],
+            "properties": {
+                "id": {
+                    "description": "角色ID",
+                    "type": "integer"
+                },
+                "perIds": {
+                    "description": "权限ID列表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "roleName": {
+                    "description": "角色名",
+                    "type": "string"
+                },
+                "sort": {
+                    "description": "排序",
                     "type": "integer"
                 },
                 "status": {
