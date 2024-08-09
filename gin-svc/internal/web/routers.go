@@ -8,7 +8,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func SetupWebEngine(userCtl, pubCtl controller.BaseController) *gin.Engine {
+func SetupWebEngine(userCtl, pubCtl controller.BaseController, roleCtl controller.BaseController) *gin.Engine {
 	engine := gin.Default()
 	rg := engine.Group("")
 
@@ -21,6 +21,8 @@ func SetupWebEngine(userCtl, pubCtl controller.BaseController) *gin.Engine {
 	privateGroup := rg.Group("/api/v1")
 	{
 		userCtl.RegisterRoute(privateGroup)
+		roleCtl.RegisterRoute(privateGroup)
+
 	}
 
 	return engine

@@ -6,7 +6,7 @@ type CommentModel struct {
 	gorm.Model
 	UserId       int64  `gorm:"index:idx_comment_user_id;not null" json:"userId" form:"userId"`             // 用户编号
 	EntityType   string `gorm:"index:idx_comment_entity_type;not null" json:"entityType" form:"entityType"` // 被评论实体类型
-	EntityId     int64  `gorm:"index:idx_comment_entity_id;not null" json:"entityId" form:"entityId"`       // 被评论实体编号
+	EntityId     int64  `gorm:"index:idx_comment_entity_id;not null" json:"entityId" form:"entityId"`       // 被评论实体编号 上级ID
 	Content      string `gorm:"type:text;not null" json:"content" form:"content"`                           // 内容
 	ImageList    string `gorm:"type:longtext" json:"imageList" form:"imageList"`                            // 图片
 	ContentType  string `gorm:"type:varchar(32);not null" json:"contentType" form:"contentType"`            // 内容类型：markdown、html

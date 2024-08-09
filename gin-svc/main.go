@@ -31,7 +31,11 @@ func main() {
 	}
 	userCtl := NewUserController(db)
 	pubController := NewPubController(db)
-	engine := web.SetupWebEngine(userCtl, pubController)
+	roleCtl := controller.NewRoleController()
+	engine := web.SetupWebEngine(
+		userCtl,
+		pubController,
+		roleCtl)
 	err = engine.Run(":8122")
 	if err != nil {
 		panic(err)

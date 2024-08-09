@@ -1,10 +1,48 @@
 definitions:
+  domain.Role:
+    properties:
+      createTime:
+        type: string
+      id:
+        type: integer
+      roleKey:
+        type: string
+      roleName:
+        type: string
+      sort:
+        type: integer
+      status:
+        type: boolean
+    type: object
+  ginx.JsonResult:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
   types.LoginForm:
     properties:
       password:
         type: string
       user_name:
         type: string
+    type: object
+  types.RolePageListReq:
+    properties:
+      keywords:
+        description: '搜索关键词: 角色名，角色key，用于模糊搜索'
+        type: string
+      page:
+        description: 页码
+        type: integer
+      size:
+        description: 页大小
+        type: integer
+      status:
+        description: 角色状态
+        type: boolean
     type: object
   types.UserForm:
     properties:
@@ -80,6 +118,34 @@ paths:
       summary: RegisterUser
       tags:
       - NA Model
+  /api/v1/roles:
+    get:
+      consumes:
+      - application/json
+      description: 获取权限列表
+      parameters:
+      - description: RolePageListReq
+        in: body
+        name: use
+        required: true
+        schema:
+          $ref: '#/definitions/types.RolePageListReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Role'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ginx.JsonResult'
+      summary: 获取权限列表
+      tags:
+      - 角色模块
   /api/v1/users:
     put:
       consumes:

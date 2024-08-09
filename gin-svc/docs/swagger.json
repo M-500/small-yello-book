@@ -74,6 +74,49 @@
                 }
             }
         },
+        "/api/v1/roles": {
+            "get": {
+                "description": "获取权限列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "角色模块"
+                ],
+                "summary": "获取权限列表",
+                "parameters": [
+                    {
+                        "description": "RolePageListReq",
+                        "name": "use",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.RolePageListReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Role"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.JsonResult"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/users": {
             "put": {
                 "description": "Update user info",
@@ -144,6 +187,41 @@
         }
     },
     "definitions": {
+        "domain.Role": {
+            "type": "object",
+            "properties": {
+                "createTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "roleKey": {
+                    "type": "string"
+                },
+                "roleName": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "ginx.JsonResult": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
         "types.LoginForm": {
             "type": "object",
             "properties": {
@@ -152,6 +230,27 @@
                 },
                 "user_name": {
                     "type": "string"
+                }
+            }
+        },
+        "types.RolePageListReq": {
+            "type": "object",
+            "properties": {
+                "keywords": {
+                    "description": "搜索关键词: 角色名，角色key，用于模糊搜索",
+                    "type": "string"
+                },
+                "page": {
+                    "description": "页码",
+                    "type": "integer"
+                },
+                "size": {
+                    "description": "页大小",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "角色状态",
+                    "type": "boolean"
                 }
             }
         },
