@@ -149,7 +149,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: LoginCtl
+      description: 用户密码登录
       parameters:
       - description: user
         in: body
@@ -165,14 +165,14 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: LoginCtl
+      summary: 用户密码登录
       tags:
-      - NA Model
+      - 公共模块
   /api/v1/na/register:
     post:
       consumes:
       - application/json
-      description: RegisterUser
+      description: 注册用户
       parameters:
       - description: user
         in: body
@@ -188,9 +188,9 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: RegisterUser
+      summary: 注册用户
       tags:
-      - NA Model
+      - 公共模块
   /api/v1/roles:
     get:
       consumes:
@@ -306,7 +306,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: Update user info
+      description: 更新用户信息
       parameters:
       - description: user
         in: body
@@ -322,14 +322,14 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: Update user info
+      summary: 更新用户信息
       tags:
-      - User Model
+      - 用户模块
   /api/v1/users/{id}:
     delete:
       consumes:
       - application/json
-      description: Delete user
+      description: 删除用户
       parameters:
       - description: User ID
         in: path
@@ -344,7 +344,7 @@ paths:
           schema:
             additionalProperties: true
             type: object
-      summary: Delete user
+      summary: 删除用户
       tags:
-      - User Model
+      - 用户模块
 swagger: "2.0"

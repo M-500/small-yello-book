@@ -18,9 +18,9 @@ func NewUserController(userSvc service.UserSvc) BaseController {
 }
 
 // UpdateUserInfo godoc
-// @Summary Update user info
-// @Description Update user info
-// @Tags User Model
+// @Summary 更新用户信息
+// @Description 更新用户信息
+// @Tags 用户模块
 // @Accept json
 // @Produce json
 // @Param user body types.UserForm true "user"
@@ -35,9 +35,9 @@ func (ctl *userController) UpdateUserInfo(ctx *gin.Context, req types.UserForm) 
 }
 
 // DeleteUserCtl godoc
-// @Summary Delete user
-// @Description Delete user
-// @Tags User Model
+// @Summary 删除用户
+// @Description 删除用户
+// @Tags 用户模块
 // @Accept json
 // @Produce json
 // @Param id path int true "User ID"

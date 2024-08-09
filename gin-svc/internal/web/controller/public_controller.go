@@ -18,9 +18,9 @@ func NewPublicController(userSvc service.UserSvc) BaseController {
 }
 
 // RegisterUser godoc
-// @Summary RegisterUser
-// @Description RegisterUser
-// @Tags NA Model
+// @Summary 注册用户
+// @Description 注册用户
+// @Tags 公共模块
 // @Accept json
 // @Produce json
 // @Param user body types.UserForm true "user"
@@ -35,9 +35,9 @@ func (p *publicController) RegisterUser(ctx *gin.Context, req types.UserForm) (r
 }
 
 // LoginCtl godoc
-// @Summary LoginCtl
-// @Description LoginCtl
-// @Tags NA Model
+// @Summary 用户密码登录
+// @Description 用户密码登录
+// @Tags 公共模块
 // @Accept json
 // @Produce json
 // @Param user body types.LoginForm true "user"

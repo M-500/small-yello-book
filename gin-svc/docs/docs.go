@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/api/v1/na/login": {
             "post": {
-                "description": "LoginCtl",
+                "description": "用户密码登录",
                 "consumes": [
                     "application/json"
                 ],
@@ -25,9 +25,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "NA Model"
+                    "公共模块"
                 ],
-                "summary": "LoginCtl",
+                "summary": "用户密码登录",
                 "parameters": [
                     {
                         "description": "user",
@@ -52,7 +52,7 @@ const docTemplate = `{
         },
         "/api/v1/na/register": {
             "post": {
-                "description": "RegisterUser",
+                "description": "注册用户",
                 "consumes": [
                     "application/json"
                 ],
@@ -60,9 +60,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "NA Model"
+                    "公共模块"
                 ],
-                "summary": "RegisterUser",
+                "summary": "注册用户",
                 "parameters": [
                     {
                         "description": "user",
@@ -256,7 +256,7 @@ const docTemplate = `{
         },
         "/api/v1/users": {
             "put": {
-                "description": "Update user info",
+                "description": "更新用户信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -264,9 +264,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Model"
+                    "用户模块"
                 ],
-                "summary": "Update user info",
+                "summary": "更新用户信息",
                 "parameters": [
                     {
                         "description": "user",
@@ -291,7 +291,7 @@ const docTemplate = `{
         },
         "/api/v1/users/{id}": {
             "delete": {
-                "description": "Delete user",
+                "description": "删除用户",
                 "consumes": [
                     "application/json"
                 ],
@@ -299,9 +299,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "User Model"
+                    "用户模块"
                 ],
-                "summary": "Delete user",
+                "summary": "删除用户",
                 "parameters": [
                     {
                         "type": "integer",
