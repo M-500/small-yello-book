@@ -8,6 +8,7 @@ import (
 )
 
 type RoleRepo interface {
+	CheckPermissionIds(ctx context.Context, perIds []int) error
 	// GetRoleByID 通过角色ID获取角色信息
 	GetRoleByID(ctx context.Context, id int) (*models.SysRoleModel, error)
 
@@ -17,7 +18,7 @@ type RoleRepo interface {
 
 	DeleteRole(ctx context.Context, id int) error
 
-	UpdateRole(ctx context.Context, role *models.SysRoleModel) error
+	UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error
 	// FindPermissionListByRoleId 查询某个角色 ID 对应的权限列表
 	FindPermissionListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error)
 }
@@ -36,6 +37,9 @@ func NewRoleRepo(pDao dao.PermissionDAO, rDao dao.RoleDAO, cache cache.RoleCache
 	}
 }
 
+func (r *roleRepoImpl) CheckPermissionIds(ctx context.Context, perIds []int) error {
+	return r.perDao.CheckPermissionIds(ctx, perIds)
+}
 func (r *roleRepoImpl) GetRoleByID(ctx context.Context, id int) (*models.SysRoleModel, error) {
 	return r.roleDao.GetRoleByID(ctx, id)
 }
@@ -56,9 +60,9 @@ func (r *roleRepoImpl) DeleteRole(ctx context.Context, id int) error {
 	return r.roleDao.DeleteByID(ctx, id)
 }
 
-func (r *roleRepoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel) error {
+func (r *roleRepoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error {
 
-	err := r.roleDao.UpdateRole(ctx, role)
+	err := r.roleDao.UpdateRole(ctx, role, perIds)
 	if err != nil {
 		return err
 	}
@@ -77,7 +81,7 @@ func (r *roleRepoImpl) FindPermissionListByRoleId(ctx context.Context, roleId in
 	}
 	res, err = r.roleDao.FindPermissionListByRoleId(ctx, roleId)
 	go func() {
-		_ = r.cache.SetPerListByRoleId(ctx, roleId, res)
+		_ = r.cache.SetPerListByRoleId(context.Background(), roleId, res)
 		// TODO: 异步设置缓存，如果出错要记录一下日志
 	}()
 	return res, err

@@ -2,10 +2,12 @@ package service
 
 import (
 	"context"
+	"errors"
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
 	"gin-svc/internal/types"
+	"gorm.io/gorm"
 )
 
 type RoleSvc interface {
@@ -89,6 +91,20 @@ func (r *roleSvcImpl) DeleteRole(ctx context.Context, id int) error {
 }
 
 func (r *roleSvcImpl) UpdateRole(ctx context.Context, role types.UpdateRoleReq) error {
-	//TODO implement me
-	panic("implement me")
+	perList := role.PerIds
+	err := r.roleRepo.CheckPermissionIds(ctx, perList)
+	if err != nil {
+		return errors.New("权限列表不合法！")
+	}
+	base := models.SysRoleModel{
+		Model: gorm.Model{
+			ID: uint(role.ID),
+		},
+		//CreatorId: 0,
+		RoleName: role.RoleName,
+		Status:   role.Status,
+		RoleSort: role.Sort,
+		//Remark:    role.,
+	}
+	return r.roleRepo.UpdateRole(ctx, &base, role.PerIds)
 }

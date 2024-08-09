@@ -17,7 +17,7 @@ type RoleDAO interface {
 
 	DeleteByID(ctx context.Context, id int) error
 
-	UpdateRole(ctx context.Context, role *models.SysRoleModel) error
+	UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error
 	// FindPermissionListByRoleId 查询某个角色 ID 对应的权限列表
 	FindPermissionListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error)
 }
@@ -69,16 +69,34 @@ func (r *roleDaoImpl) DeleteByID(ctx context.Context, id int) error {
 	panic("implement me")
 }
 
-func (r *roleDaoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel) error {
-	//TODO implement me
-	panic("implement me")
+func (r *roleDaoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error {
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		err := tx.WithContext(ctx).Model(&models.SysRoleModel{}).Where("id=?", role.ID).Updates(role).Error
+		if err != nil {
+			return err
+		}
+		err = tx.Model(&models.RolePermissionModel{}).Where("role_id=?", role.ID).Delete("role_id=?", role.ID).Error
+		if err != nil {
+			return err
+		}
+		for _, id := range perIds {
+			err = tx.Model(&models.RolePermissionModel{}).Create(&models.RolePermissionModel{
+				RoleID: int(role.ID),
+				PerID:  id,
+			}).Error
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
 }
 
 func (r *roleDaoImpl) FindPermissionListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error) {
 	var perList []models.SysPermissionModel
 	err := r.db.WithContext(ctx).Table("sys_permission").
 		Select("sys_permission.*").
-		Joins("INNER JOIN sys_role_permission ON sys_permission.id = sys_role_permission.permission_id").
+		Joins("LEFT JOIN sys_role_permission ON sys_permission.id = sys_role_permission.per_id").
 		Where("sys_role_permission.role_id = ?", roleId).Find(&perList).Error
 	return perList, err
 }

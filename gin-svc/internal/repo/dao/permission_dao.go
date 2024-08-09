@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"gin-svc/internal/models"
+	"github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -44,7 +45,18 @@ func (p *permissionDao) CheckPermissionIds(ctx context.Context, perIds []int) er
 }
 
 func (p *permissionDao) Insert(ctx context.Context, data models.SysPermissionModel) error {
-	return p.db.WithContext(ctx).Create(&data).Error
+	err := p.db.WithContext(ctx).Create(&data).Error
+	if err != nil {
+		var me *mysql.MySQLError
+		if errors.As(err, &me) {
+			const uniqueIndexErrNo uint16 = 1062
+			if me.Number == uniqueIndexErrNo {
+				return ErrKeyDuplicate
+			}
+		}
+		return err
+	}
+	return nil
 }
 
 func (p *permissionDao) ListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error) {
