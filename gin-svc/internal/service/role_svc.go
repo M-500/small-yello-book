@@ -86,8 +86,11 @@ func (r *roleSvcImpl) CreateRole(ctx context.Context, req types.CreateRoleReq) e
 }
 
 func (r *roleSvcImpl) DeleteRole(ctx context.Context, id int) error {
-	//TODO implement me
-	panic("implement me")
+	err := r.roleRepo.DeleteRole(ctx, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *roleSvcImpl) UpdateRole(ctx context.Context, role types.UpdateRoleReq) error {

@@ -65,8 +65,8 @@ func (r *roleDaoImpl) Insert(ctx context.Context, role *models.SysRoleModel) err
 }
 
 func (r *roleDaoImpl) DeleteByID(ctx context.Context, id int) error {
-	//TODO implement me
-	panic("implement me")
+	// TODO：删除角色，是不是要删除对应的角色权限关联表 是吧
+	return r.db.WithContext(ctx).Model(&models.SysRoleModel{}).Delete("id = ?", id).Error
 }
 
 func (r *roleDaoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error {
