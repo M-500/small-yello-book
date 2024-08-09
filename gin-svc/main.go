@@ -12,10 +12,12 @@ import (
 	"gin-svc/internal/ioc"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
+	"gin-svc/internal/repo/cache"
 	"gin-svc/internal/repo/dao"
 	"gin-svc/internal/service"
 	"gin-svc/internal/web"
 	"gin-svc/internal/web/controller"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
@@ -25,14 +27,14 @@ func main() {
 	config := ioc.SetUpConfig(*configFile)
 	fmt.Println(config)
 	db := ioc.SetUpDB(&config.Database)
+	redisCli := ioc.SetUpRedis(&config.Redis)
 	err := models.InitTables(db)
 	if err != nil {
 		return
 	}
-	userCtl := NewUserController(db)
-	pubController := NewPubController(db)
-	roleSvc := service.NewRoleService()
-	roleCtl := controller.NewRoleController(roleSvc)
+	userCtl := InitUserController(db)
+	pubController := InitPubController(db)
+	roleCtl := InitRoleController(db, redisCli)
 	engine := web.SetupWebEngine(
 		userCtl,
 		pubController,
@@ -43,16 +45,25 @@ func main() {
 	}
 }
 
-func NewUserController(db *gorm.DB) controller.BaseController {
+func InitUserController(db *gorm.DB) controller.BaseController {
 	userDao := dao.NewUserDao(db)
 	userRepo := repo.NewUserRepoInterface(userDao)
 	userSvc := service.NewUserSvc(userRepo)
 	return controller.NewUserController(userSvc)
 }
 
-func NewPubController(db *gorm.DB) controller.BaseController {
+func InitPubController(db *gorm.DB) controller.BaseController {
 	userDao := dao.NewUserDao(db)
 	userRepo := repo.NewUserRepoInterface(userDao)
 	userSvc := service.NewUserSvc(userRepo)
 	return controller.NewPublicController(userSvc)
+}
+
+func InitRoleController(db *gorm.DB, cli redis.Cmdable) controller.BaseController {
+	perDao := dao.NewPermissionDAO(db)
+	roleDao := dao.NewRoleDAO(db)
+	cac := cache.NewRoleCache(cli)
+	roleRepo := repo.NewRoleRepo(perDao, roleDao, cac)
+	roleSvc := service.NewRoleService(roleRepo)
+	return controller.NewRoleController(roleSvc)
 }

@@ -9,10 +9,10 @@ import (
 )
 
 type roleController struct {
-	svc service.RoleServiceInterface
+	svc service.RoleSvc
 }
 
-func NewRoleController(svc service.RoleServiceInterface) BaseController {
+func NewRoleController(svc service.RoleSvc) BaseController {
 	return &roleController{
 		svc: svc,
 	}
