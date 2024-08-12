@@ -20,7 +20,7 @@
 <style scoped>
 .scroll-container{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-start;
     align-items: center;
     user-select: none;
     -webkit-user-select: none;
