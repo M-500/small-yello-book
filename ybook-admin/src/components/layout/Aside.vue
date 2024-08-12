@@ -20,11 +20,9 @@
                 </div>
                 <div class="text">通知</div>
             </div>
-           
             <div class="box-login" @click="loginBtnClick">
                 登 陆
             </div>
-           
         </div>
         <Login />
     </div>

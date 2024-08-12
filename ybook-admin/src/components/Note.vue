@@ -10,10 +10,15 @@
             <div class="box">彩妆</div>
             <div class="box">健身</div>
         </div>
+        <div class="content">
+            <Card />
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import Card from './Card.vue';
+
 </script>
 
 
@@ -41,5 +46,8 @@
     color: #333;
     font-weight: bold;
     border-radius: 50px;
+}
+.content{
+    padding-top: 10px;
 }
 </style>

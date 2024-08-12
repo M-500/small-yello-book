@@ -6,22 +6,22 @@
         <div class="header">
           <div class="login_reason">登陆后推荐更懂你的笔记</div>
           <div class="logo">
-            <img src="../../assets/logo.svg" alt="慕课网">
+            <img src="../assets/logo.svg" alt="">
           </div>
         </div>
-
+<!-- 
         <div class="wechar_code">
           微信二维码
-        </div>
+        </div> -->
       </div>
 
       <div class="right">
         <div class="login_title">
           账号密码登录
         </div>
-        <div class="login_form">
-          <el-input class="form_item" placeholder="请输入手机号"></el-input>
-          <el-input class="form_item" placeholder="请输入密码"></el-input>
+        <div class="login_form" >
+          <el-input class="form_item" v-model="LoginForm.phone" placeholder="请输入手机号"></el-input>
+          <el-input class="form_item" v-model="LoginForm.password"  placeholder="请输入密码"></el-input>
           <el-button type="primary" class="login_btn">登陆</el-button>
         </div>
         <div class="protocl">
@@ -36,8 +36,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 const dialogVisible: Ref<boolean> = ref(true);
+
+const LoginForm = reactive({
+  phone: '18574945291',
+  password: 'wulinlin'
+});
 
 function handleClose(done) {
   dialogVisible.value = false;
@@ -58,11 +63,21 @@ function handleClose(done) {
 
 .left{
   width: 400px;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  /* align-items: center; */
   border-right: 1px solid #ebebeb;
+}
+.left .header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.left .header .logo img{
+  width: 100px;
 }
 .login_reason{
   height: 48px;
@@ -96,6 +111,9 @@ function handleClose(done) {
   flex-direction: column;
 }
 
+.el-dialog{
+  border-radius: 16px;
+}
 ::v-deep(.el-dialog) {
   /* display: flex;
   position: relative;
@@ -149,6 +167,14 @@ function handleClose(done) {
   font-weight: 600;
   height: 24px;
   line-height: 120%;
+}
+
+.protocl{
+  /* width: 100%; */
+  padding: 0px 48px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 </style>
