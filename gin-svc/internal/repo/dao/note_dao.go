@@ -10,6 +10,7 @@ import (
 type NoteDaoInterface interface {
 	FindById(ctx context.Context, id int) (*models.NoteModel, error)
 	ListByKey(ctx context.Context, keyword string, page, size int) ([]models.NoteModel, error)
+	ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
 	Insert(ctx context.Context, note *models.NoteModel) error
 	Update(ctx context.Context, note *models.NoteModel) error
 	Delete(ctx context.Context, id int) error
@@ -36,6 +37,17 @@ func (n *noteDaoImpl) ListByKey(ctx context.Context, keyword string, page, size 
 	var notes []models.NoteModel
 	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("title like ?", "%"+keyword+"%").
 		Limit(size).Offset((page - 1) * size).Find(&notes)
+	if err := query.Error; err != nil {
+		return nil, err
+	}
+	return notes, nil
+}
+
+func (n *noteDaoImpl) ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error) {
+	var notes []models.NoteModel
+	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).
+		Where("status = ?", status).Limit(size).Offset((page - 1) * size).
+		Find(&notes)
 	if err := query.Error; err != nil {
 		return nil, err
 	}
