@@ -1,6 +1,6 @@
 FROM golang:1.22 AS builder
 
-ENV APP_HOME /code/bbs-go/server
+ENV APP_HOME /go/pkg/src/github.com/ybook/gin-svc
 WORKDIR "$APP_HOME"
 
 COPY go.mod ./
@@ -10,12 +10,12 @@ COPY go.sum ./
 RUN go mod download
 
 COPY . ./
-RUN CGO_ENABLED=0 go build -v -o bbs-go main.go && chmod +x bbs-go
+RUN CGO_ENABLED=0 go build -v -o server main.go && chmod +x server
 
 FROM alpine:latest
 
-COPY --from=builder /code/bbs-go/server/bbs-go /app/bbs-go
-COPY --from=builder /code/bbs-go/server/bbs-go.docker.yaml /app/bbs-go.docker.yaml
+COPY --from=builder /go/pkg/src/github.com/ybook/gin-svc /app/bbs-go
+COPY --from=builder /go/pkg/src/github.com/ybook/gin-svc/bbs-go.docker.yaml /app/bbs-go.docker.yaml
 
 WORKDIR /app
 

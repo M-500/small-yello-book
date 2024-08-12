@@ -9,5 +9,11 @@ func InitTables(db *gorm.DB) error {
 		&SysPermissionModel{},
 		&UserRoleModel{},
 		&RolePermissionModel{},
+
+		&NoteModel{},
+		&TagModel{},
+		&NoteTagModel{},
+
+		&CommentModel{},
 	)
 }
