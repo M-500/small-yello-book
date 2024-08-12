@@ -7,8 +7,8 @@
             <el-input class="search_input" placeholder="登陆探索更多内容" :suffix-icon="Search"></el-input>
         </div>
         <div class="center">
-            <el-button type="text">创作中心</el-button>
-            <el-button type="text">业务合作</el-button>
+            <button class="rds_btn" >创作中心</button>
+            <button class="rds_btn">业务合作</button>
         </div>
     </div>
   
@@ -27,12 +27,21 @@ import { Search } from '@element-plus/icons-vue'
     align-items: center;
     padding: 10px 0;
     background-color: #fff;
-    /* box-shadow: 0 2px 4px 0 rgba(0,0,0,.1); */
+
+    line-height: 72px;
 }
 
 .logo img{
     height: 24px;
     margin-left: 16px;
+}
+
+
+.center{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 16px;
 }
 
 
@@ -47,5 +56,14 @@ import { Search } from '@element-plus/icons-vue'
  }
  /deep/ .el-input__wrapper .is_focus {
     border: 1px solid #ff2e4d;
+}
+.rds_btn{
+    height: 40px !important;
+    color: rgba(51,51,51,0.6);
+    font-size: 16px;
+    line-height: 120%;
+    padding: 0 16px;
+    background: transparent;
+    border: transparent;
 }
 </style>

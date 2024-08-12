@@ -77,9 +77,9 @@ function loginBtnClick(){
 <style scoped>
 .sider_bar{
     /* 高度撑满屏幕 */
-    height: 100vh;
-    /* width: calc(-18px + 25vw); */
+    height: calc(100vh - 72px);
     background-color: #ffffff;
+    padding-left: 16px;
 }
 .item{
     padding-top: 16px;
@@ -88,7 +88,7 @@ function loginBtnClick(){
 
 
 .active-box{
-    background-color: rgba(190, 187, 187, 0.6);
+    background: rgba(51,51,51,0.1);
 }
 
 .box{
