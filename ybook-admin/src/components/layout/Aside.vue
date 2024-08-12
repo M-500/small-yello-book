@@ -4,13 +4,13 @@
         <div class="item">
             <div class="box active-box">
                 <div class="icon">
-                    <img src="../../assets/icon/msg.svg" alt="">
+                    <img src="../../assets/icon/home.svg" alt="">
                 </div>
                 <div class="text">发现</div>
             </div>
             <div class="box">
                 <div class="icon">
-                    <img src="../../assets/icon/msg.svg" alt="">
+                    <img src="../../assets/icon/publish.svg" alt="">
                 </div>
                 <div class="text">发布</div>
             </div>
@@ -33,10 +33,13 @@
   >
     <div class="login_container">
         <div class="left">
-            <div class="mark">登陆后推荐更懂你的笔记</div>
-            <div class="logo">
-                <img src="../../assets/logo.svg" alt="慕课网">
+            <div class="header">
+                <div class="login_reason">登陆后推荐更懂你的笔记</div>
+                <div class="logo">
+                    <img src="../../assets/logo.svg" alt="慕课网">
+                </div>
             </div>
+            
             <div class="wechar_code">
                 微信二维码
             </div>
@@ -138,10 +141,44 @@ function loginBtnClick(){
     height: 24px;
 }
 .left{
+
+    width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
     border-right: 1px solid #ebebeb;
+}
+.login_reason{
+    height: 48px;
+    padding: 0 20px;
+    background:  #d0e3ff;
+    color: #3d8af5;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 120%;
+    margin-bottom: 20px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.right{
+    margin: 0;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 48px;
+}
+
+.login_form{
+    margin-top: 32px;
+    padding: 16px 0;
+    width: 304px;
+    display: flex;
+    flex-direction: column;
 }
 
 /deep/.el-dialog{
@@ -151,8 +188,11 @@ function loginBtnClick(){
     width: 800px;
     height: 480px;
     border-radius: 16px;
+    padding: 0;
 }
-
+/deep/ .el-input__inner{
+    padding: 12px;
+}
 .login_btn{
     background-color: #ff2e4d;
     border: #ebebeb;
@@ -179,5 +219,12 @@ function loginBtnClick(){
 
 /deep/  .is_focus {
     border: 1px solid #ff2e4d;
+}
+.login_title{
+    font-size: 18px;
+    color: #333;
+    font-weight: 600;
+    height: 24px;
+    line-height: 120%;
 }
 </style>

@@ -34,15 +34,18 @@ import { Search } from '@element-plus/icons-vue'
     height: 24px;
     margin-left: 16px;
 }
-/* 深度修改 覆盖elemet的样式 */
-/* .search /deep/  .el-input--suffix{
+
+
+ /deep/ .el-input__wrapper{
+    width: 300px;
+    height: 40px;
+    border-radius: 50px;
+    background-color: #f5f5f5;
     padding: 0 84px 0 16px;
     color: #333;
     caret-color: #ff2442;
-    border-radius: 50px;
+ }
+ /deep/ .el-input__wrapper .is_focus {
+    border: 1px solid #ff2e4d;
 }
-.search .el-input__suffix .el-input__suffix-inner{
-    color: #333;
-    font-size: 14px;
-} */
 </style>
