@@ -4,7 +4,7 @@
             <img src="https://th.bing.com/th/id/R.c8dc540e2aca707e4b6ce7dfc683df89?rik=6oYnoUTZcBLzOQ&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50053%2f4738.jpg_wh1200.jpg&ehk=ySgvy2yVdn%2bgvOxx24%2bX65oDzRtujqpdpNjrBPr23OM%3d&risl=&pid=ImgRaw&r=0" alt="">
         </div>
         <div class="bottom">
-            <div class="title">一定要收藏</div>
+            <div class="title">一定要收藏这样子会比较好玩的哦，小葱丝</div>
             <div class="info">
                 <div class="left">
                     <img src="https://th.bing.com/th/id/R.c8dc540e2aca707e4b6ce7dfc683df89?rik=6oYnoUTZcBLzOQ&riu=http%3a%2f%2fseopic.699pic.com%2fphoto%2f50053%2f4738.jpg_wh1200.jpg&ehk=ySgvy2yVdn%2bgvOxx24%2bX65oDzRtujqpdpNjrBPr23OM%3d&risl=&pid=ImgRaw&r=0" alt="">
@@ -38,7 +38,9 @@
     width: 100%;
     height: 300px;
     overflow: hidden;
-    border-radius: 8px;
+    /* 图片自动伸缩，不影藏 */
+    object-fit: cover;
+    border-radius: 20px;
     margin-bottom: 16px;
 }
 .bottom{

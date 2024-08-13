@@ -9,10 +9,10 @@
             <img src="../assets/logo.svg" alt="">
           </div>
         </div>
-<!-- 
+
         <div class="wechar_code">
-          微信二维码
-        </div> -->
+          <img src="../assets/background.png" alt="">
+        </div> 
       </div>
 
       <div class="right">
@@ -25,8 +25,9 @@
           <el-button type="primary" class="login_btn">登陆</el-button>
         </div>
         <div class="protocl">
-          <el-checkbox></el-checkbox>
-          <a href="#">我已阅读并同意《用户协议》</a>
+          <el-checkbox class="check_agree"></el-checkbox>
+          <span>我已阅读并同意
+            <a href="#">《用户协议》</a></span>
         </div>
 
       </div>
@@ -66,7 +67,7 @@ function handleClose(done) {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   /* align-items: center; */
   border-right: 1px solid #ebebeb;
 }
@@ -78,6 +79,17 @@ function handleClose(done) {
 }
 .left .header .logo img{
   width: 100px;
+}
+.left .wechar_code{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+.wechar_code img{
+  width: 100%;
+  height: 100%;
 }
 .login_reason{
   height: 48px;
@@ -173,8 +185,12 @@ function handleClose(done) {
   /* width: 100%; */
   padding: 0px 48px;
   display: flex;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+}
+.protocl span{
+  margin-left: 4px;
 }
 
 </style>
