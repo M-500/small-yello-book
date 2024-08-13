@@ -9,6 +9,7 @@ import (
 type UserRepoInterface interface {
 	UpsertUser(ctx context.Context, user *models.UserModel) error
 	DeleteUser(ctx context.Context, user *models.UserModel) error
+	CreateUser(ctx context.Context, user *models.UserModel) error
 	FindByUserName(ctx context.Context, userName string) (*models.UserModel, error)
 }
 
@@ -30,4 +31,9 @@ func (u *userRepo) DeleteUser(ctx context.Context, user *models.UserModel) error
 
 func (u *userRepo) FindByUserName(ctx context.Context, userName string) (*models.UserModel, error) {
 	return u.dao.FindByUserName(ctx, userName)
+}
+
+func (u *userRepo) CreateUser(ctx context.Context, user *models.UserModel) error {
+	// 创建用户，是依赖唯一索引冲突 还是说
+	return nil
 }
