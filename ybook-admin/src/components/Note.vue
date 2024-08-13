@@ -11,7 +11,25 @@
             <div class="box">健身</div>
         </div>
         <div class="content">
-            <Card />
+            <div class="session">
+                <Card />
+            </div>
+            <div class="session">
+                <Card />
+            </div>
+            <div class="session">
+                <Card />
+            </div>
+            <div class="session">
+                <Card />
+            </div>
+            <div class="session">
+                <Card />
+            </div>
+            <div class="session">
+                <Card />
+            </div>
+            
         </div>
     </div>
 </template>
@@ -49,5 +67,16 @@ import Card from './Card.vue';
 }
 .content{
     padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* 每行显示最多4个 */
+    justify-content: space-between;
+    align-items: center;
+
+}
+.session{
+    margin-right: 25px;
+    margin-bottom: 16px;
 }
 </style>

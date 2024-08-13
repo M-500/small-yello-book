@@ -9,6 +9,7 @@
         </el-aside>
         <el-main>
             <Note />
+            
         </el-main>
       </el-container>
     </el-container>

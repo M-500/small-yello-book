@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
 	"gin-svc/internal/repo/dao"
@@ -13,6 +14,7 @@ type UserSvc interface {
 	RegisterUser(ctx context.Context, req types.UserForm) error
 	DeleteUser(ctx context.Context, req types.UserForm) error
 	PwdLogin(ctx context.Context, req types.LoginForm) error
+	GetUserInfo(ctx context.Context, id int) (domain.DUser, error)
 }
 
 func NewUserSvc(userRepo repo.UserRepoInterface) UserSvc {
@@ -60,4 +62,8 @@ func (u *userSvcImpl) PwdLogin(ctx context.Context, req types.LoginForm) error {
 	}
 	// 组合Jwt信息，返回Token
 	return nil
+}
+
+func (u *userSvcImpl) GetUserInfo(ctx context.Context, id int) (domain.DUser, error) {
+	return domain.DUser{}, nil
 }
