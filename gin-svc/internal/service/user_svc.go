@@ -11,7 +11,6 @@ import (
 	"gin-svc/internal/types"
 	"gin-svc/internal/web/middleware/jwt"
 	"gin-svc/pkg/utils"
-	"time"
 )
 
 type UserSvc interface {
@@ -66,11 +65,11 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 			LikeCntCount:  0,
 			Age:           0,
 			Male:          "",
-			BirthDay:      time.Time{},
-			Addr:          "",
-			Profession:    "",
-			School:        "",
-			Level:         1,
+			//BirthDay:      &time.Time{},
+			Addr:       "",
+			Profession: "",
+			School:     "",
+			Level:      1,
 		}
 		// 初始化用户逻辑
 		err = u.userRepo.CreateUser(ctx, user)
@@ -92,14 +91,14 @@ func (u *userSvcImpl) DeleteUser(ctx context.Context, req types.UserForm) error 
 
 func (u *userSvcImpl) reqToModel(req *types.UserForm) *models.UserModel {
 	return &models.UserModel{
-		UserName:   req.UserName,
-		NickName:   req.NickName,
-		Avatar:     req.Avatar,
-		Email:      req.Email,
-		Password:   req.Password,
-		Signature:  req.Signature,
-		Male:       req.Male,
-		BirthDay:   req.BirthDay,
+		UserName:  req.UserName,
+		NickName:  req.NickName,
+		Avatar:    req.Avatar,
+		Email:     req.Email,
+		Password:  req.Password,
+		Signature: req.Signature,
+		Male:      req.Male,
+		//BirthDay:   &req.BirthDay,
 		Addr:       req.Addr,
 		Profession: req.Profession,
 		School:     req.School,

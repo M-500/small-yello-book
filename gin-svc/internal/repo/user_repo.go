@@ -38,6 +38,5 @@ func (u *userRepo) FindByEmail(ctx context.Context, email string) (*models.UserM
 }
 
 func (u *userRepo) CreateUser(ctx context.Context, user *models.UserModel) error {
-	// 创建用户，是依赖唯一索引冲突 还是说
-	return nil
+	return u.dao.Upsert(ctx, user)
 }

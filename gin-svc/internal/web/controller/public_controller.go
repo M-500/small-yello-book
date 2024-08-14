@@ -76,10 +76,11 @@ func (p *publicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (
 		return ginx.Error(10011, "邮箱格式不合法"), errors.New("邮箱格式不合法")
 	}
 	err = p.smtpSvc.LoginEmailSend(ctx, req.Email)
-	return ginx.JsonResult{
-		Code: 500,
-		Msg:  err.Error(),
-	}, err
+	if err != nil {
+		fmt.Println(err)
+		return ginx.Error(10011, "发送失败"), err
+	}
+	return ginx.Success(), err
 }
 
 func (p *publicController) RegisterRoute(group *gin.RouterGroup) {

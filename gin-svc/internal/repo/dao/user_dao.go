@@ -33,7 +33,7 @@ func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error 
 	}
 	return u.db.WithContext(ctx).Clauses(clause.OnConflict{
 		// 当发生冲突时，更新所有字段
-		Columns: []clause.Column{{Name: "id"}},
+		Columns: []clause.Column{{Name: "email"}},
 		DoUpdates: clause.Assignments(map[string]interface{}{
 			"user_name":      user.UserName,
 			"nick_name":      user.NickName,
@@ -47,11 +47,11 @@ func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error 
 			"like_cnt_count": user.LikeCntCount,
 			"age":            user.Age,
 			"male":           user.Male,
-			"birth_day":      user.BirthDay,
-			"addr":           user.Addr,
-			"profession":     user.Profession,
-			"school":         user.School,
-			"level":          user.Level,
+			//"birth_day":      user.BirthDay,
+			"addr":       user.Addr,
+			"profession": user.Profession,
+			"school":     user.School,
+			"level":      user.Level,
 		}),
 	}).Create(user).Error
 }
