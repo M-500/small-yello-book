@@ -20,9 +20,13 @@
           账号密码登录
         </div>
         <div class="login_form" >
-          <el-input class="form_item" v-model="LoginForm.phone" placeholder="请输入手机号"></el-input>
-          <el-input class="form_item" v-model="LoginForm.password"  placeholder="请输入密码"></el-input>
-          <el-button type="primary" class="login_btn">登陆</el-button>
+          <el-input class="form_item" v-model="LoginForm.email" placeholder="请输入邮箱"></el-input>
+          <!-- <el-input class="form_item" v-model="LoginForm.password"  placeholder="请输入密码"></el-input> -->
+          <div class="auth_code">
+            <el-input class="form_item" v-model="LoginForm.ver_code" placeholder="请输入验证码"></el-input>
+            <span class="auth_code_btn" @click="SendEmailBtn">获取验证码</span>
+          </div>
+          <el-button type="primary" class="login_btn" @click="loginBtn">登陆</el-button>
         </div>
         <div class="protocl">
           <el-checkbox class="check_agree"></el-checkbox>
@@ -38,16 +42,34 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+import { SendCode,login } from '../requests/api';
+import ElementPlus from 'element-plus';
 const dialogVisible: Ref<boolean> = ref(true);
 
 const LoginForm = reactive({
-  phone: '18574945291',
-  password: 'wulinlin'
+  email: '1978992154@qq.com',
+  ver_code: '626058'
+});
+const SendCodeForm = reactive({
+  email: '1978992154@qq.com',
+  type_code:1,
 });
 
-function handleClose(done) {
-  dialogVisible.value = false;
-  done();
+function loginBtn() {
+  login(LoginForm).then(res => {
+    let token = res.token;
+    console.log(res,token);
+  }).catch(err => {
+    ElementPlus.ElMessage.error('登陆失败');
+  });
+}
+
+function SendEmailBtn() {
+  SendCode(SendCodeForm).then(res => {
+    console.log(res);
+  }).catch(err => {
+    
+  });
 }
 </script>
 
@@ -192,5 +214,20 @@ function handleClose(done) {
 .protocl span{
   margin-left: 4px;
 }
-
+.auth_code{
+  /* 绝对定位 */
+  position: relative;
+}
+.auth_code_btn{
+  position: absolute;
+  right: 10%;
+  top: 25%;
+  height: 48px;
+  line-height: 48px;
+  font-size: 16px;
+  color: #ff2e4d;
+  /* background-color: #f5f5f5; */
+  /* border-radius: 50px;
+  border: 1px solid #ebebeb; */
+}
 </style>
