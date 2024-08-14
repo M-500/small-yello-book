@@ -43,23 +43,6 @@ func (p *publicController) EmailLoginCtl(ctx *gin.Context, req types.EmailLoginF
 	return ginx.JsonResult{Data: res}, nil
 }
 
-// LoginCtl godoc
-// @Summary 用户密码登录
-// @Description 用户密码登录
-// @Tags 公共模块
-// @Accept json
-// @Produce json
-// @Param user body types.LoginForm true "user"
-// @Success 200 {object} map[string]any
-// @Router /api/v1/na/login [post]
-func (p *publicController) LoginCtl(ctx *gin.Context, req types.LoginForm) (result ginx.JsonResult, err error) {
-	err = p.userSvc.PwdLogin(ctx, req)
-	if err != nil {
-		return ginx.Error(10011, "登陆失败"), err
-	}
-	return ginx.Success(), nil
-}
-
 // EmailSendCtl godoc
 // @Summary 发送邮件
 // @Description 发送邮件
@@ -78,13 +61,13 @@ func (p *publicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (
 	err = p.smtpSvc.LoginEmailSend(ctx, req.Email)
 	if err != nil {
 		fmt.Println(err)
-		return ginx.Error(10011, "发送失败"), err
+		return ginx.Error(10011, err.Error()), err
 	}
 	return ginx.Success(), err
 }
 
 func (p *publicController) RegisterRoute(group *gin.RouterGroup) {
 	group.POST("/login", ginx.WrapJsonBody[types.EmailLoginForm](p.EmailLoginCtl))
-	//group.POST("/login", ginx.WrapJsonBody[types.LoginForm](p.LoginCtl))
 	group.POST("/email/send", ginx.WrapJsonBody[types.EmailForm](p.EmailSendCtl))
+	//group.OPTIONS("/email/send", ginx.WrapJsonBody[types.EmailForm](p.EmailSendCtl))
 }

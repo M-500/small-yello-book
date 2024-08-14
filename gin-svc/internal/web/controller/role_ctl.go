@@ -19,11 +19,11 @@ func NewRoleController(svc service.RoleSvc) BaseController {
 }
 
 func (r *roleController) RegisterRoute(group *gin.RouterGroup) {
-	group.GET("/roles", ginx.WrapJsonBody[types.RolePageListReq](r.RolePageList))
-	group.GET("/roles/:id", ginx.WrapResponse(r.DetailRoleCtl))
-	group.POST("/roles", ginx.WrapJsonBody[types.CreateRoleReq](r.CreateRoleCtl))
-	group.DELETE("/roles/:id", ginx.WrapResponse(r.DeleteRoleCtl))
-	group.PUT("/roles", ginx.WrapJsonBody[types.UpdateRoleReq](r.UpdateRoleCtl))
+	group.GET("/roles", ginx.WrapJsonBody[types.RolePageListReq](r.RolePageList)) // 获取角色列表
+	group.GET("/roles/:id", ginx.WrapResponse(r.DetailRoleCtl))                   // 查询角色详情
+	group.POST("/roles", ginx.WrapJsonBody[types.CreateRoleReq](r.CreateRoleCtl)) // 创建角色
+	group.DELETE("/roles/:id", ginx.WrapResponse(r.DeleteRoleCtl))                // 删除角色
+	group.PUT("/roles", ginx.WrapJsonBody[types.UpdateRoleReq](r.UpdateRoleCtl))  //	更新角色
 }
 
 // RolePageList godoc

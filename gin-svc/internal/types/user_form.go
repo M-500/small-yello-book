@@ -16,11 +16,6 @@ type UserForm struct {
 	School     string    `json:"school"`
 }
 
-type LoginForm struct {
-	UserName string `json:"user_name"`
-	Password string `json:"password"`
-}
-
 type EmailLoginForm struct {
 	Email   string `json:"email" binding:"required,email"`
 	VerCode string `json:"ver_code" binding:"required"`

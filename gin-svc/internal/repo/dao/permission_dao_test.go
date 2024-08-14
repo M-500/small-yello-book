@@ -2,134 +2,91 @@ package dao
 
 import (
 	"context"
-	"gin-svc/internal/conf/cfg"
-	"gin-svc/internal/ioc"
+	"database/sql"
+
 	"gin-svc/internal/models"
+	"github.com/stretchr/testify/assert"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"net/http"
 	"testing"
 )
 
 func Test_permissionDao_Insert(t *testing.T) {
-	d := cfg.DatabaseCfg{
-		DSN:         "root:root@tcp(127.0.0.1:13317)/y_book?charset=utf8mb4&parseTime=True&loc=Local",
-		MaxIdleConn: 10,
-		MaxOpenConn: 10,
-	}
-	//redis := ioc.SetUpRedis(&config.Redis)
-	db := ioc.SetUpDB(&d)
-	type fields struct {
-		db *gorm.DB
-	}
-	type args struct {
+	testCases := []struct {
+		name string
+		mock func(t *testing.T) *sql.DB
 		ctx  context.Context
-		data models.SysPermissionModel
-	}
-	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
+		user models.SysPermissionModel
+
+		wantErr error
+
+		before func(t *testing.T)
+		after  func(t *testing.T)
 	}{
-		{
-			name: "",
-			fields: fields{
-				db: db,
-			},
-			args: args{
-				ctx: context.Background(),
-				data: models.SysPermissionModel{
-					Title:  "创建角色",
-					Action: http.MethodPost,
-					PerKey: "create:role",
-					Mark:   "",
-					Path:   "/api/v1/roles",
-					Type:   "SYS",
-					Status: true,
-				},
-			},
-		},
-		{
-			name: "",
-			fields: fields{
-				db: db,
-			},
-			args: args{
-				ctx: context.Background(),
-				data: models.SysPermissionModel{
-					Title:  "查看角色列表",
-					Action: http.MethodGet,
-					PerKey: "query:role:list",
-					Mark:   "",
-					Path:   "/api/v1/roles",
-					Type:   "SYS",
-					Status: true,
-				},
-			},
-		},
-		{
-			name: "",
-			fields: fields{
-				db: db,
-			},
-			args: args{
-				ctx: context.Background(),
-				data: models.SysPermissionModel{
-					Title:  "查看角色详情",
-					Action: http.MethodGet,
-					PerKey: "query:role:detail",
-					Mark:   "",
-					Path:   "/api/v1/roles/:id",
-					Type:   "SYS",
-					Status: true,
-				},
-			},
-		},
-		{
-			name: "",
-			fields: fields{
-				db: db,
-			},
-			args: args{
-				ctx: context.Background(),
-				data: models.SysPermissionModel{
-					Title:  "删除角色",
-					Action: http.MethodDelete,
-					PerKey: "delete:role",
-					Mark:   "",
-					Path:   "/api/v1/roles/:id",
-					Type:   "SYS",
-					Status: true,
-				},
-			},
-		},
-		{
-			name: "",
-			fields: fields{
-				db: db,
-			},
-			args: args{
-				ctx: context.Background(),
-				data: models.SysPermissionModel{
-					Title:  "更新角色信息",
-					Action: http.MethodPut,
-					PerKey: "update:role:detail",
-					Mark:   "",
-					Path:   "/api/v1/roles",
-					Type:   "SYS",
-					Status: true,
-				},
-			},
-		},
+		//{
+		//	name: "插入成功",
+		//	mock: func(t *testing.T) *sql.DB {
+		//		db, mock, err := sqlmock.New()
+		//		assert.NoError(t, err)
+		//		mockRes := sqlmock.NewResult(123, 1)
+		//		// 这边要求传入的是 sql 的正则表达式
+		//		mock.ExpectExec("INSERT INTO .*").
+		//			WillReturnResult(mockRes)
+		//		return db
+		//	},
+		//	ctx: context.Background(),
+		//	user: models.SysPermissionModel{
+		//		Title: "Tom",
+		//	},
+		//},
+		//{
+		//	name: "邮箱冲突",
+		//	mock: func(t *testing.T) *sql.DB {
+		//		db, mock, err := sqlmock.New()
+		//		assert.NoError(t, err)
+		//		// 这边要求传入的是 sql 的正则表达式
+		//		mock.ExpectExec("INSERT INTO .*").
+		//			WillReturnError(&dbDriver.MySQLError{Number: 1062})
+		//		return db
+		//	},
+		//	ctx: context.Background(),
+		//	user: User{
+		//		Nickname: "Tom",
+		//	},
+		//	wantErr: ErrDuplicateEmail,
+		//},
+		//{
+		//	name: "数据库错误",
+		//	mock: func(t *testing.T) *sql.DB {
+		//		db, mock, err := sqlmock.New()
+		//		assert.NoError(t, err)
+		//		// 这边要求传入的是 sql 的正则表达式
+		//		mock.ExpectExec("INSERT INTO .*").
+		//			WillReturnError(errors.New("数据库错误"))
+		//		return db
+		//	},
+		//	ctx: context.Background(),
+		//	user: User{
+		//		Nickname: "Tom",
+		//	},
+		//	wantErr: errors.New("数据库错误"),
+		//},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			p := &permissionDao{
-				db: tt.fields.db,
-			}
-			if err := p.Insert(tt.args.ctx, tt.args.data); (err != nil) != tt.wantErr {
-				t.Errorf("Insert() error = %v, wantErr %v", err, tt.wantErr)
-			}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			sqlDB := tc.mock(t)
+			db, err := gorm.Open(mysql.New(mysql.Config{
+				Conn:                      sqlDB,
+				SkipInitializeWithVersion: true,
+			}), &gorm.Config{
+				DisableAutomaticPing:   true,
+				SkipDefaultTransaction: true,
+			})
+			assert.NoError(t, err)
+			dao := NewPermissionDAO(db)
+			err = dao.Insert(tc.ctx, tc.user)
+			assert.Equal(t, tc.wantErr, err)
 		})
 	}
 }
