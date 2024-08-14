@@ -17,6 +17,7 @@ import (
 	"gin-svc/internal/service"
 	"gin-svc/internal/web"
 	"gin-svc/internal/web/controller"
+	"gin-svc/internal/web/middleware/jwt"
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
@@ -32,8 +33,8 @@ func main() {
 	if err != nil {
 		return
 	}
-	userCtl := InitUserController(db)
-	pubController := InitPubController(db)
+	userCtl := InitUserController(db, redisCli)
+	pubController := InitPubController(db, redisCli)
 	roleCtl := InitRoleController(db, redisCli)
 	engine := web.SetupWebEngine(
 		userCtl,
@@ -45,18 +46,25 @@ func main() {
 	}
 }
 
-func InitUserController(db *gorm.DB) controller.BaseController {
+func InitUserController(db *gorm.DB, cli redis.Cmdable) controller.BaseController {
 	userDao := dao.NewUserDao(db)
 	userRepo := repo.NewUserRepoInterface(userDao)
-	userSvc := service.NewUserSvc(userRepo)
+
+	codeCache := cache.NewRedisVerificationCodeCache(cli)
+	jwtHdl := jwt.NewRedisJWTHandler(cli)
+	userSvc := service.NewUserSvc(userRepo, codeCache, jwtHdl)
 	return controller.NewUserController(userSvc)
 }
 
-func InitPubController(db *gorm.DB) controller.BaseController {
+func InitPubController(db *gorm.DB, cli redis.Cmdable) controller.BaseController {
 	userDao := dao.NewUserDao(db)
 	userRepo := repo.NewUserRepoInterface(userDao)
-	userSvc := service.NewUserSvc(userRepo)
-	return controller.NewPublicController(userSvc)
+	codeCache := cache.NewRedisVerificationCodeCache(cli)
+	jwtHdl := jwt.NewRedisJWTHandler(cli)
+	userSvc := service.NewUserSvc(userRepo, codeCache, jwtHdl)
+	redisVerificationCodeCache := cache.NewRedisVerificationCodeCache(cli)
+	emailSvc := service.NewSMTPService(redisVerificationCodeCache)
+	return controller.NewPublicController(userSvc, emailSvc)
 }
 
 func InitRoleController(db *gorm.DB, cli redis.Cmdable) controller.BaseController {

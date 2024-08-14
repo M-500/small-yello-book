@@ -12,6 +12,7 @@ type UserDao interface {
 	Upsert(ctx context.Context, user *models.UserModel) error
 	Delete(ctx context.Context, id int) error
 	FindByUserName(ctx context.Context, userName string) (*models.UserModel, error)
+	FindByEmail(ctx context.Context, email string) (*models.UserModel, error)
 }
 
 func NewUserDao(db *gorm.DB) UserDao {
@@ -38,7 +39,7 @@ func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error 
 			"nick_name":      user.NickName,
 			"avatar":         user.Avatar,
 			"password":       user.Password,
-			"phone":          user.Phone,
+			"email":          user.Email,
 			"signature":      user.Signature,
 			"ip_addr":        user.IPAddr,
 			"fans_count":     user.FansCount,
@@ -58,6 +59,17 @@ func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error 
 func (u *userDaoImpl) FindByUserName(ctx context.Context, userName string) (*models.UserModel, error) {
 	user := &models.UserModel{}
 	query := u.db.WithContext(ctx).Where("user_name = ?", userName).First(user)
+	if err := query.Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, ErrRecordNotFound
+		}
+		return nil, err
+	}
+	return user, nil
+}
+func (u *userDaoImpl) FindByEmail(ctx context.Context, email string) (*models.UserModel, error) {
+	user := &models.UserModel{}
+	query := u.db.WithContext(ctx).Where("email = ?", email).First(user)
 	if err := query.Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrRecordNotFound

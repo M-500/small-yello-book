@@ -27,7 +27,7 @@ func NewUserController(userSvc service.UserSvc) BaseController {
 // @Success 200 {object} map[string]any
 // @Router /api/v1/users [put]
 func (ctl *userController) UpdateUserInfo(ctx *gin.Context, req types.UserForm) (result ginx.JsonResult, err error) {
-	err = ctl.userSvc.RegisterUser(ctx, req)
+	err = ctl.userSvc.DeleteUser(ctx, req)
 	if err != nil {
 		return ginx.Error(10011, "更新失败"), err
 	}
@@ -44,7 +44,7 @@ func (ctl *userController) UpdateUserInfo(ctx *gin.Context, req types.UserForm) 
 // @Success 200 {object} map[string]any
 // @Router /api/v1/users/{id} [delete]
 func (ctl *userController) DeleteUserCtl(ctx *gin.Context, req types.UserForm) (result ginx.JsonResult, err error) {
-	err = ctl.userSvc.RegisterUser(ctx, req)
+	err = ctl.userSvc.DeleteUser(ctx, req)
 	if err != nil {
 		return ginx.Error(10011, "更新失败"), err
 	}

@@ -10,7 +10,7 @@ import (
 
 func SetupWebEngine(userCtl, pubCtl controller.BaseController, roleCtl controller.BaseController) *gin.Engine {
 	engine := gin.Default()
-	rg := engine.Group("")
+	rg := engine.Group("/api/v1")
 
 	publicGroup := rg.Group("/na")
 	{
@@ -18,7 +18,7 @@ func SetupWebEngine(userCtl, pubCtl controller.BaseController, roleCtl controlle
 		pubCtl.RegisterRoute(publicGroup)
 	}
 
-	privateGroup := rg.Group("/api/v1")
+	privateGroup := rg.Group("")
 	{
 		userCtl.RegisterRoute(privateGroup)
 		roleCtl.RegisterRoute(privateGroup)

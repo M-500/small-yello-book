@@ -7,7 +7,7 @@ type UserForm struct {
 	NickName   string    `json:"nick_name"`
 	Avatar     string    `json:"avatar"`
 	Password   string    `json:"password"`
-	Phone      string    `json:"phone"`
+	Email      string    `json:"email"`
 	Signature  string    `json:"signature"`
 	Male       string    `json:"male"`
 	BirthDay   time.Time `json:"birthDay"`
@@ -19,4 +19,9 @@ type UserForm struct {
 type LoginForm struct {
 	UserName string `json:"user_name"`
 	Password string `json:"password"`
+}
+
+type EmailLoginForm struct {
+	Email   string `json:"email" binding:"required,email"`
+	VerCode string `json:"ver_code" binding:"required"`
 }

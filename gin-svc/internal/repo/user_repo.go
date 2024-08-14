@@ -11,6 +11,7 @@ type UserRepoInterface interface {
 	DeleteUser(ctx context.Context, user *models.UserModel) error
 	CreateUser(ctx context.Context, user *models.UserModel) error
 	FindByUserName(ctx context.Context, userName string) (*models.UserModel, error)
+	FindByEmail(ctx context.Context, email string) (*models.UserModel, error)
 }
 
 func NewUserRepoInterface(userDao dao.UserDao) UserRepoInterface {
@@ -31,6 +32,9 @@ func (u *userRepo) DeleteUser(ctx context.Context, user *models.UserModel) error
 
 func (u *userRepo) FindByUserName(ctx context.Context, userName string) (*models.UserModel, error) {
 	return u.dao.FindByUserName(ctx, userName)
+}
+func (u *userRepo) FindByEmail(ctx context.Context, email string) (*models.UserModel, error) {
+	return u.dao.FindByEmail(ctx, email)
 }
 
 func (u *userRepo) CreateUser(ctx context.Context, user *models.UserModel) error {

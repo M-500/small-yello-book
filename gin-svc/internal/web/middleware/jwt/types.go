@@ -8,6 +8,7 @@ import (
 type Handler interface {
 	ClearToken(ctx *gin.Context) error
 	ExtractToken(ctx *gin.Context) string
+	GenJWTToken(uid int64) (string, error)
 	SetLoginToken(ctx *gin.Context, uid int64) error
 }
 
