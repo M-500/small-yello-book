@@ -25,7 +25,7 @@ func Test_smtp163Service_SendEmail(t *testing.T) {
 			fields: fields{
 				smtpService: "smtp.163.com",
 				smtpPort:    25,
-				smtpKey:     "PNNSCQKYCIIN",
+				smtpKey:     "",
 				emailAddr:   "18574945291@163.com",
 			},
 			args: args{

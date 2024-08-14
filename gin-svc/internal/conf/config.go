@@ -7,4 +7,5 @@ import (
 type ConfigInstance struct {
 	Database cfg.DatabaseCfg `mapstructure:"database"`
 	Redis    cfg.RedisCfg    `mapstructure:"redis"`
+	Email    cfg.EmailCfg    `mapstructure:"email"`
 }

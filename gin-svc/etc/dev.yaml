@@ -8,3 +8,9 @@ redis:
   port: 16379
   db: 1
   password: ""
+
+email:
+  host: "smtp.163.com"
+  port: 25
+  addr: "18574945291@163.com"
+  secret_key: "PNNSCQKYTCCBCIIN"
