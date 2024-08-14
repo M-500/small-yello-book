@@ -12,6 +12,7 @@ import (
 	jwtMock "gin-svc/internal/web/middleware/jwt/mocks"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 	"testing"
 
 	"go.uber.org/mock/gomock" // 使用uber的mock包
@@ -137,9 +138,58 @@ func Test_userSvcImpl_EmailLogin(t *testing.T) {
 			tokenStr: "",
 			wantErr:  errors.New("验证码错误"),
 		},
-		//{
-		//	name: "系统错误",
-		//},
+		{
+			name: "MySQL查询错误",
+			mock: func(ctrl *gomock.Controller) (repo.UserRepoInterface, repo.VerificationCodeRepo, jwt.Handler) {
+				userRepo := mocks.NewMockUserRepoInterface(ctrl)
+				userRepo.EXPECT().FindByEmail(gomock.Any(), "19722221111@qq.com").
+					Return(nil, gorm.ErrInvalidDB)
+				codeRepo := mocks.NewMockVerificationCodeRepo(ctrl)
+				// 模拟查询成功
+				//codeRepo.EXPECT().GetVerificationCode(gomock.Any(), "19722221111@qq.com").
+				//	Return("123456", nil)
+				// 模拟删除成功
+				//codeRepo.EXPECT().DeleteVerificationCode(gomock.Any(), "19722221111@qq.com").
+				//	Return(nil)
+				handler := jwtMock.NewMockHandler(ctrl)
+				//handler.EXPECT().GenJWTToken(gomock.Any()).Return("xxx.weqweq.asijdiouqjwe", nil)
+				return userRepo, codeRepo, handler
+			},
+			ctx: context.Background(),
+			req: types.EmailLoginForm{
+				Email:   "19722221111@qq.com",
+				VerCode: "123456",
+			},
+			tokenStr: "",
+			wantErr:  errors.New("系统错误，查询用户失败"),
+		},
+		{
+			name: "Redis查询错误",
+			mock: func(ctrl *gomock.Controller) (repo.UserRepoInterface, repo.VerificationCodeRepo, jwt.Handler) {
+				userRepo := mocks.NewMockUserRepoInterface(ctrl)
+				userRepo.EXPECT().FindByEmail(gomock.Any(), "19722221111@qq.com").
+					Return(&models.UserModel{
+						Email: "19722221111@qq.com",
+					}, nil)
+				codeRepo := mocks.NewMockVerificationCodeRepo(ctrl)
+				// 模拟查询Redis报错
+				codeRepo.EXPECT().GetVerificationCode(gomock.Any(), "19722221111@qq.com").
+					Return("", redis.ErrClosed)
+				// 模拟删除成功
+				//codeRepo.EXPECT().DeleteVerificationCode(gomock.Any(), "19722221111@qq.com").
+				//	Return(nil)
+				handler := jwtMock.NewMockHandler(ctrl)
+				//handler.EXPECT().GenJWTToken(gomock.Any()).Return("xxx.weqweq.asijdiouqjwe", nil)
+				return userRepo, codeRepo, handler
+			},
+			ctx: context.Background(),
+			req: types.EmailLoginForm{
+				Email:   "19722221111@qq.com",
+				VerCode: "123456",
+			},
+			tokenStr: "",
+			wantErr:  errors.New("系统错误，查询验证码失败"),
+		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {

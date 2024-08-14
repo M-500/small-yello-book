@@ -10,6 +10,7 @@ import (
 	"gin-svc/internal/types"
 	"gin-svc/internal/web/middleware/jwt"
 	"gin-svc/pkg/utils"
+	"github.com/redis/go-redis/v9"
 )
 
 type UserSvc interface {
@@ -41,12 +42,15 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 		return "", errors.New("用户不存在")
 	}
 	if err != nil {
-		return "", err
+		return "", errors.New("系统错误，查询用户失败")
 	}
 	// 校验验证码是否正确
 	code, err := u.verRepo.GetVerificationCode(ctx, req.Email)
-	if err != nil {
+	if errors.Is(err, redis.Nil) {
 		return "", errors.New("验证码错误")
+	}
+	if err != nil {
+		return "", errors.New("系统错误，查询验证码失败")
 	}
 	if code != req.VerCode {
 		return "", errors.New("验证码验证失败")
