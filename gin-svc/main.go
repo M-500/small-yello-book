@@ -18,7 +18,7 @@ var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
 
 // @title Swagger YBOOK API
 // @version 0.0.1
-// @description This is a sample Server pets
+// @description Y_BOOK 的API文档
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization

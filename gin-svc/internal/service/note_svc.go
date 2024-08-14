@@ -54,6 +54,5 @@ func (n *noteSvcImpl) DeleteNote(ctx context.Context, id int) error {
 }
 
 func (n *noteSvcImpl) UpdatePermission(ctx context.Context, noteId int, userId int, permission int) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }

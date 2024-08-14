@@ -13,3 +13,11 @@ type App struct {
 	Cli    redis.Cmdable
 	Cfg    *conf.ConfigInstance
 }
+
+func NewApp(engine *gin.Engine, DB *gorm.DB, cli redis.Cmdable, cfg *conf.ConfigInstance) *App {
+	return &App{
+		Engine: engine,
+		DB:     DB,
+		Cli:    cli,
+		Cfg:    cfg}
+}
