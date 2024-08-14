@@ -37,7 +37,10 @@ type userSvcImpl struct {
 
 func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error) {
 	user, err := u.userRepo.FindByEmail(ctx, req.Email)
-	if err != nil && !errors.Is(err, dao.ErrRecordNotFound) {
+	if errors.Is(err, dao.ErrRecordNotFound) {
+		return "", errors.New("用户不存在")
+	}
+	if err != nil {
 		return "", err
 	}
 	// 校验验证码是否正确
