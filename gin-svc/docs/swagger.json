@@ -1,7 +1,10 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is a sample Server pets",
+        "title": "Swagger YBOOK API",
+        "contact": {},
+        "version": "0.0.1"
     },
     "paths": {
         "/api/v1/na/email/send": {
@@ -41,7 +44,7 @@
         },
         "/api/v1/na/login": {
             "post": {
-                "description": "用户密码登录",
+                "description": "邮箱登录/注册",
                 "consumes": [
                     "application/json"
                 ],
@@ -51,7 +54,7 @@
                 "tags": [
                     "公共模块"
                 ],
-                "summary": "用户密码登录",
+                "summary": "邮箱登录/注册",
                 "parameters": [
                     {
                         "description": "user",
@@ -59,16 +62,21 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.LoginForm"
+                            "$ref": "#/definitions/types.EmailLoginForm"
                         }
                     }
                 ],
                 "responses": {
+                    "10011": {
+                        "description": "登陆失败",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/resp.LoginResp"
                         }
                     }
                 }
@@ -76,6 +84,11 @@
         },
         "/api/v1/roles": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取角色列表",
                 "consumes": [
                     "application/json"
@@ -457,17 +470,6 @@
                 }
             }
         },
-        "types.LoginForm": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "user_name": {
-                    "type": "string"
-                }
-            }
-        },
         "types.RolePageListReq": {
             "type": "object",
             "properties": {
@@ -558,6 +560,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

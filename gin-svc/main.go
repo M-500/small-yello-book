@@ -24,6 +24,13 @@ import (
 
 var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
 
+// @title Swagger YBOOK API
+// @version 0.0.1
+// @description This is a sample Server pets
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+// @BasePath /
 func main() {
 	config := ioc.SetUpConfig(*configFile)
 	fmt.Println(config)

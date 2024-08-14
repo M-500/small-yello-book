@@ -96,13 +96,6 @@ definitions:
     - email
     - ver_code
     type: object
-  types.LoginForm:
-    properties:
-      password:
-        type: string
-      user_name:
-        type: string
-    type: object
   types.RolePageListReq:
     properties:
       keywords:
@@ -168,6 +161,9 @@ definitions:
     type: object
 info:
   contact: {}
+  description: This is a sample Server pets
+  title: Swagger YBOOK API
+  version: 0.0.1
 paths:
   /api/v1/na/email/send:
     post:
@@ -196,23 +192,26 @@ paths:
     post:
       consumes:
       - application/json
-      description: 用户密码登录
+      description: 邮箱登录/注册
       parameters:
       - description: user
         in: body
         name: user
         required: true
         schema:
-          $ref: '#/definitions/types.LoginForm'
+          $ref: '#/definitions/types.EmailLoginForm'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties: true
-            type: object
-      summary: 用户密码登录
+            $ref: '#/definitions/resp.LoginResp'
+        "10011":
+          description: 登陆失败
+          schema:
+            type: string
+      summary: 邮箱登录/注册
       tags:
       - 公共模块
   /api/v1/roles:
@@ -240,6 +239,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/ginx.JsonResult'
+      security:
+      - ApiKeyAuth: []
       summary: 获取角色列表
       tags:
       - 角色模块
@@ -371,4 +372,9 @@ paths:
       summary: 删除用户
       tags:
       - 用户模块
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

@@ -24,7 +24,9 @@
           <!-- <el-input class="form_item" v-model="LoginForm.password"  placeholder="请输入密码"></el-input> -->
           <div class="auth_code">
             <el-input class="form_item" v-model="LoginForm.ver_code" placeholder="请输入验证码"></el-input>
-            <span class="auth_code_btn" @click="SendEmailBtn">获取验证码</span>
+            <button :disabled="!isEmailValid || isSending || countdown > 0"
+               :style="buttonStyle"
+               class="auth_code_btn" @click="SendEmailBtn">获取验证码</button>
           </div>
           <el-button type="primary" class="login_btn" @click="loginBtn">登陆</el-button>
         </div>
@@ -44,7 +46,11 @@
 import { reactive, ref } from 'vue';
 import { SendCode,login } from '../requests/api';
 import ElementPlus from 'element-plus';
+import { computed,defineComponent } from 'vue';
 const dialogVisible: Ref<boolean> = ref(true);
+const isEmailValid = ref<boolean>(false); // 邮箱是否有效
+const isSending = ref<boolean>(false); // 是否正在发送验证码
+const countdown = ref<number>(0); // 倒计时
 
 const LoginForm = reactive({
   email: '1978992154@qq.com',
@@ -54,7 +60,11 @@ const SendCodeForm = reactive({
   email: '1978992154@qq.com',
   type_code:1,
 });
-
+const validateEmail = () => {
+  // 基本的邮箱正则表达式验证
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  isEmailValid.value = emailPattern.test(SendCodeForm.email);
+};
 function loginBtn() {
   login(LoginForm).then(res => {
     let token = res.token;
@@ -66,11 +76,34 @@ function loginBtn() {
 
 function SendEmailBtn() {
   SendCode(SendCodeForm).then(res => {
-    console.log(res);
+    console.log(res.msg);
+    isSending.value = false;
   }).catch(err => {
-    
+    console.log("出错了",err);
   });
+
+  const startCountdown = () => {
+      countdown.value = 120; // 2分钟倒计时
+
+      const interval = setInterval(() => {
+        if (countdown.value > 0) {
+          countdown.value--;
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000); // 每秒更新一次倒计时
+    };
+    const buttonStyle = computed(() => ({
+      backgroundColor:
+        isEmailValid.value && !isSending.value && countdown.value === 0
+          ? '#007bff'
+          : '#d3d3d3',
+      cursor: isEmailValid.value && !isSending.value && countdown.value === 0
+        ? 'pointer'
+        : 'not-allowed',
+    }));
 }
+
 </script>
 
 
@@ -221,13 +254,14 @@ function SendEmailBtn() {
 .auth_code_btn{
   position: absolute;
   right: 10%;
-  top: 25%;
-  height: 48px;
-  line-height: 48px;
+  top: 27%;
+  height: 40px;
+  line-height: 40px;
   font-size: 16px;
   color: #ff2e4d;
-  /* background-color: #f5f5f5; */
-  /* border-radius: 50px;
-  border: 1px solid #ebebeb; */
+
+  background-color: #ffffff;
+  /* 设置边框为透明 */
+  border: 1px solid transparent;
 }
 </style>

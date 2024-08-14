@@ -52,7 +52,7 @@ const docTemplate = `{
         },
         "/api/v1/na/login": {
             "post": {
-                "description": "用户密码登录",
+                "description": "邮箱登录/注册",
                 "consumes": [
                     "application/json"
                 ],
@@ -62,7 +62,7 @@ const docTemplate = `{
                 "tags": [
                     "公共模块"
                 ],
-                "summary": "用户密码登录",
+                "summary": "邮箱登录/注册",
                 "parameters": [
                     {
                         "description": "user",
@@ -70,16 +70,21 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/types.LoginForm"
+                            "$ref": "#/definitions/types.EmailLoginForm"
                         }
                     }
                 ],
                 "responses": {
+                    "10011": {
+                        "description": "登陆失败",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/resp.LoginResp"
                         }
                     }
                 }
@@ -87,6 +92,11 @@ const docTemplate = `{
         },
         "/api/v1/roles": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取角色列表",
                 "consumes": [
                     "application/json"
@@ -468,17 +478,6 @@ const docTemplate = `{
                 }
             }
         },
-        "types.LoginForm": {
-            "type": "object",
-            "properties": {
-                "password": {
-                    "type": "string"
-                },
-                "user_name": {
-                    "type": "string"
-                }
-            }
-        },
         "types.RolePageListReq": {
             "type": "object",
             "properties": {
@@ -570,17 +569,24 @@ const docTemplate = `{
                 }
             }
         }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "0.0.1",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Swagger YBOOK API",
+	Description:      "This is a sample Server pets",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

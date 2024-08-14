@@ -27,6 +27,7 @@ func (r *roleController) RegisterRoute(group *gin.RouterGroup) {
 }
 
 // RolePageList godoc
+// @Security ApiKeyAuth
 // @Summary 获取角色列表
 // @Description 获取角色列表
 // @Tags 角色模块
