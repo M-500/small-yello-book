@@ -6,6 +6,7 @@ import (
 	"gin-svc/internal/repo/dao"
 )
 
+//go:generate mockgen -destination=../repo/mocks/mock_user_repo.go -package=mocks gin-svc/internal/repo UserRepoInterface
 type UserRepoInterface interface {
 	UpsertUser(ctx context.Context, user *models.UserModel) error
 	DeleteUser(ctx context.Context, user *models.UserModel) error

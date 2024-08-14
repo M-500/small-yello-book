@@ -6,7 +6,6 @@ import (
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
-	"gin-svc/internal/repo/cache"
 	"gin-svc/internal/repo/dao"
 	"gin-svc/internal/types"
 	"gin-svc/internal/web/middleware/jwt"
@@ -20,12 +19,12 @@ type UserSvc interface {
 }
 
 func NewUserSvc(userRepo repo.UserRepoInterface,
-	verCache cache.VerificationCodeCache,
+	verRepo repo.VerificationCodeRepo,
 	hdl jwt.Handler,
 ) UserSvc {
 	return &userSvcImpl{
 		userRepo: userRepo,
-		verCache: verCache,
+		verRepo:  verRepo,
 		Handler:  hdl,
 	}
 }
@@ -33,7 +32,7 @@ func NewUserSvc(userRepo repo.UserRepoInterface,
 type userSvcImpl struct {
 	jwt.Handler
 	userRepo repo.UserRepoInterface
-	verCache cache.VerificationCodeCache
+	verRepo  repo.VerificationCodeRepo
 }
 
 func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error) {
@@ -42,7 +41,7 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 		return "", err
 	}
 	// 校验验证码是否正确
-	code, err := u.verCache.GetVerificationCode(ctx, req.Email)
+	code, err := u.verRepo.GetVerificationCode(ctx, req.Email)
 	if err != nil {
 		return "", errors.New("验证码错误")
 	}
@@ -83,7 +82,7 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 	}
 
 	// 删除验证码
-	_ = u.verCache.DeleteVerificationCode(ctx, req.Email)
+	_ = u.verRepo.DeleteVerificationCode(ctx, req.Email)
 	return tokenStr, nil
 }
 

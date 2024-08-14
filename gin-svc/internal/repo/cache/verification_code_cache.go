@@ -11,6 +11,7 @@ const (
 	TimeExpire               = 5 * time.Minute
 )
 
+//go:generate mockgen -destination=./repo/mocks/mock_verification_code_cache.go -package=mocks gin-svc/internal/repo VerificationCodeCache
 type VerificationCodeCache interface {
 	// SetVerificationCode 设置验证码
 	SetVerificationCode(ctx context.Context, email string, code string) error
