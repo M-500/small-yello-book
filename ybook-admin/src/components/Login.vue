@@ -6,29 +6,36 @@
         <div class="header">
           <div class="login_reason">登陆后推荐更懂你的笔记</div>
           <div class="logo">
-            <img src="../assets/logo.svg" alt="">
+            <img src="../assets/logo.svg"
+                 alt="">
           </div>
         </div>
-
         <div class="wechar_code">
-          <img src="../assets/background.png" alt="">
-        </div> 
+          <img src="../assets/background.png"
+               alt="">
+        </div>
       </div>
-
       <div class="right">
         <div class="login_title">
           账号密码登录
         </div>
-        <div class="login_form" >
-          <el-input class="form_item" v-model="LoginForm.email" placeholder="请输入邮箱"></el-input>
+        <div class="login_form">
+          <el-input class="form_item"
+                    v-model="LoginForm.email"
+                    placeholder="请输入邮箱"></el-input>
           <!-- <el-input class="form_item" v-model="LoginForm.password"  placeholder="请输入密码"></el-input> -->
           <div class="auth_code">
-            <el-input class="form_item" v-model="LoginForm.ver_code" placeholder="请输入验证码"></el-input>
+            <el-input class="form_item"
+                      v-model="LoginForm.ver_code"
+                      placeholder="请输入验证码"></el-input>
             <button :disabled="!isEmailValid || isSending || countdown > 0"
-               :style="buttonStyle"
-               class="auth_code_btn" @click="SendEmailBtn">获取验证码</button>
+                    :style="buttonStyle"
+                    class="auth_code_btn"
+                    @click="SendEmailBtn">获取验证码</button>
           </div>
-          <el-button type="primary" class="login_btn" @click="loginBtn">登陆</el-button>
+          <el-button type="primary"
+                     class="login_btn"
+                     @click="loginBtn">登陆</el-button>
         </div>
         <div class="protocl">
           <el-checkbox class="check_agree"></el-checkbox>
@@ -43,73 +50,79 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
-import { SendCode,login } from '../requests/api';
-import ElementPlus from 'element-plus';
-import { computed,defineComponent } from 'vue';
-const dialogVisible: Ref<boolean> = ref(true);
-const isEmailValid = ref<boolean>(false); // 邮箱是否有效
-const isSending = ref<boolean>(false); // 是否正在发送验证码
-const countdown = ref<number>(0); // 倒计时
+import { reactive, ref } from 'vue'
+import { SendCode, login } from '@/requests/api'
+import ElementPlus from 'element-plus'
+import { computed, defineComponent } from 'vue'
+import { useUserStore } from '@/store'
+
+const dialogVisible: Ref<boolean> = ref(true)
+const isEmailValid = ref<boolean>(false) // 邮箱是否有效
+const isSending = ref<boolean>(false) // 是否正在发送验证码
+const countdown = ref<number>(0) // 倒计时
+const userStore = useUserStore() // 引入pinia的store
 
 const LoginForm = reactive({
   email: '1978992154@qq.com',
   ver_code: '626058'
-});
+})
 const SendCodeForm = reactive({
   email: '1978992154@qq.com',
-  type_code:1,
-});
+  type_code: 1
+})
 const validateEmail = () => {
   // 基本的邮箱正则表达式验证
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  isEmailValid.value = emailPattern.test(SendCodeForm.email);
-};
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  isEmailValid.value = emailPattern.test(SendCodeForm.email)
+}
 function loginBtn() {
-  login(LoginForm).then(res => {
-    let token = res.token;
-    console.log(res,token);
-  }).catch(err => {
-    ElementPlus.ElMessage.error('登陆失败');
-  });
+  login(LoginForm)
+    .then(res => {
+      let token = res.token
+      userStore.setToken(token)
+    })
+    .catch(err => {
+      ElementPlus.ElMessage.error('登陆失败')
+    })
 }
 
 function SendEmailBtn() {
-  SendCode(SendCodeForm).then(res => {
-    console.log(res.msg);
-    isSending.value = false;
-  }).catch(err => {
-    console.log("出错了",err);
-  });
+  SendCode(SendCodeForm)
+    .then(res => {
+      console.log(res.msg)
+      isSending.value = false
+    })
+    .catch(err => {
+      console.log('出错了', err)
+    })
 
   const startCountdown = () => {
-      countdown.value = 120; // 2分钟倒计时
+    countdown.value = 120 // 2分钟倒计时
 
-      const interval = setInterval(() => {
-        if (countdown.value > 0) {
-          countdown.value--;
-        } else {
-          clearInterval(interval);
-        }
-      }, 1000); // 每秒更新一次倒计时
-    };
-    const buttonStyle = computed(() => ({
-      backgroundColor:
-        isEmailValid.value && !isSending.value && countdown.value === 0
-          ? '#007bff'
-          : '#d3d3d3',
-      cursor: isEmailValid.value && !isSending.value && countdown.value === 0
+    const interval = setInterval(() => {
+      if (countdown.value > 0) {
+        countdown.value--
+      } else {
+        clearInterval(interval)
+      }
+    }, 1000) // 每秒更新一次倒计时
+  }
+  const buttonStyle = computed(() => ({
+    backgroundColor:
+      isEmailValid.value && !isSending.value && countdown.value === 0
+        ? '#007bff'
+        : '#d3d3d3',
+    cursor:
+      isEmailValid.value && !isSending.value && countdown.value === 0
         ? 'pointer'
-        : 'not-allowed',
-    }));
+        : 'not-allowed'
+  }))
 }
-
 </script>
 
 
 <style scoped>
-
-.login_container{
+.login_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -117,7 +130,7 @@ function SendEmailBtn() {
   height: 100%;
 }
 
-.left{
+.left {
   width: 400px;
   height: 100%;
   display: flex;
@@ -126,30 +139,30 @@ function SendEmailBtn() {
   /* align-items: center; */
   border-right: 1px solid #ebebeb;
 }
-.left .header{
+.left .header {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.left .header .logo img{
+.left .header .logo img {
   width: 100px;
 }
-.left .wechar_code{
+.left .wechar_code {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
   padding: 20px;
 }
-.wechar_code img{
+.wechar_code img {
   width: 100%;
   height: 100%;
 }
-.login_reason{
+.login_reason {
   height: 48px;
   padding: 0 20px;
-  background:  #d0e3ff;
+  background: #d0e3ff;
   color: #3d8af5;
   border-radius: 999px;
   font-size: 16px;
@@ -161,7 +174,7 @@ function SendEmailBtn() {
   align-items: center;
   justify-content: center;
 }
-.right{
+.right {
   margin: 0;
   width: 400px;
   display: flex;
@@ -170,7 +183,7 @@ function SendEmailBtn() {
   padding-top: 48px;
 }
 
-.login_form{
+.login_form {
   margin-top: 32px;
   padding: 16px 20px;
   width: 304px;
@@ -178,7 +191,7 @@ function SendEmailBtn() {
   flex-direction: column;
 }
 
-.el-dialog{
+.el-dialog {
   border-radius: 16px;
 }
 ::v-deep(.el-dialog) {
@@ -193,7 +206,7 @@ function SendEmailBtn() {
 ::v-deep(.el-input__inner) {
   padding: 12px;
 }
-.login_btn{
+.login_btn {
   background-color: #ff2e4d;
   border: #ebebeb;
   border-radius: 50px;
@@ -201,7 +214,7 @@ function SendEmailBtn() {
   height: 48px;
   margin-top: 16px;
 }
-.login_btn:hover{
+.login_btn:hover {
   background-color: #ff2e4d;
   border: #ebebeb;
   border-radius: 50px;
@@ -209,11 +222,11 @@ function SendEmailBtn() {
   height: 48px;
   margin-top: 16px;
 }
-::v-deep(.el-button--primary){
+::v-deep(.el-button--primary) {
   background-color: #ff2e4d;
 }
 
-.form_item{
+.form_item {
   margin-top: 16px;
   height: 48px;
   font-size: 16px;
@@ -221,14 +234,14 @@ function SendEmailBtn() {
   color: #333;
 }
 
-::v-deep(.el-input__wrapper){
+::v-deep(.el-input__wrapper) {
   border-radius: 50px;
 }
 
 ::v-deep(.is_focus) {
   border: 1px solid #ff2e4d;
 }
-.login_title{
+.login_title {
   font-size: 18px;
   color: #333;
   font-weight: 600;
@@ -236,7 +249,7 @@ function SendEmailBtn() {
   line-height: 120%;
 }
 
-.protocl{
+.protocl {
   /* width: 100%; */
   padding: 0px 48px;
   display: flex;
@@ -244,14 +257,14 @@ function SendEmailBtn() {
   justify-content: flex-start;
   align-items: center;
 }
-.protocl span{
+.protocl span {
   margin-left: 4px;
 }
-.auth_code{
+.auth_code {
   /* 绝对定位 */
   position: relative;
 }
-.auth_code_btn{
+.auth_code_btn {
   position: absolute;
   right: 10%;
   top: 27%;

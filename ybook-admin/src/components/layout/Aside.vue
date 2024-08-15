@@ -30,7 +30,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import Login from '../Login.vue';
+import Login from '@/Login.vue';
+import { useUserStore } from '@/store';
+
+const userStore = useUserStore();
+
+userStore.loadUserInfo();
 const dialogVisible: Ref<boolean> = ref(false);
 function loginBtnClick(){
     console.log('click');
