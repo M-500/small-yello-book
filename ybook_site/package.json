@@ -16,6 +16,7 @@
   "dependencies": {
     "element-plus": "^2.8.0",
     "pinia": "^2.1.7",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

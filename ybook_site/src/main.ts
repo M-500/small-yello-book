@@ -15,4 +15,6 @@ app.use(router)
 app.use(ElementPlus, {
   locale: zhCn // 使用ElementPlus的中文语言包
 }) // 使用ElementPlus
+
+import 'virtual:svg-icons-register' // 引入svg图标
 app.mount('#app')

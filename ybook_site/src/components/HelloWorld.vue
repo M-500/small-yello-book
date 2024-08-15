@@ -10,6 +10,9 @@ defineProps<{
     <h3>
       You’ve successfully created a project with
       <el-button type="primary">傻逼</el-button>
+      <svg>
+        <use xlink:href="#icon-home" />
+      </svg>
       <a href="https://vitejs.dev/"
          target="_blank"
          rel="noopener">Vite</a> +
