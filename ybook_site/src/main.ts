@@ -16,6 +16,8 @@ app.use(ElementPlus, {
 
 import 'virtual:svg-icons-register' // 引入svg图标
 import globalComponent from '@/components' // 引入全局组件
+import '@/styles/index.scss' // 引入全局样式
 
 app.use(globalComponent) // 使用全局组件
+
 app.mount('#app')

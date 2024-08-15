@@ -9,7 +9,7 @@ import path from 'path'
 export default defineConfig({
   plugins: [
     vue(),
-    // 加上面的代码
+    // 配置自定义插件
     createSvgIconsPlugin({
       // Specify the icon folder to be cached
       iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
@@ -22,5 +22,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
       // '@': path.resolve(__dirname, 'src')
     }
+  },
+  // sass全局变量的配置
+  css: {
+    preprocessorOptions: {
+      scss: {
+        javascriptEnabled: true,
+        additionalData: '@import "./src/styles/variable.scss";',
+      },
+    },
   }
 })
