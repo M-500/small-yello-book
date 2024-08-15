@@ -167,7 +167,7 @@ func Test_userDaoImpl_Upsert(t *testing.T) {
 			})
 			assert.NoError(t, err)
 			dao := NewUserDao(db)
-			err = dao.Upsert(tc.ctx, &tc.user)
+			err = dao.Upsert(tc.ctx, &tc.user, []int{})
 			assert.Equal(t, tc.wantErr, err)
 		})
 	}

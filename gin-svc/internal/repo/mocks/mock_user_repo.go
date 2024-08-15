@@ -12,6 +12,7 @@ package mocks
 import (
 	context "context"
 	models "gin-svc/internal/models"
+	types "gin-svc/internal/types"
 	reflect "reflect"
 
 	gomock "go.uber.org/mock/gomock"
@@ -99,7 +100,7 @@ func (mr *MockUserRepoInterfaceMockRecorder) FindByUserName(arg0, arg1 any) *gom
 }
 
 // UpsertUser mocks base method.
-func (m *MockUserRepoInterface) UpsertUser(arg0 context.Context, arg1 *models.UserModel) error {
+func (m *MockUserRepoInterface) UpsertUser(arg0 context.Context, arg1 types.UpdateUserForm) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpsertUser", arg0, arg1)
 	ret0, _ := ret[0].(error)

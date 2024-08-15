@@ -9,13 +9,13 @@ import (
 )
 
 func GenerateRandomNumber() int {
-	rand.Seed(time.Now().UnixNano())
-	return rand.Intn(900000) + 100000
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return r.Intn(900000) + 100000
 }
 
 func GenerateRandomNumberStr() string {
-	rand.Seed(time.Now().UnixNano())
-	return strconv.Itoa(rand.Intn(900000) + 100000)
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	return strconv.Itoa(r.Intn(900000) + 100000)
 }
 
 func RandNickName() string {
