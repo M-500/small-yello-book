@@ -15,8 +15,12 @@ type RoleSvc interface {
 	GetDetailByID(ctx context.Context, id int) (domain.RoleDetail, error)
 	// CreateRole 创建角色信息
 	CreateRole(ctx context.Context, role types.CreateRoleReq) error
+	// DeleteRole 删除角色
 	DeleteRole(ctx context.Context, id int) error
+	// UpdateRole 更新角色信息
 	UpdateRole(ctx context.Context, role types.UpdateRoleReq) error
+	// PageListRole 搜索-分页获取角色列表信息
+	PageListRole(ctx context.Context, key string, page, pageSize int) ([]domain.Role, int64, error)
 }
 
 func NewRoleService(roleRepo repo.RoleRepo) RoleSvc {
@@ -111,4 +115,27 @@ func (r *roleSvcImpl) UpdateRole(ctx context.Context, role types.UpdateRoleReq) 
 		//Remark:    role.,
 	}
 	return r.roleRepo.UpdateRole(ctx, &base, role.PerIds)
+}
+
+func (r *roleSvcImpl) PageListRole(ctx context.Context, key string, page, pageSize int) ([]domain.Role, int64, error) {
+	var res []domain.Role
+	roles, i, err := r.roleRepo.ListRole(ctx, key, page, pageSize)
+	if err != nil {
+		return nil, 0, err
+	}
+	for _, item := range roles {
+		res = append(res, r.toDomainRole(item))
+	}
+	return res, i, nil
+}
+
+func (r *roleSvcImpl) toDomainRole(data models.SysRoleModel) domain.Role {
+	return domain.Role{
+		Id:         int(data.ID),
+		RoleName:   data.RoleName,
+		RoleKey:    data.RoleKey,
+		Sort:       data.RoleSort,
+		Status:     data.Status,
+		CreateTime: uint(data.CreatedAt.Unix()),
+	}
 }

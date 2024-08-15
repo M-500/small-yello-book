@@ -1,6 +1,9 @@
 package resp
 
-import "gin-svc/internal/models"
+import (
+	"gin-svc/internal/domain"
+	"gin-svc/internal/models"
+)
 
 // RoleDetailResp 角色详情 包含角色基本信息和角色对应的权限列表
 type RoleDetailResp struct {
@@ -10,8 +13,8 @@ type RoleDetailResp struct {
 
 // RoleListResp 权限列表的翻页结果
 type RoleListResp struct {
-	List  []models.SysRoleModel `json:"list"`
-	Total int                   `json:"total"`
+	List  []domain.Role `json:"list"`
+	Total int           `json:"total"`
 }
 
 // PermissionListResp 权限列表的翻页结果

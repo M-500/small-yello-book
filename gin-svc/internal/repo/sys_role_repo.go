@@ -3,9 +3,11 @@ package repo
 import (
 	"context"
 	"errors"
+	"fmt"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/cache"
 	"gin-svc/internal/repo/dao"
+	"golang.org/x/sync/errgroup"
 )
 
 //go:generate mockgen -destination=../repo/mocks/mock_role_repo.go -package=mocks -source=./sys_role_repo.go RoleRepo
@@ -81,8 +83,14 @@ func (r *roleRepoImpl) FindPermissionListByRoleId(ctx context.Context, roleId in
 }
 
 func (r *roleRepoImpl) ListRole(ctx context.Context, key string, page, pageSize int) ([]models.SysRoleModel, int64, error) {
-	//TODO implement me
-	panic("implement me")
+	role, i, err := r.roleDao.ListRole(ctx, key, page, pageSize)
+	if err != nil {
+		return nil, 0, err
+	}
+	for _, item := range role {
+		_ = r.cache.SetRoleInfo(ctx, &item)
+	}
+	return role, i, nil
 }
 
 func (r *roleRepoImpl) CreateRole(ctx context.Context, role *models.SysRoleModel) error {
@@ -94,8 +102,24 @@ func (r *roleRepoImpl) CreateRole(ctx context.Context, role *models.SysRoleModel
 }
 
 func (r *roleRepoImpl) DeleteRole(ctx context.Context, id int) error {
-	//TODO implement me
-	panic("implement me")
+	err2 := r.roleDao.DeleteByID(ctx, id)
+	if err2 != nil {
+		return err2
+	}
+	group := errgroup.Group{}
+	group.Go(func() error {
+		return r.cache.DelRoleInfo(context.Background(), id)
+	})
+	group.Go(func() error {
+		return r.cache.DeletePerListByRoleId(context.Background(), id)
+	})
+	err := group.Wait()
+	if err != nil {
+		// TODO 记录日志
+		fmt.Println("删除缓存失败啦！阿西！")
+	}
+	// 缓存删除失败，无伤大雅，不会影响业务
+	return nil
 }
 
 func (r *roleRepoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error {

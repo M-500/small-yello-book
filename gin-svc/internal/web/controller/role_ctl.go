@@ -3,6 +3,7 @@ package controller
 import (
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
+	"gin-svc/internal/types/resp"
 	"gin-svc/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -19,11 +20,11 @@ func NewRoleController(svc service.RoleSvc) BaseController {
 }
 
 func (r *roleController) RegisterRoute(group *gin.RouterGroup) {
-	group.GET("/roles", ginx.WrapJsonBody[types.RolePageListReq](r.RolePageList)) // 获取角色列表
-	group.GET("/roles/:id", ginx.WrapResponse(r.DetailRoleCtl))                   // 查询角色详情
-	group.POST("/roles", ginx.WrapJsonBody[types.CreateRoleReq](r.CreateRoleCtl)) // 创建角色
-	group.DELETE("/roles/:id", ginx.WrapResponse(r.DeleteRoleCtl))                // 删除角色
-	group.PUT("/roles", ginx.WrapJsonBody[types.UpdateRoleReq](r.UpdateRoleCtl))  //	更新角色
+	group.GET("/roles", ginx.WrapQueryBody[types.RolePageListReq](r.RolePageList)) // 获取角色列表
+	group.GET("/roles/:id", ginx.WrapResponse(r.DetailRoleCtl))                    // 查询角色详情
+	group.POST("/roles", ginx.WrapJsonBody[types.CreateRoleReq](r.CreateRoleCtl))  // 创建角色
+	group.DELETE("/roles/:id", ginx.WrapResponse(r.DeleteRoleCtl))                 // 删除角色
+	group.PUT("/roles", ginx.WrapJsonBody[types.UpdateRoleReq](r.UpdateRoleCtl))   //	更新角色
 }
 
 // RolePageList godoc
@@ -38,7 +39,20 @@ func (r *roleController) RegisterRoute(group *gin.RouterGroup) {
 // @Failure 500 {object} ginx.JsonResult{}
 // @Router /api/v1/roles [get]
 func (r *roleController) RolePageList(ctx *gin.Context, req types.RolePageListReq) (result ginx.JsonResult, err error) {
-	return ginx.Success(), nil
+	if req.Page == 0 {
+		req.Page = 1
+	}
+	if req.Size == 0 || req.Size > 50 {
+		req.Page = 10
+	}
+	role, total, err := r.svc.PageListRole(ctx.Request.Context(), req.Keywords, req.Page, req.Size)
+	if err != nil {
+		return ginx.Error(10009, err.Error()), err
+	}
+	return ginx.SuccessJson(resp.RoleListResp{
+		List:  role,
+		Total: int(total),
+	}), nil
 }
 
 // CreateRoleCtl godoc

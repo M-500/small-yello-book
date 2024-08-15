@@ -49,13 +49,17 @@ func (r *roleDaoImpl) ListRole(ctx context.Context, key string, page, pageSize i
 		total int64
 		res   []models.SysRoleModel
 	)
-	err := r.db.WithContext(ctx).Model(&models.SysRoleModel{}).
-		Where("role_key like ?", "%"+key+"%").Count(&total).Error
+
+	query := r.db.WithContext(ctx).Model(&models.SysRoleModel{})
+
+	if len(key) > 0 {
+		query = query.Where("role_key like ? or role_name like ?", "%"+key+"%", "%"+key+"%")
+	}
+	err := query.Count(&total).Error
 	if err != nil {
 		return nil, 0, err
 	}
-	err = r.db.WithContext(ctx).Model(&models.SysRoleModel{}).Where("role_key like ?", "%"+key+"%").
-		Offset((page - 1) * pageSize).Limit(pageSize).Find(&res).Error
+	err = query.Offset((page - 1) * pageSize).Limit(pageSize).Find(&res).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -78,8 +82,18 @@ func (r *roleDaoImpl) Insert(ctx context.Context, role *models.SysRoleModel) err
 }
 
 func (r *roleDaoImpl) DeleteByID(ctx context.Context, id int) error {
-	// TODO：删除角色，是不是要删除对应的角色权限关联表 是吧
-	return r.db.WithContext(ctx).Model(&models.SysRoleModel{}).Delete("id = ?", id).Error
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		err := r.db.Model(&models.SysRoleModel{}).Delete("id = ?", id).Error
+		if err != nil {
+			return err
+		}
+		err = r.db.Model(&models.RolePermissionModel{}).Delete("role_id = ?", id).Error
+		if err != nil {
+			return err
+		}
+		return r.db.Model(&models.UserRoleModel{}).Delete("role_id = ?", id).Error
+	})
+
 }
 
 func (r *roleDaoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error {
