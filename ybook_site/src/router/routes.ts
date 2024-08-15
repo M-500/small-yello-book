@@ -1,12 +1,11 @@
 // 对外暴露配置路由（常量路由 ） 存放所有路由的文件
-import HomeView from '../views/HomeView.vue'
 
 
 export const constantRoutes: Array<RouteRecordRaw> = [
 	{
 		path: '/',
 		name: 'home',
-		component: HomeView
+		component: () => import('@/layout/index.vue'),
 	},
 	{
 		path: '/publish',

@@ -1,0 +1,46 @@
+<template>
+  <div class="layout_container">
+    <div class="layout_slide">左侧123 傻逼</div>
+
+    <div class="layout_header">这里是顶部</div>
+
+    <div class="layout_main">这里是主分区</div>
+  </div>
+</template>
+
+<script setup>
+import { } from "vue"
+</script>
+
+<style scoped lang="scss" >
+.layout_container {
+	width: 100%;
+	height: 100vh;
+	background-color: $layout-body-background;
+	.layout_slide{
+		width: $layout-sider-width;
+		height: 100vh; // 这里用100vh是为了让左侧栏高度和屏幕一样高 不用100%是因为100%是相对于父元素的高度
+		background-color: $layout-sider-background;// 使用左侧栏的背景色
+		float: left;
+	}
+	.layout_header{
+		width: calc(100% - $layout-sider-width);
+		height: $layout-header-height;
+		background-color: rebeccapurple;
+		// 固定定位
+		position: fixed;
+		top: 0;
+		left: $layout-sider-width; // 这里是为了让顶部栏和左侧栏对齐
+	}
+	.layout_main{
+		width: calc(100% - $layout-sider-width);
+		height: calc(100% - $layout-header-height);
+		background-color: $layout-body-background;
+		// 绝对定位
+		position: absolute;
+		top: $layout-header-height;
+		left: $layout-sider-width;
+	}
+}
+</style>
+ 
