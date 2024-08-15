@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import SvgIcon from '@/components/global/SvgIcon.vue'
 defineProps<{
   msg: string
 }>()

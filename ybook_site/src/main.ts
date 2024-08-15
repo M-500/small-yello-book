@@ -17,4 +17,6 @@ app.use(ElementPlus, {
 }) // 使用ElementPlus
 
 import 'virtual:svg-icons-register' // 引入svg图标
+import SvgIcon from '@/components/global/SvgIcon.vue' // 引入SvgIcon组件
+app.component('SvgIcon', SvgIcon) // 注册SvgIcon组件
 app.mount('#app')
