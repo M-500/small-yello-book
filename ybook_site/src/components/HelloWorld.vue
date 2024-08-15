@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SvgIcon from '@/components/global/SvgIcon.vue'
 defineProps<{
   msg: string
 }>()
@@ -10,9 +11,11 @@ defineProps<{
     <h3>
       You’ve successfully created a project with
       <el-button type="primary">傻逼</el-button>
-      <svg>
-        <use xlink:href="#icon-home" />
-      </svg>
+      <SvgIcon name="home"
+               color="red"
+               width="24px"
+               height="24px"></SvgIcon>
+
       <a href="https://vitejs.dev/"
          target="_blank"
          rel="noopener">Vite</a> +
