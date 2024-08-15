@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "format": "prettier --write \"./**/*.{html,vue,ts,js,json,md}\"",
     "lint:eslint": "eslint src/**/*.{ts,vue} --cache --fix",
-    "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix"
+    "lint:style": "stylelint src/**/*.{css,scss,vue} --cache --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "axios": "^1.7.4",
@@ -21,6 +22,7 @@
     "@vitejs/plugin-vue": "^5.1.2",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
+    "husky": "^8.0.0",
     "postcss": "^8.4.41",
     "postcss-html": "^1.7.0",
     "postcss-scss": "^4.0.9",
