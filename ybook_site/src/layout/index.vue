@@ -1,6 +1,9 @@
 <template>
   <div class="layout_container">
-    <div class="layout_slide">左侧123 傻逼</div>
+    <div class="layout_slide">
+      <Logo />
+      <login_btn />
+    </div>
 
     <div class="layout_header">这里是顶部</div>
 
@@ -11,7 +14,8 @@
 </template>
 
 <script setup>
-import { } from "vue"
+import Logo from "./logo/index.vue";
+import login_btn from "./loginBtn/index.vue";
 </script>
 
 <style scoped lang="scss" >
