@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
@@ -198,6 +199,30 @@ func Test_roleSvcImpl_UpdateRole(t *testing.T) {
 				PerIds:   []int{1, 2},
 			},
 			wantErr: nil,
+		},
+		{
+			name: "更新失败，角色ID不存在",
+			mock: func(ctrl *gomock.Controller) repo.RoleRepo {
+				roleRepo := mocks.NewMockRoleRepo(ctrl)
+				roleRepo.EXPECT().CheckPermissionIds(gomock.Any(), []int{1, 2}).Return(errors.New("角色ID列表错误"))
+
+				//roleRepo.EXPECT().UpdateRole(gomock.Any(), &models.SysRoleModel{
+				//	Model:    gorm.Model{ID: 1},
+				//	RoleName: "管理员",
+				//	RoleSort: 0,
+				//	Status:   false,
+				//}, []int{1, 2}).Return(nil)
+				return roleRepo
+			},
+			ctx: context.Background(),
+			req: types.UpdateRoleReq{
+				ID:       1,
+				RoleName: "管理员",
+				Status:   false,
+				Sort:     0,
+				PerIds:   []int{1, 2},
+			},
+			wantErr: errors.New("权限列表不合法！"),
 		},
 	}
 	for _, tc := range testCases {

@@ -11,9 +11,9 @@ import (
 )
 
 type RoleSvc interface {
-	// 获取角色详情，通过角色ID 后台管理用  {RoleBase, PerList}
+	// GetDetailByID 获取角色详情，通过角色ID 后台管理用  {RoleBase, PerList}
 	GetDetailByID(ctx context.Context, id int) (domain.RoleDetail, error)
-	// 创建角色信息
+	// CreateRole 创建角色信息
 	CreateRole(ctx context.Context, role types.CreateRoleReq) error
 	DeleteRole(ctx context.Context, id int) error
 	UpdateRole(ctx context.Context, role types.UpdateRoleReq) error
@@ -66,16 +66,16 @@ func (r *roleSvcImpl) toRoleModel(data types.CreateRoleReq) models.SysRoleModel 
 
 func (r *roleSvcImpl) GetDetailByID(ctx context.Context, id int) (domain.RoleDetail, error) {
 	var res domain.RoleDetail
-	byID, err := r.roleRepo.GetRoleByID(ctx, id)
+	roleBase, err := r.roleRepo.GetRoleByID(ctx, id)
 	if err != nil {
 		return domain.RoleDetail{}, err
 	}
-	res.RoleBase = r.toDMRole(*byID)
-	pers, err := r.roleRepo.FindPermissionListByRoleId(ctx, id)
+	res.RoleBase = r.toDMRole(*roleBase)
+	perList, err := r.roleRepo.FindPermissionListByRoleId(ctx, id)
 	if err != nil {
 		return res, err
 	}
-	for _, item := range pers {
+	for _, item := range perList {
 		res.PerList = append(res.PerList, r.toDMPermission(item))
 	}
 	return res, nil

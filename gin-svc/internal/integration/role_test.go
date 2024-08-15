@@ -3,6 +3,7 @@ package integration
 import (
 	"bytes"
 	"encoding/json"
+	"gin-svc/internal/integration/startup"
 	"gin-svc/internal/types"
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
@@ -35,6 +36,12 @@ type Result[T any] struct {
 // 实现 SetupAllSuite 接口
 func (s *RoleTestSuite) SetupSuite() {
 	// 在所有测试开始之前，做一些事情 比如初始化gin的engine 初始化MySQL，redis等，用于测试
+	s.db = startup.InitDB()
+	s.cli = startup.InitRedis()
+
+	server := gin.Default()
+
+	s.server = server
 
 }
 

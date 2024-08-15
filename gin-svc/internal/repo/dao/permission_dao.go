@@ -39,7 +39,7 @@ func (p *permissionDao) CheckPermissionIds(ctx context.Context, perIds []int) er
 		return err
 	}
 	if len(per) != len(perIds) {
-		return err
+		return errors.New("角色ID列表错误")
 	}
 	return nil
 }
@@ -62,7 +62,7 @@ func (p *permissionDao) Insert(ctx context.Context, data models.SysPermissionMod
 func (p *permissionDao) ListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error) {
 	var res []models.SysPermissionModel
 	err := p.db.WithContext(ctx).
-		Joins("INNER JOIN sys_role_permission rp ON rp.permission_id = sys_permission.id").
+		Joins("INNER JOIN sys_role_permission rp ON rp.per_id = sys_permission.id").
 		Where("rp.role_id = ?", roleId).
 		Find(&res).Error
 	return res, err

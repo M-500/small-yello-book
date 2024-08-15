@@ -1,21 +1,17 @@
 package startup
 
 import (
-	"gin-svc/internal/conf"
-	"github.com/gin-gonic/gin"
+	"gin-svc/internal/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func InitRoleWebServer(path string) *gin.Engine {
-	//config := ioc.SetUpConfig(path)
-
-	return gin.Default()
-}
-
-func InitTestDB(cfg *conf.ConfigInstance) *gorm.DB {
-	config := &gorm.Config{}
-	db, err := gorm.Open(mysql.Open(cfg.Database.DSN), config)
+func InitDB() *gorm.DB {
+	db, err := gorm.Open(mysql.Open("root:root@tcp(127.0.0.1:13317)/y_book_test?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+	err = models.InitTables(db)
 	if err != nil {
 		panic(err)
 	}

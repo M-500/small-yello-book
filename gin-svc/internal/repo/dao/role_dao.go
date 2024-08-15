@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"gin-svc/internal/models"
+	"github.com/go-sql-driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -62,7 +63,18 @@ func (r *roleDaoImpl) ListRole(ctx context.Context, key string, page, pageSize i
 }
 
 func (r *roleDaoImpl) Insert(ctx context.Context, role *models.SysRoleModel) error {
-	return r.db.WithContext(ctx).Model(&models.SysRoleModel{}).Create(role).Error
+	query := r.db.WithContext(ctx).Model(&models.SysRoleModel{}).Create(role)
+	var me *mysql.MySQLError
+	if errors.As(query.Error, &me) {
+		const uniqueIndexErrNo uint16 = 1062
+		if me.Number == uniqueIndexErrNo {
+			return ErrKeyDuplicate
+		}
+	}
+	if query.Error != nil {
+		return query.Error
+	}
+	return nil
 }
 
 func (r *roleDaoImpl) DeleteByID(ctx context.Context, id int) error {
