@@ -1,1 +1,11 @@
 @import './reset.scss';
+
+// 设置全局滚动条的样式
+// ::--webkit-scrollbar {
+// 	width: 10px;
+// 	height: 10px;
+// }
+// 隐藏滚动条样式
+::-webkit-scrollbar {
+	display: none;
+}

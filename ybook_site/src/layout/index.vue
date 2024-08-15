@@ -4,7 +4,9 @@
 
     <div class="layout_header">这里是顶部</div>
 
-    <div class="layout_main">这里是主分区</div>
+    <div class="layout_main">
+      <p style="height: 100000px;">哈啥</p>
+    </div>
   </div>
 </template>
 
@@ -40,6 +42,8 @@ import { } from "vue"
 		position: absolute;
 		top: $layout-header-height;
 		left: $layout-sider-width;
+		padding: 20px; // 这里是为了让内容不要贴边
+		overflow: auto; // 这里是为了防止撑开整个页面，出现滚动条
 	}
 }
 </style>
