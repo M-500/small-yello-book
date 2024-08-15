@@ -16,6 +16,6 @@ const pinia = createPinia()
 app.use(pinia)
 app.use(ElementPlus)
 
-app.config.globalProperties.$message = ElMessage;
-app.config.globalProperties.$https = service;
+app.config.globalProperties.$message = ElMessage
+app.config.globalProperties.$https = service
 app.mount('#app')

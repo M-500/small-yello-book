@@ -1,52 +1,54 @@
 <template>
-
   <el-dialog v-model="dialogVisible">
     <div class="login_container">
       <div class="left">
         <div class="header">
           <div class="login_reason">登陆后推荐更懂你的笔记</div>
           <div class="logo">
-            <img src="../assets/logo.svg"
-                 alt="">
+            <img src="../assets/logo.svg" alt="" />
           </div>
         </div>
         <div class="wechar_code">
-          <img src="../assets/background.png"
-               alt="">
+          <img src="../assets/background.png" alt="" />
         </div>
       </div>
       <div class="right">
-        <div class="login_title">
-          账号密码登录
-        </div>
+        <div class="login_title">账号密码登录</div>
         <div class="login_form">
-          <el-input class="form_item"
-                    v-model="LoginForm.email"
-                    placeholder="请输入邮箱"></el-input>
+          <el-input
+            class="form_item"
+            v-model="LoginForm.email"
+            placeholder="请输入邮箱"
+          ></el-input>
           <!-- <el-input class="form_item" v-model="LoginForm.password"  placeholder="请输入密码"></el-input> -->
           <div class="auth_code">
-            <el-input class="form_item"
-                      v-model="LoginForm.ver_code"
-                      placeholder="请输入验证码"></el-input>
-            <button :disabled="!isEmailValid || isSending || countdown > 0"
-                    :style="buttonStyle"
-                    class="auth_code_btn"
-                    @click="SendEmailBtn">获取验证码</button>
+            <el-input
+              class="form_item"
+              v-model="LoginForm.ver_code"
+              placeholder="请输入验证码"
+            ></el-input>
+            <button
+              :disabled="!isEmailValid || isSending || countdown > 0"
+              class="auth_code_btn"
+              @click="SendEmailBtn"
+            >
+              获取验证码
+            </button>
           </div>
-          <el-button type="primary"
-                     class="login_btn"
-                     @click="loginBtn">登陆</el-button>
+          <el-button type="primary" class="login_btn" @click="loginBtn">
+            登陆
+          </el-button>
         </div>
         <div class="protocl">
           <el-checkbox class="check_agree"></el-checkbox>
-          <span>我已阅读并同意
-            <a href="#">《用户协议》</a></span>
+          <span>
+            我已阅读并同意
+            <a href="#">《用户协议》</a>
+          </span>
         </div>
-
       </div>
     </div>
   </el-dialog>
-
 </template>
 
 <script setup lang="ts">
@@ -64,11 +66,11 @@ const userStore = useUserStore() // 引入pinia的store
 
 const LoginForm = reactive({
   email: '1978992154@qq.com',
-  ver_code: '626058'
+  ver_code: '626058',
 })
 const SendCodeForm = reactive({
   email: '1978992154@qq.com',
-  type_code: 1
+  type_code: 1,
 })
 const validateEmail = () => {
   // 基本的邮箱正则表达式验证
@@ -77,22 +79,22 @@ const validateEmail = () => {
 }
 function loginBtn() {
   login(LoginForm)
-    .then(res => {
+    .then((res) => {
       let token = res.token
       userStore.setToken(token)
     })
-    .catch(err => {
+    .catch((err) => {
       ElementPlus.ElMessage.error('登陆失败')
     })
 }
 
 function SendEmailBtn() {
   SendCode(SendCodeForm)
-    .then(res => {
+    .then((res) => {
       console.log(res.msg)
       isSending.value = false
     })
-    .catch(err => {
+    .catch((err) => {
       console.log('出错了', err)
     })
 
@@ -107,19 +109,8 @@ function SendEmailBtn() {
       }
     }, 1000) // 每秒更新一次倒计时
   }
-  const buttonStyle = computed(() => ({
-    backgroundColor:
-      isEmailValid.value && !isSending.value && countdown.value === 0
-        ? '#007bff'
-        : '#d3d3d3',
-    cursor:
-      isEmailValid.value && !isSending.value && countdown.value === 0
-        ? 'pointer'
-        : 'not-allowed'
-  }))
 }
 </script>
-
 
 <style scoped>
 .login_container {

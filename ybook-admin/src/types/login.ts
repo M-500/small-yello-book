@@ -1,10 +1,6 @@
+export interface ILoginData {}
 
-
-export interface ILoginData{
-
-}
-
-export interface ISendCodeData{
-    email:string
-    type_code:number
+export interface ISendCodeData {
+  email: string
+  type_code: number
 }

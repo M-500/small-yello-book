@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Home from './components/Home.vue';
+import Home from './components/Home.vue'
 </script>
 
 <template>
@@ -7,12 +7,12 @@ import Home from './components/Home.vue';
 </template>
 
 <style scoped>
-body{
+body {
   margin: 0;
   padding: 0;
   font-family: 'Arial', sans-serif;
 }
-#app{
+#app {
   height: 100vh;
   display: flex;
   flex-direction: column;
