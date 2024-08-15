@@ -16,6 +16,13 @@ type UserForm struct {
 	School     string    `json:"school"`
 }
 
+type UpdateUserForm struct {
+	ID       int    `json:"id"`
+	NickName string `json:"nick_name"`
+	Avatar   string `json:"avatar"`
+	RoleIds  []int  `json:"roleIds"`
+}
+
 type EmailLoginForm struct {
 	Email   string `json:"email" binding:"required,email"`
 	VerCode string `json:"ver_code" binding:"required"`

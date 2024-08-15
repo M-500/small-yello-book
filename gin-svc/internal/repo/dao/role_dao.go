@@ -21,6 +21,8 @@ type RoleDAO interface {
 	UpdateRole(ctx context.Context, role *models.SysRoleModel, perIds []int) error
 	// FindPermissionListByRoleId 查询某个角色 ID 对应的权限列表
 	FindPermissionListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error)
+
+	FindRoleListByUserId(ctx context.Context, uid int) ([]models.SysRoleModel, error)
 }
 
 func NewRoleDAO(db *gorm.DB) RoleDAO {
@@ -126,4 +128,13 @@ func (r *roleDaoImpl) FindPermissionListByRoleId(ctx context.Context, roleId int
 		Joins("LEFT JOIN sys_role_permission ON sys_permission.id = sys_role_permission.per_id").
 		Where("sys_role_permission.role_id = ?", roleId).Find(&perList).Error
 	return perList, err
+}
+
+func (r *roleDaoImpl) FindRoleListByUserId(ctx context.Context, uid int) ([]models.SysRoleModel, error) {
+	var roleList []models.SysRoleModel
+	err := r.db.WithContext(ctx).Table("sys_role").
+		Select("sys_role.*").
+		Joins("LEFT JOIN sys_user_role ON sys_role.id = sys_user_role.role_id").
+		Where("sys_user_role.user_id = ?", uid).Find(&roleList).Error
+	return roleList, err
 }

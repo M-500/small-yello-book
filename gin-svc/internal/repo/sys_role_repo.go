@@ -7,6 +7,7 @@ import (
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/cache"
 	"gin-svc/internal/repo/dao"
+	"gin-svc/pkg/set"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -132,8 +133,26 @@ func (r *roleRepoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel
 }
 
 func (r *roleRepoImpl) FindAllPermissionsByUserID(ctx context.Context, uid int) ([]models.SysPermissionModel, error) {
-	//TODO implement me
-	panic("implement me")
+	var res []models.SysPermissionModel
+	roles, err := r.roleDao.FindRoleListByUserId(ctx, uid)
+	if err != nil {
+		return nil, err
+	}
+	mapSet := set.NewMapSet[string](0)
+	for _, item := range roles {
+		ids, err := r.roleDao.FindPermissionListByRoleId(ctx, int(item.ID))
+		if err != nil {
+			return nil, err
+		}
+		for _, i := range ids {
+			if mapSet.Exist(i.PerKey) {
+				continue
+			}
+			mapSet.Add(i.PerKey)
+			res = append(res, i)
+		}
+	}
+	return res, nil
 }
 
 func (r *roleRepoImpl) FindAllRolesByUserID(ctx context.Context, uid int) ([]models.SysRoleModel, error) {

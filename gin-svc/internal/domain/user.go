@@ -1,6 +1,9 @@
 package domain
 
-import "time"
+import (
+	"gin-svc/internal/models"
+	"time"
+)
 
 type DUser struct {
 	GlobalNumber  string       `json:"globalNumber"`
@@ -23,4 +26,17 @@ type DUser struct {
 	Level         int          `json:"level"`
 	RoleList      []Role       `json:"roleList"`
 	PerList       []Permission `json:"perList"`
+}
+
+func (d *DUser) ToDomainPermission(res []models.SysPermissionModel) {
+	for _, re := range res {
+		d.PerList = append(d.PerList, Permission{
+			Id:     int(re.ID),
+			PerKey: re.PerKey,
+			Title:  re.Title,
+			Action: re.Action,
+			Path:   re.Path,
+			Mark:   re.Mark,
+		})
+	}
 }

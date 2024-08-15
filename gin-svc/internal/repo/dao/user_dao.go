@@ -9,7 +9,7 @@ import (
 )
 
 type UserDao interface {
-	Upsert(ctx context.Context, user *models.UserModel) error
+	Upsert(ctx context.Context, user *models.UserModel, rid []int) error
 	Delete(ctx context.Context, id int) error
 	FindByUserName(ctx context.Context, userName string) (*models.UserModel, error)
 	FindByEmail(ctx context.Context, email string) (*models.UserModel, error)
@@ -27,7 +27,7 @@ func (u *userDaoImpl) Delete(ctx context.Context, id int) error {
 	return u.db.WithContext(ctx).Delete(&models.UserModel{}, id).Error
 }
 
-func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel) error {
+func (u *userDaoImpl) Upsert(ctx context.Context, user *models.UserModel, rid []int) error {
 	if user == nil {
 		return errors.New("user is nil")
 	}

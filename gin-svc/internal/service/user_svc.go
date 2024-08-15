@@ -17,6 +17,7 @@ type UserSvc interface {
 	EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error)
 	DeleteUser(ctx context.Context, req types.UserForm) error
 	GetUserInfo(ctx context.Context, id int) (domain.DUser, error)
+	UpdateUserInfo(ctx context.Context, req types.UpdateUserForm) error
 }
 
 func NewUserSvc(userRepo repo.UserRepoInterface,
@@ -34,6 +35,7 @@ type userSvcImpl struct {
 	jwt.Handler
 	userRepo repo.UserRepoInterface
 	verRepo  repo.VerificationCodeRepo
+	roleRepo repo.RoleRepo
 }
 
 func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error) {
@@ -114,5 +116,15 @@ func (u *userSvcImpl) reqToModel(req *types.UserForm) *models.UserModel {
 }
 
 func (u *userSvcImpl) GetUserInfo(ctx context.Context, id int) (domain.DUser, error) {
-	return domain.DUser{}, nil
+	var res domain.DUser
+	rightPerList, err := u.roleRepo.FindAllPermissionsByUserID(ctx, id)
+	if err != nil {
+		return domain.DUser{}, err
+	}
+	res.ToDomainPermission(rightPerList)
+	return res, nil
+}
+
+func (u *userSvcImpl) UpdateUserInfo(ctx context.Context, req types.UpdateUserForm) error {
+	return u.userRepo.UpsertUser(ctx, req)
 }
