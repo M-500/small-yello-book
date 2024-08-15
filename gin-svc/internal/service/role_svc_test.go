@@ -7,6 +7,7 @@ import (
 	"gin-svc/internal/repo"
 	"gin-svc/internal/repo/dao"
 	"gin-svc/internal/repo/mocks"
+	"gin-svc/internal/types"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock" // 使用uber的mock包
 	"gorm.io/gorm"
@@ -158,6 +159,60 @@ func Test_roleSvcImpl_GetDetailByID(t *testing.T) {
 			} else {
 				assert.Equal(t, tc.wantRes, id)
 			}
+		})
+	}
+}
+
+func Test_roleSvcImpl_UpdateRole(t *testing.T) {
+	//nowDate := time.Now()
+	testCases := []struct {
+		name string
+
+		mock func(ctrl *gomock.Controller) repo.RoleRepo
+
+		ctx context.Context
+		req types.UpdateRoleReq
+
+		wantErr error
+	}{
+		{
+			name: "更新成功",
+			mock: func(ctrl *gomock.Controller) repo.RoleRepo {
+				roleRepo := mocks.NewMockRoleRepo(ctrl)
+				roleRepo.EXPECT().CheckPermissionIds(gomock.Any(), []int{1, 2}).Return(nil)
+
+				roleRepo.EXPECT().UpdateRole(gomock.Any(), &models.SysRoleModel{
+					Model:    gorm.Model{ID: 1},
+					RoleName: "管理员",
+					RoleSort: 0,
+					Status:   false,
+				}, []int{1, 2}).Return(nil)
+				return roleRepo
+			},
+			ctx: context.Background(),
+			req: types.UpdateRoleReq{
+				ID:       1,
+				RoleName: "管理员",
+				Status:   false,
+				Sort:     0,
+				PerIds:   []int{1, 2},
+			},
+			wantErr: nil,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// 固定写法 照抄就好了
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			roleRepoMock := tc.mock(ctrl)
+			svc := &roleSvcImpl{
+				roleRepo: roleRepoMock,
+			}
+
+			err := svc.UpdateRole(tc.ctx, tc.req)
+			assert.Equal(t, tc.wantErr, err)
 		})
 	}
 }

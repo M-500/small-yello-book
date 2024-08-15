@@ -82,7 +82,6 @@ func (r *roleSvcImpl) GetDetailByID(ctx context.Context, id int) (domain.RoleDet
 }
 
 func (r *roleSvcImpl) CreateRole(ctx context.Context, req types.CreateRoleReq) error {
-
 	temp := r.toRoleModel(req)
 	return r.roleRepo.CreateRole(ctx, &temp)
 }
