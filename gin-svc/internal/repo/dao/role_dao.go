@@ -37,7 +37,8 @@ func (r *roleDaoImpl) GetRoleByID(ctx context.Context, id int) (*models.SysRoleM
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrRecordNotFound
 		}
-		return nil, err
+		// 记录日志，不要把错误抛出给上层
+		return nil, errors.New("DB查询角色信息失败")
 	}
 	return &res, nil
 }

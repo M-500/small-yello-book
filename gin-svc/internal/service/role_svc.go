@@ -36,7 +36,7 @@ func (r *roleSvcImpl) toDMRole(data models.SysRoleModel) domain.Role {
 		RoleKey:  data.RoleKey,
 		//Sort:       int(data.Sort),
 		Status:     data.Status,
-		CreateTime: &data.CreatedAt,
+		CreateTime: uint(data.CreatedAt.Unix()),
 	}
 }
 func (r *roleSvcImpl) toDMPermission(data models.SysPermissionModel) domain.Permission {
