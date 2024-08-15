@@ -5,6 +5,7 @@ import (
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
+	"gin-svc/internal/repo/dao"
 	"gin-svc/internal/repo/mocks"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock" // 使用uber的mock包
@@ -23,7 +24,7 @@ func Test_roleSvcImpl_GetDetailByID(t *testing.T) {
 		ctx context.Context
 		id  int
 
-		wantRes domain.RoleDetail
+		wantRes domain.RoleDetail // 类型要和返回值一致
 		wantErr error
 	}{
 		{
@@ -97,6 +98,48 @@ func Test_roleSvcImpl_GetDetailByID(t *testing.T) {
 				},
 			},
 			wantErr: nil,
+		},
+		{
+			name: "查询Role信息失败",
+			mock: func(ctrl *gomock.Controller) repo.RoleRepo {
+				roleRepo := mocks.NewMockRoleRepo(ctrl)
+				roleRepo.EXPECT().GetRoleByID(gomock.Any(), 1).
+					Return(nil, dao.ErrRecordNotFound)
+				return roleRepo
+			},
+			ctx: context.Background(),
+			id:  1,
+
+			wantRes: domain.RoleDetail{},
+			wantErr: dao.ErrRecordNotFound,
+		},
+		{
+			name: "查询权限信息失败",
+			mock: func(ctrl *gomock.Controller) repo.RoleRepo {
+				roleRepo := mocks.NewMockRoleRepo(ctrl)
+				roleRepo.EXPECT().GetRoleByID(gomock.Any(), 1).
+					Return(&models.SysRoleModel{
+						Model:    gorm.Model{ID: 1, CreatedAt: nowDate},
+						RoleName: "admin",
+						RoleKey:  "admin",
+					}, nil)
+				roleRepo.EXPECT().FindPermissionListByRoleId(gomock.Any(), 1).
+					Return(nil, gorm.ErrInvalidValue)
+				return roleRepo
+			},
+			ctx: context.Background(),
+			id:  1,
+
+			wantRes: domain.RoleDetail{
+				RoleBase: domain.Role{
+					Id:         1,
+					RoleName:   "admin",
+					RoleKey:    "admin",
+					CreateTime: uint(nowDate.Unix()),
+				},
+				PerList: []domain.Permission{},
+			},
+			wantErr: gorm.ErrInvalidValue,
 		},
 	}
 	for _, tc := range testCases {

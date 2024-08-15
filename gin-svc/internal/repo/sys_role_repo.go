@@ -69,8 +69,7 @@ func (r *roleRepoImpl) UpdateRole(ctx context.Context, role *models.SysRoleModel
 }
 
 func (r *roleRepoImpl) FindPermissionListByRoleId(ctx context.Context, roleId int) ([]models.SysPermissionModel, error) {
-	//TODO implement me
-	panic("implement me")
+	return r.perDao.ListByRoleId(ctx, roleId)
 }
 
 func (r *roleRepoImpl) FindAllPermissionsByUserID(ctx context.Context, uid int) ([]models.SysPermissionModel, error) {
