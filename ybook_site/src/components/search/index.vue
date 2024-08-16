@@ -23,7 +23,8 @@
     </div>
 
     <!-- 搜索关键词展示区域 -->
-    <div class="sug-container-wrapper sug_pad">
+    <div class="sug-container-wrapper sug_pad"
+         v-show="showClose">
       <div class="sug-container">
         <div class="sug-box">
           <div class="sug-wrapper">
