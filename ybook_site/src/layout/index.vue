@@ -2,7 +2,10 @@
   <div class="layout_container">
     <div class="layout_slide">
       <Logo />
-      <login_btn />
+      <div class="sider_main">
+        <Channel />
+        <card />
+      </div>
     </div>
 
     <div class="layout_header">这里是顶部</div>
@@ -15,7 +18,8 @@
 
 <script setup>
 import Logo from "./logo/index.vue";
-import login_btn from "./loginBtn/index.vue";
+import Channel from "./channel/index.vue";
+import card from "./card/index.vue";
 </script>
 
 <style scoped lang="scss" >
@@ -28,15 +32,23 @@ import login_btn from "./loginBtn/index.vue";
 		height: 100vh; // 这里用100vh是为了让左侧栏高度和屏幕一样高 不用100%是因为100%是相对于父元素的高度
 		background-color: $layout-sider-background;// 使用左侧栏的背景色
 		float: left;
+		.sider_main{
+			height: calc(100% - $layout-header-height);
+			padding-top: 16px;
+			margin-left: 16px;
+		}
 	}
 	.layout_header{
 		width: calc(100% - $layout-sider-width);
 		height: $layout-header-height;
-		background-color: rebeccapurple;
+		background-color: $layout-body-background;
 		// 固定定位
 		position: fixed;
 		top: 0;
 		left: $layout-sider-width; // 这里是为了让顶部栏和左侧栏对齐
+		
+		display: flex;
+		align-items: center;
 	}
 	.layout_main{
 		width: calc(100% - $layout-sider-width);
