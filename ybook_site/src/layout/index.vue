@@ -13,11 +13,7 @@
     </div>
 
     <div class="layout_main">
-      <div>
-        <tab_item name="评论"
-                  :active="true" />
-        <note_item />
-      </div>
+      <RouterView />
     </div>
   </div>
 </template>
@@ -28,8 +24,7 @@ import Channel from "./channel/index.vue";
 import card from "./card/index.vue";
 import search from "../components/search/index.vue";
 import { RouterView } from 'vue-router'
-import tab_item from "@/components/TabItem/index.vue";
-import note_item from "@/components/NoteItem/index.vue";
+
 </script>
 
 <style scoped lang="scss" >
@@ -72,6 +67,7 @@ import note_item from "@/components/NoteItem/index.vue";
 		left: $layout-sider-width;
 		padding: 16px 32px 0; // 这里是为了让内容不要贴边 24 32
 		overflow: auto; // 这里是为了防止撑开整个页面，出现滚动条
+		
 	}
 }
 </style>

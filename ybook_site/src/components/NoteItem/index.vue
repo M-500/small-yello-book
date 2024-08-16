@@ -18,9 +18,9 @@ import NoteFooter from "@/components/NoteFooter/index.vue"
 
 <style lang="scss" scoped>
 .note-item{
-	position: absolute;
-	left: 0;
-	top: 0;
+	// position: absolute;
+	// left: 0;
+	// top: 0;
 	width: 221.33px; // 这个需要后期需要根据屏幕来适配
 	.container{
 		width: 100%;

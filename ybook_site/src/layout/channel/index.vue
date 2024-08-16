@@ -1,35 +1,39 @@
 <template>
   <div class="channel_container">
-    <div class="item active">
+    <router-link class="item active"
+                 to="/home">
       <div class="icon">
         <img src="../../assets/icons/home.svg"
              alt="" />
       </div>
       <div class="title">发现</div>
-    </div>
-    <div class="item">
+    </router-link>
+    <router-link class="item"
+                 to="/publish">
       <div class="icon">
         <img src="../../assets/icons/publish.svg"
              alt="" />
       </div>
       <div class="title">发布</div>
-    </div>
-    <div class="item">
+    </router-link>
+    <router-link class="item"
+                 to="/notices">
       <div class="icon">
         <img src="../../assets/icons/msg.svg"
              alt="" />
         <div class="count">4</div>
       </div>
       <div class="title">通知</div>
-    </div>
-    <div class="item">
+    </router-link>
+    <router-link class="item"
+                 to="/user/profile/1">
       <div class="icon">
         <img src="../../assets/imgs/avatar.jpeg"
              class="avatar"
              alt="" />
       </div>
       <div class="title">我</div>
-    </div>
+    </router-link>
     <login_btn />
   </div>
 </template>
@@ -37,6 +41,7 @@
 <script setup>
 
 import login_btn from "../loginBtn/index.vue";
+import { RouterLink } from "vue-router";
 </script>
 
 <style lang="scss" scoped>
@@ -52,6 +57,7 @@ import login_btn from "../loginBtn/index.vue";
 		height: 45px;
 		cursor: pointer;
 		border-radius: 50px;
+		text-decoration: none; // 去掉a标签的下划线
 		.icon {
 			position: relative;
 			img {

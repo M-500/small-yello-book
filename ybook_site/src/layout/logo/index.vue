@@ -1,12 +1,13 @@
 <template>
-  <div class="logo_container">
+  <router-link class="logo_container"
+               to="/home">
     <img src="../../assets/icons/logo.svg"
          alt="logo" />
-  </div>
+  </router-link>
 </template>
 
 <script setup>
-import { } from "vue"
+
 </script>
 
 <style lang="scss" scoped>
