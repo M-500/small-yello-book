@@ -246,6 +246,9 @@ function search () {
 			.sug-box{
 				.sug-wrapper{
 					padding: 2px;
+					.active{
+							background-color: $active-color;
+					}
 					.sug-item{
 						border-radius: $input-border-radius;
 						padding: 8px 16px;
@@ -253,9 +256,6 @@ function search () {
 						&:hover{
 							background-color: $active-color;
 						}
-						&:active{
-							background-color: $active-color;
-						}	
 						div {
 							.highlight{
 								color: $primary-color-red;
@@ -265,7 +265,6 @@ function search () {
 								color: rgba(51, 51, 51, 0.6);
 							}
 						}
-						
 					}
 				}
 			}

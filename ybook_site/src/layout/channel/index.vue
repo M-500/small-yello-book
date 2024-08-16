@@ -1,6 +1,6 @@
 <template>
   <div class="channel_container">
-    <div class="item active_box">
+    <div class="item active">
       <div class="icon">
         <img src="../../assets/icons/home.svg"
              alt="" />
@@ -41,7 +41,7 @@ import login_btn from "../loginBtn/index.vue";
 
 <style lang="scss" scoped>
 .channel_container{
-	.active_box{
+	.active{
 		background-color: $active-color;
 	}
 	.item{
@@ -85,6 +85,9 @@ import login_btn from "../loginBtn/index.vue";
 			font-weight: 600;
 			margin-left: 12px;
 			color: $gray-color;
+		}
+		&:hover{
+			background-color: $active-color;
 		}
 	}
 }

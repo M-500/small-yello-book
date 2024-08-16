@@ -13,7 +13,10 @@
     </div>
 
     <div class="layout_main">
-      <p style="height: 100000px;">哈啥</p>
+      <div>
+        <tab_item name="评论"
+                  :active="true" />
+      </div>
     </div>
   </div>
 </template>
@@ -23,6 +26,8 @@ import Logo from "./logo/index.vue";
 import Channel from "./channel/index.vue";
 import card from "./card/index.vue";
 import search from "../components/search/index.vue";
+import { RouterView } from 'vue-router'
+import tab_item from "@/components/TabItem/index.vue";
 </script>
 
 <style scoped lang="scss" >
