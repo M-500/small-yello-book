@@ -1,0 +1,102 @@
+<template>
+  <div class="footer">
+    <a href=""
+       class="title">
+      <span>库里又在日天</span>
+    </a>
+    <div class="author_wrapper">
+      <a href=""
+         class="author">
+        <img src="../../assets/imgs/avatar.jpeg"
+             class="author-avatar"
+             alt="">
+        <span>王木木</span>
+      </a>
+      <span class="like_wrapper">
+        <span class="like-lottie"></span>
+        <SvgIcon name="heart"
+                 width="16"
+                 height="16"
+                 class="like_icon" />
+        <span class="count">1万+</span>
+      </span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { } from "vue"
+</script>
+
+<style lang="scss" scoped>
+.footer{
+	padding: 12px;
+	width: 100%;
+	.title{
+		margin-bottom: 8px;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 140%;
+		color: #333;
+		// 去掉a标签下划线样式
+		text-decoration: none;
+	}
+	.author_wrapper{
+		display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 20px;
+    color: rgba(51,51,51,0.8);
+    font-size: 12px;
+    transition: color 1s;
+		// width: 100%;
+
+		.author{
+			width: 100%;
+			display: flex;
+			align-items: center;
+			color: inherit;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			// white-space: nowrap;
+			margin-right: 12px;
+			// 去掉a标签下划线样式
+			text-decoration: none;
+    	background-color: transparent;
+			.author-avatar{
+				margin-right: 6px;
+				width: 20px;
+				height: 20px;
+				border-radius: 20px;
+				border: 1px solid rgba(0,0,0,0.08);
+				// flex-shrink: 0;
+			}
+		}
+		.like_wrapper{
+			position: relative;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			.like-lottie{
+				width: 16px;
+    		height: 16px;
+				position: absolute;
+				left: 0;
+				top: 0;
+				transform: scale(1.7);
+			}
+			.count{
+				margin-left: 2px;
+				font-size: 12px;
+				text-wrap: nowrap;
+			}
+		}
+	}
+	
+}
+</style>
