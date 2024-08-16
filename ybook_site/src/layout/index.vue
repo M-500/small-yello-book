@@ -8,7 +8,9 @@
       </div>
     </div>
 
-    <div class="layout_header">这里是顶部</div>
+    <div class="layout_header">
+      <search />
+    </div>
 
     <div class="layout_main">
       <p style="height: 100000px;">哈啥</p>
@@ -20,6 +22,7 @@
 import Logo from "./logo/index.vue";
 import Channel from "./channel/index.vue";
 import card from "./card/index.vue";
+import search from "../components/search/index.vue";
 </script>
 
 <style scoped lang="scss" >
