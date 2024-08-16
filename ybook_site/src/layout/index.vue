@@ -52,6 +52,8 @@ import search from "../components/search/index.vue";
 		
 		display: flex;
 		align-items: center;
+
+		z-index: 1000; /* 确保在 container 之上 */
 	}
 	.layout_main{
 		width: calc(100% - $layout-sider-width);
