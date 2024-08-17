@@ -3,12 +3,15 @@
        :class="active === true ? 'active': ''">
     <div class="container">
       <span>{{ name }}</span>
+      <div v-show="tagCount > 0"
+           class="count">{{ tagCount }}</div>
     </div>
   </div>
 
 </template>
 
 <script setup>
+
 
 defineProps({
   active: {
@@ -18,6 +21,10 @@ defineProps({
   name: {
     type: String,
     required: true
+  },
+  tagCount: {
+    type: Number,
+    default: 0
   }
 })
 
@@ -42,10 +49,28 @@ defineProps({
 		flex-direction: column;
 		justify-content: center;
 		align-content: center;
+		position: relative;
 		span {
 			color: #333;
 			// 文字居中
 			text-align: center;
+		}
+		.count{
+			position: absolute;
+			right: 14px;
+			background-color: $primary-color-red;
+			color: white;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0 4px;
+			min-width: 16px;
+			height: 16px;
+			border-radius: 999px;
+			font-size: 12px;
+			font-weight: 500;
+			transform: translate(calc(100% - 4px), calc(-100% + 4px));
+			z-index: 1;
 		}
 	}
 	&:hover {

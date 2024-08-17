@@ -81,7 +81,7 @@ import tab_item from "@/components/TabItem/index.vue";
     width: 100%;
     padding: 24px 0;
     justify-content: center;
-    margin: 0 100px;
+    margin: 0 120px;
     .avatar{
       display: flex;
       align-content: center;
