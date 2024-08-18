@@ -1,9 +1,8 @@
 {
-  "singleQuote": true,
+  "$schema": "https://json.schemastore.org/prettierrc",
   "semi": false,
-  "bracketSpacing": true,
-  "htmlWhitespaceSensitivity": "ignore",
-  "endOfLine": "auto",
-  "trailingComma": "all",
-  "tabWidth": 2
+  "tabWidth": 2,
+  "singleQuote": true,
+  "printWidth": 100,
+  "trailingComma": "none"
 }
