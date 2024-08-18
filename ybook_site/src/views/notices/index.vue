@@ -20,6 +20,7 @@
           <CommentCard />
           <CommentCard />
           <CommentCard />
+          <div class="end_content"> - THE END - </div>
         </div>
       </div>
     </div>
@@ -63,6 +64,15 @@ import CommentCard from "@/components/CommentCard/index.vue";
         display: flex;
         flex-direction: column;
         // gap: 16px;
+        .end_content{
+          display: flex;
+          justify-content: center;
+          margin-top: 24px;
+          margin-bottom: 24px;
+          font-size: 12px;
+          line-height: 16px;
+          color: rgba(51,51,51,0.6);
+        }
       }
     }
   }
