@@ -2,8 +2,9 @@
   <div class="container">
     <!-- 左边头像 -->
     <div class="avatar_box">
-      <img src="../../assets/imgs/avatar.jpeg"
-           alt="">
+      <!-- <img src="../../assets/imgs/avatar.jpeg"
+           alt=""> -->
+      <avatar imgURL="https://sns-avatar-qc.xhscdn.com/avatar/1000g2jo2obr4ip8k80005n65phn49t50rl79avo?imageView2/2/w/540/format/webp|imageMogr2/strip2" />
     </div>
     <!-- 右边主要信息区域 -->
     <div class="main">
@@ -57,6 +58,7 @@
 <script setup>
 import { } from "vue"
 import SvgIcon from "../global/SvgIcon.vue";
+import avatar from "../avatar/index.vue";
 </script>
 
 <style lang="scss" scoped>
@@ -67,14 +69,12 @@ import SvgIcon from "../global/SvgIcon.vue";
 	padding-top: 24px;
 	max-width: 100vw;
 	.avatar_box{
-		width: 100px;
-		height: 100px;
-		border-radius: 50%;
+		// width: 100px;
+		// height: 100px;
+		// border-radius: 50%;
 		overflow: hidden;
-		img{
-			width: 100%;
-			height: 100%;
-		}
+		margin-right: 24px;
+	
 	}
 	.main{
 		flex-grow: 1;
