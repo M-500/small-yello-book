@@ -1,11 +1,8 @@
 <template>
   <div class="header-container">
     <svg-icon name="logo"
-              class="icon"
               width="16"
               height="16" />
-    <!-- <img src="../../assets/icons/logo.svg"
-         alt=""> -->
     <div class="title">创作服务平台</div>
   </div>
 </template>

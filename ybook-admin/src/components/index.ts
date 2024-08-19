@@ -1,4 +1,4 @@
-import SvgIcon from './SvgIcon/index.vue'
+import SvgIcon from '@/components/SvgIcon/index.vue'
 
 const allGlbComponents = {
   SvgIcon

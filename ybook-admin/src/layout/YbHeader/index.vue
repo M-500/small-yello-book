@@ -48,4 +48,7 @@ import logo from '@/components/Logo/index.vue'
 		}
 	}
 }
+::v-deep(.el-sub-menu__title.el-tooltip__trigger.el-tooltip__trigger):hover{ 
+	color: $primary-buttom-active-colder;
+}
 </style>
