@@ -100,6 +100,7 @@
               <div class="help-btn">收不到验证码？</div>
             </div>
             <el-button @click="loginHandler">登录</el-button>
+            <!-- :disabled="canSend" -->
           </div>
         </div>
       </div>
@@ -110,11 +111,11 @@
 <script setup>
 import logo from '@/components/Logo/index.vue'
 import { ref, watch } from 'vue';
-import { getEmailCaptchas } from '@/api/user';
-
-const email = ref('18574945291@163.com');
-const ver_code = ref('');
-const canSend = ref(false);
+import { getEmailCaptchas, login } from '@/api/user';
+import { ElMessage } from 'element-plus';
+const email = ref('1978992154@qq.com');
+const ver_code = ref('443254');
+const canSend = ref(true);
 const buttonText = ref('发送验证码');
 let countdown = 60;
 let timer = null;
@@ -130,13 +131,16 @@ watch(() => email.value, (val) => {
 
 // 发送验证码点击事件
 function sendEmailBtn () {
+  let form = {
+    email: email.value,
+    type_code: 1
+  };
   if (canSend.value) {
-    getEmailCaptchas().then(res => {
-      console.log(res);
+    getEmailCaptchas(form).then(res => {
+      ElMessage.success('验证码发送成功');
     }).catch(err => {
       console.log(err);
     });
-    console.log('发送验证码');
     canSend.value = false;
     buttonText.value = `${countdown}s后重发`;
 
@@ -156,7 +160,18 @@ function sendEmailBtn () {
 
 // 登录点击事件
 function loginHandler () {
-  console.log('登录');
+  login({
+    email: email.value,
+    ver_code: ver_code.value
+  }).then(res => {
+    ElMessage.success('登录成功');
+    
+    let jwt = res.token
+    console.log(res, jwt)
+    // 获取JWT信息
+  }).catch(err => {
+    console.log("")
+  });
 }
 </script>
 

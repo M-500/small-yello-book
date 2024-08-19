@@ -2,10 +2,10 @@
 
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-
+// axios.defaults.baseURL = import.meta.env.VITE_APP_BASE_API
 // 创建axios实例 使用Create方法
 const request = axios.create({
-  baseURL: import.meta.env.VITE_SERVER + import.meta.env.VITE_APP_BASE_API, // api的base_url(基础路径配置)
+  baseURL: import.meta.env.VITE_SERVER, // api的base_url(基础路径配置)
   timeout: 5000 // 请求超时时间
 })
 
@@ -21,14 +21,14 @@ request.interceptors.response.use(
   (response) => {
     // 请求成功后的处理 这个成功只是网络成功，不是业务成功，业务成功需要根据业务状态码来判断
     // 业务成功需要和后端约定好状态码，一般是200，或者0，或者其他的
-
-    return response.data // 简化数据，只返回data
+    // console.log('哈哈？', response.data)
+    return response.data.data // 简化数据，只返回data
   },
   (error) => {
     // 请求失败后的处理：一般处理http的网络错误
     let message: string = ''
     const status = error.response.status // HTTP状态码
-
+    console.log('状态码', status, error.response)
     switch (status) {
       case 400:
         message = '请求错误'
@@ -43,7 +43,11 @@ request.interceptors.response.use(
         message = `请求地址出错: ${error.response.config.url}`
         break
       case 500:
-        message = '服务器内部错误'
+        if (error.response.data.msg) {
+          message = error.response.data.msg
+          break
+        }
+        message = '服务器内部错误:'
         break
       default:
         message = '网络异常'

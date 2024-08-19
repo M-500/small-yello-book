@@ -7,6 +7,8 @@ import '@/styles/index.scss' // 引入全局SASS样式
 import * as ElementPlusIconsVue from '@element-plus/icons-vue' // 引入ElementPlus的ICON
 import 'virtual:svg-icons-register' // 引入SVG ICON
 import globalComponent from '@/components' // 引入全局组件
+// 将 Message 组件挂载到全局
+import { ElMessage } from 'element-plus'
 import App from './App.vue'
 import router from './router'
 
@@ -22,4 +24,8 @@ app.use(ElementPlus, {
 }) // 使用ElementPlus
 
 app.use(globalComponent) // 使用全局组件
+
+//如果没有全局引用element，还需写下面一句
+//app.config.globalProperties.$message = ElMessage;
+// app.provide('$message', ElMessage)
 app.mount('#app')
