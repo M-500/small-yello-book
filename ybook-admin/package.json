@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",
@@ -13,9 +13,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "element-plus": "^2.8.0",
     "pinia": "^2.1.7",
     "sass": "^1.77.8",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

@@ -1,7 +1,6 @@
 <template>
-  <div class="container">
-    <div class="left-logo"></div>
-    <div class="right-info"></div>
+  <div class="">
+    粉丝数据啦
   </div>
 </template>
 

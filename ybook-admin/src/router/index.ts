@@ -6,8 +6,40 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: () => import('../layout/index.vue')
+      name: 'home1',
+      component: () => import('@/layout/index.vue'),
+      children: [
+        {
+          path: '/publish',
+          name: 'publish',
+          component: () => import('@/views/publish/index.vue')
+        },
+        {
+          path: '/home',
+          name: 'home',
+          component: () => import('@/views/home/index.vue')
+        },
+        {
+          path: '/notes-manager',
+          name: 'notes-manager',
+          component: () => import('@/views/notes/index.vue')
+        },
+        {
+          path: '/notes-dashboard',
+          name: 'notes-dashboard',
+          component: () => import('@/views/notedashboard/index.vue')
+        },
+        {
+          path: '/fans-dashboard',
+          name: 'fans-dashboard',
+          component: () => import('@/views/fans/index.vue')
+        }
+      ]
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('@/views/login/index.vue')
     }
   ]
 })
