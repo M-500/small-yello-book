@@ -40,8 +40,15 @@ const useUserStore = defineStore('User', {
         return Promise.reject(new Error(result.data.data.msg))
       }
     },
+    userLogout() {
+      this.clearToke()
+    },
     setToken(token: string) {
       this.token = token
+    },
+    clearToke() {
+      localStorage.clear()
+      this.token = ''
     },
     setUserInfo(userInfo: any) {
       this.userInfo = userInfo
