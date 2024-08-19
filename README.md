@@ -2,9 +2,11 @@
 
 模拟小红书网页版的一个前端+后端项目。主要用于学习
 
-![img.png](img.png)
+创作平台：
+![img.png](imgs/img.png)
 
-![img_1.png](img_1.png)
+小黄书web端：
+![img_1.png](imgs/img_1.png)
 
 # 1. 项目结构
 
@@ -21,6 +23,11 @@ ybook_site: 前段项目: 用户端小红书
 ## 前端
 
 1. vue3.x
+2. TS
+3. Pinia
+4. ElementPlus
+5. Vite
+6. Axios
 
 
 
@@ -38,9 +45,31 @@ ybook_site: 前段项目: 用户端小红书
 
 ## 前端
 
+```shell
+cd ybook-admin
 
+npm i
+
+npm  run dev
+```
+
+
+```shell
+cd ybook_site
+
+npm i
+
+npm  run dev
+```
 
 ## 后端
+配置好MySQL, Redis, Kafka, Canal, ES，然后启动。主要是配置文件`/etc/dev.yaml`
+```shell
+cd gin-svc
 
+go mod tidy
+
+go run main.go
+```
 
 
