@@ -6,8 +6,62 @@
     <div class="content">
       <div class="con">
         <div class="video-box-container">
-          <!-- <div class="mask"
-               style="width: 697.76px; height: 418.656px;"></div> -->
+          <div class="mask"
+               style="width: 697.76px; height: 418.656px;"></div>
+          <div class="video-item-container"
+               style="width: 178px;height: 178px;margin-top: 77px;margin-left: 0px;">
+            <div class="circle balloon">
+              <video autoplay
+                     muted
+                     loop
+                     src="@/assets/videos/demo.mp4"></video>
+            </div>
+          </div>
+          <div class="video-item-container"
+               style="width: 222.163px; height: 222.163px; margin-top: 86.6436px; margin-left: 181.433px; border-radius: 222.163px;">
+            <div class="circle balloon">
+              <video autoplay
+                     muted
+                     loop
+                     src="@/assets/videos/demo1.mp4"></video>
+            </div>
+          </div>
+          <div class="video-item-container"
+               style="width: 186.37px; height: 186.37px; margin-top: 195.627px; margin-left: 385.083px; border-radius: 186.37px;">
+            <div class="circle balloon">
+              <video autoplay
+                     muted
+                     loop
+                     src="@/assets/videos/demo2.mp4"></video>
+            </div>
+          </div>
+          <div class="video-item-container"
+               style="width: 127.127px; height: 127.127px; margin-top: -9.87392px; margin-left: 335.096px; border-radius: 127.127px;">
+            <div class="circle balloon">
+              <video autoplay
+                     muted
+                     loop
+                     src="@/assets/videos/demo3.mp4"></video>
+            </div>
+          </div>
+          <div class="video-item-container"
+               style="width: 120.956px; height: 120.956px; margin-top: 73.5607px; margin-left: 435.07px; border-radius: 120.956px;">
+            <div class="circle balloon">
+              <video autoplay
+                     muted
+                     loop
+                     src="@/assets/videos/demo5.mp4"></video>
+            </div>
+          </div>
+          <div class="video-item-container"
+               style="width: 77.7571px; height: 77.7571px; margin-top: 157.366px; margin-left: 539.363px; border-radius: 77.7571px;">
+            <div class="circle balloon">
+              <video autoplay
+                     muted
+                     loop
+                     src="@/assets/videos/demo6.mp4"></video>
+            </div>
+          </div>
           <div class="title-box">
             <span class="title-line">
               加入我们
@@ -64,6 +118,7 @@ const ver_code = ref('');
   height: 100vh;
   width: 100%;
   .top-header{
+    padding: 0 20px;
     height: $primary-header-height;
     background-color: #fff;
     display: flex;
@@ -93,6 +148,25 @@ const ver_code = ref('');
         width: 663.04px;
         height: 397.824px;
         top: 0;
+        .mask{
+          position: absolute;
+          z-index: 10;
+        }
+        .video-item-container{
+          position: absolute;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .circle{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 100%;
+            width: 85%;
+            height: 85%;
+          }
+        }
         .title-box{
           margin-top: -60.78px;
           float: left;
@@ -209,5 +283,28 @@ const ver_code = ref('');
 }
 ::v-deep(.el-input__wrapper){
   border-radius: 8px;
+}
+
+::v-deep(.email-input){
+  width: 100%;
+}
+
+@keyframes balloon-move {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(2px, -2px);
+  }
+  50% {
+    transform: translate(-2px, 2px);
+  }
+  75% {
+    transform: translate(2px, 2px);
+  }
+}
+
+.balloon {
+  animation: balloon-move 3s ease-in-out infinite;
 }
 </style>
