@@ -1,8 +1,8 @@
 <template>
   <div class="header-container">
     <svg-icon name="logo"
-              width="16"
-              height="16" />
+              width="72"
+              height="72" />
     <div class="title">创作服务平台</div>
   </div>
 </template>
