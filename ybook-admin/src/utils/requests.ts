@@ -5,7 +5,7 @@ import { ElMessage } from 'element-plus'
 
 // 创建axios实例 使用Create方法
 const request = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_API, // api的base_url(基础路径配置)
+  baseURL: import.meta.env.VITE_SERVER + import.meta.env.VITE_APP_BASE_API, // api的base_url(基础路径配置)
   timeout: 5000 // 请求超时时间
 })
 

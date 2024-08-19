@@ -4,7 +4,7 @@
 
 创作平台：
 ![img.png](imgs/img.png)
-
+![img.png](imgs/img_2.png)
 小黄书web端：
 ![img_1.png](imgs/img_1.png)
 

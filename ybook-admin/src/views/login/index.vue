@@ -111,7 +111,6 @@
 import logo from '@/components/Logo/index.vue'
 import { ref, watch } from 'vue';
 import { getEmailCaptchas } from '@/api/user';
-import func from '../../../vue-temp/vue-editor-bridge';
 
 const email = ref('18574945291@163.com');
 const ver_code = ref('');
