@@ -78,20 +78,20 @@
               <div class="email-input-box">
                 <el-input v-model="email"
                           class="email-input"
-                          style="width: 240px"
                           placeholder="邮箱"
                           clearable />
               </div>
               <div class="code-input-box">
                 <el-input v-model="ver_code"
+                          disabled
                           class="code-input"
                           max="6"
-                          style="width: 240px"
                           placeholder="验证码">
                 </el-input>
                 <div class="slot-right">
                   <div class="box">
-                    <span class="send-btn">发送验证码</span>
+                    <!-- <span class="send-btn">发送验证码</span> -->
+                    <button class="send-btn active">发送验证码</button>
                   </div>
                 </div>
               </div>
@@ -233,8 +233,8 @@ const ver_code = ref('');
         .slot-right{
           height: 48px;
           position: absolute;
-          right: 25px;
-          top: 1px;
+          right: 10px;
+          top: 0px;
           bottom: 1px;
           overflow: hidden;
           display: flex;
@@ -244,6 +244,8 @@ const ver_code = ref('');
           border-bottom-right-radius: 3px;
           .box{
             border-left: 1px solid rgb(228, 234, 242);
+            display: flex;
+            align-content: center;
             .send-btn{
               color: rgb(136, 136, 136);
               cursor: not-allowed;
@@ -252,6 +254,10 @@ const ver_code = ref('');
               font-size: 14px;
               width: 70px;
               text-align: center;
+              cursor: pointer;
+            }
+            .active{
+              color: rgb(22, 119, 255);
               cursor: pointer;
             }
           }
