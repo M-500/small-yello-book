@@ -6,8 +6,8 @@
     <div class="content">
       <div class="con">
         <div class="video-box-container">
-          <div class="mask"
-               style="width: 697.76px; height: 418.656px;"></div>
+          <!-- <div class="mask"
+               style="width: 697.76px; height: 418.656px;"></div> -->
           <div class="title-box">
             <span class="title-line">
               加入我们
@@ -21,16 +21,27 @@
           <div class="login-box">
             <div class="title">邮箱验证码登录</div>
             <div class="form-content">
-              <div class="email-input">
-                <el-input v-model="input1"
-                          style="max-width: 600px"
-                          placeholder="邮箱">
-                  <template #prepend>Http://</template>
+              <div class="email-input-box">
+                <el-input v-model="email"
+                          class="email-input"
+                          style="width: 240px"
+                          placeholder="邮箱"
+                          clearable />
+              </div>
+              <div class="code-input-box">
+                <el-input v-model="ver_code"
+                          class="code-input"
+                          max="6"
+                          style="width: 240px"
+                          placeholder="验证码">
                 </el-input>
+                <div class="slot-right">
+                  <div class="box">
+                    <span class="send-btn">发送验证码</span>
+                  </div>
+                </div>
               </div>
-              <div class="code-input">
-
-              </div>
+              <div class="help-btn">收不到验证码？</div>
             </div>
             <el-button>登录</el-button>
           </div>
@@ -42,6 +53,10 @@
 
 <script setup>
 import logo from '@/components/Logo/index.vue'
+import { ref } from 'vue';
+
+const email = ref('18574945291@163.com');
+const ver_code = ref('');
 </script>
 
 <style lang="scss" scoped>
@@ -77,10 +92,25 @@ import logo from '@/components/Logo/index.vue'
       .video-box-container{
         width: 663.04px;
         height: 397.824px;
+        top: 0;
         .title-box{
           margin-top: -60.78px;
           float: left;
           margin-left: 42px;
+          position: relative;
+          top: 0;
+          .title-line{
+            font-size: 2.5vw;
+            line-height: 150%;
+            margin-bottom: .7vw;
+            display: block;
+            width: 100%;
+            font-size: 36px;
+            font-weight: 600;
+            line-height: 150%;
+            margin: 0 0 10px;
+            color: #363f4d;
+          }
         }
       }
     }
@@ -108,6 +138,57 @@ import logo from '@/components/Logo/index.vue'
     }
     .form-content{
       height: 180px;
+      .email-input-box{
+        margin-bottom: 20px;
+        .email-input{
+          height: 48px;
+          border-color: rgb(228, 234, 242);
+          border-radius: 8px;
+          font-size: 14px;
+        }
+      }
+      .code-input-box{
+        position: relative;
+        // margin-bottom: 20px;
+        .code-input{
+          height: 48px;
+          border-color: rgb(228, 234, 242);
+          border-radius: 8px;
+          font-size: 14px;
+        }
+        .slot-right{
+          height: 48px;
+          position: absolute;
+          right: 25px;
+          top: 1px;
+          bottom: 1px;
+          overflow: hidden;
+          display: flex;
+          -webkit-box-align: center;
+          align-items: center;
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          .box{
+            border-left: 1px solid rgb(228, 234, 242);
+            .send-btn{
+              color: rgb(136, 136, 136);
+              cursor: not-allowed;
+              padding: 2px 0px;
+              margin-left: 14px;
+              font-size: 14px;
+              width: 70px;
+              text-align: center;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+      .help-btn{
+        margin-top: 5px;
+        color: rgb(22, 119, 255);
+        font-size: 12px;
+        cursor: pointer;
+      }
     }
     
   }
@@ -125,5 +206,8 @@ import logo from '@/components/Logo/index.vue'
   span{
     color: white;
   }
+}
+::v-deep(.el-input__wrapper){
+  border-radius: 8px;
 }
 </style>
