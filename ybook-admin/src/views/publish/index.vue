@@ -42,9 +42,31 @@
                   <div class="title">图片编辑</div>
                   <div class="status">(1/18)</div>
                 </div>
+                <span class="reset-upload">清空并重新上传</span>
               </div>
               <div class="img-upload-area">
                 <img-upload></img-upload>
+              </div>
+              <div class="title-input">
+                <el-input v-model="noteTitle"
+                          style="width: 240px"
+                          maxlength="10"
+                          placeholder="填写标题，可能会有更多赞哦~"
+                          show-word-limit
+                          type="text" />
+              </div>
+              <div class="topic-container">
+
+              </div>
+              <div class="setting">
+                发布设置
+              </div>
+
+              <div class="submit">
+                <div class="submit-wrap">
+                  <el-button>发布</el-button>
+                  <el-button>取消</el-button>
+                </div>
               </div>
             </div>
           </div>
@@ -59,7 +81,10 @@ import { ref } from 'vue'
 import { TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
+
 const activeName = ref('first')
+
+const noteTitle = ref('')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
@@ -106,7 +131,36 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
           width: 100%;
           .img-list{
             .top{
-              
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 12px;
+              .title-area{
+                display: flex;
+                align-items: center;
+                .title{
+                  font-weight: 900;
+                  font-size: 18px;
+                  line-height: 26px;
+                  color: #262626;
+                  margin-right: 6px;
+                }
+                .status{
+                  color: rgba(51, 51, 51, .6);
+                  font-family: PingFang SC;
+                  font-size: 14px;
+                  font-style: normal;
+                  font-weight: 400;
+                  line-height: 18px;
+                }
+              }
+              .reset-upload{
+                color: #ff2442;
+                font-size: 14px;
+                font-family: PingFang SC;
+                font-weight: 400;
+                cursor: pointer; // 鼠标移上去变成小手
+              }
             }
             .img-upload-area{
               
