@@ -5,7 +5,18 @@
     </div>
     <div class="content">
       <div class="con">
-        <div class="video-box-container"></div>
+        <div class="video-box-container">
+          <div class="mask"
+               style="width: 697.76px; height: 418.656px;"></div>
+          <div class="title-box">
+            <span class="title-line">
+              加入我们
+              <br>
+              解锁创作者专属功能
+            </span>
+            <span class="des">让创作发布、数据分析、商业变现更高效。</span>
+          </div>
+        </div>
         <div class="login-box-container">
           <div class="login-box">
             <div class="title">邮箱验证码登录</div>
@@ -13,7 +24,7 @@
               <div class="email-input">
                 <el-input v-model="input1"
                           style="max-width: 600px"
-                          placeholder="Please input">
+                          placeholder="邮箱">
                   <template #prepend>Http://</template>
                 </el-input>
               </div>
@@ -47,7 +58,7 @@ import logo from '@/components/Logo/index.vue'
   .content{
     height: calc(100vh - #{$primary-header-height});
     width: 100%;
-    background-image: url('@/assets/imgs/background.jpg'); // 确保路径正确
+    background-image: url('@/assets/imgs/background.png'); // 确保路径正确
     background-size: cover; // 使背景图片覆盖整个容器
     background-position: center; // 使背景图片居中
     position: absolute;
@@ -63,6 +74,15 @@ import logo from '@/components/Logo/index.vue'
       display: flex;
       justify-content: center;
       align-items: center;
+      .video-box-container{
+        width: 663.04px;
+        height: 397.824px;
+        .title-box{
+          margin-top: -60.78px;
+          float: left;
+          margin-left: 42px;
+        }
+      }
     }
   }
 }

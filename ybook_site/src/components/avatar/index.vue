@@ -6,7 +6,6 @@
            :style="{width,height}"
            alt="">
     </router-link>
-
   </div>
 </template>
 
