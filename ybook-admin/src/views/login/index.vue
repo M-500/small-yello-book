@@ -83,7 +83,7 @@
               </div>
               <div class="code-input-box">
                 <el-input v-model="ver_code"
-                          disabled
+                          :disabled="canSend"
                           class="code-input"
                           max="6"
                           placeholder="验证码">
@@ -91,7 +91,9 @@
                 <div class="slot-right">
                   <div class="box">
                     <!-- <span class="send-btn">发送验证码</span> -->
-                    <button class="send-btn active">发送验证码</button>
+                    <button class="send-btn"
+                            :class="canSend ? 'active': ''"
+                            @click="sendEmailBtn">{{ buttonText }}</button>
                   </div>
                 </div>
               </div>
@@ -107,10 +109,45 @@
 
 <script setup>
 import logo from '@/components/Logo/index.vue'
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
-const email = ref('18574945291@163.com');
+const email = ref('');
 const ver_code = ref('');
+const canSend = ref(false);
+const buttonText = ref('发送验证码');
+let countdown = 60;
+let timer = null;
+
+// 监听Email输入框的值
+watch(() => email.value, (val) => {
+  if (val) {
+    canSend.value = true;
+  } else {
+    canSend.value = false;
+  }
+});
+
+// 发送验证码点击事件
+function sendEmailBtn () {
+  if (canSend.value) {
+    console.log('发送验证码');
+    canSend.value = false;
+    buttonText.value = `${countdown}s后重发`;
+
+    timer = setInterval(() => {
+      countdown--;
+      buttonText.value = `${countdown}s后重发`;
+
+      if (countdown === 0) {
+        clearInterval(timer);
+        countdown = 60;
+        buttonText.value = '发送验证码';
+        canSend.value = true;
+      }
+    }, 1000);
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>
