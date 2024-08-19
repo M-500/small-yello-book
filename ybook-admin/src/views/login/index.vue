@@ -115,7 +115,7 @@ import logo from '@/components/Logo/index.vue'
 import { type emialForm } from '@/api/user/types';
 import { reactive, ref, watch } from 'vue';
 import { getEmailCaptchas } from '@/api/user';
-import { ElMessage } from 'element-plus';
+import { ElMessage,ElNotification } from 'element-plus';
 import { useRouter } from 'vue-router';
 // const email = ref('1978992154@qq.com');
 // const ver_code = ref('443254');
@@ -141,14 +141,15 @@ watch(() => formData.email, (val) => {
 // 发送验证码点击事件
 function sendEmailBtn () {
   let form = reactive({
-    emial: formData.email,
-    type_code: '1'
+    email: formData.email,
+    type_code: 1
   })
   if (canSend.value) {
     getEmailCaptchas(form).then(res => {
       ElMessage.success('验证码发送成功');
     }).catch(err => {
-      console.log(err);
+      // canSend.value = true
+      return 
     });
     canSend.value = false;
     buttonText.value = `${countdown}s后重发`;
@@ -170,9 +171,17 @@ function sendEmailBtn () {
 const loginHandler = async()=>{
   try {
     await userStore.userLogin(formData)
+    ElNotification({
+      type:'success',
+      message:'登陆成功！'
+    })
     $router.push('/home')
   }catch (err){
-    ElMessage.success(err)
+    // console.log("wotama de",err)
+    // ElNotification({
+    //   type:'error',
+    //   message: err.response.data.data.msg
+    // })
   }
 }
 
