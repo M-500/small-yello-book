@@ -8,6 +8,11 @@
 
 # 1. 项目结构
 
+```shell
+gin-svc : 后端服务 基于gin开发的单体服务
+ybook-admin: 前端项目: 创作者平台
+ybook_site: 前段项目: 用户端小红书
+```
 
 
 
