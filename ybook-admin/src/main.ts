@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus' // 引入ElementPlus
 import 'element-plus/dist/index.css' // 引入ElementPlus的样式
 import zhCn from 'element-plus/es/locale/lang/zh-cn' // 引入ElementPlus的中文语言包
@@ -8,17 +7,21 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue' // 引入ElementP
 import 'virtual:svg-icons-register' // 引入SVG ICON
 import globalComponent from '@/components' // 引入全局组件
 // 将 Message 组件挂载到全局
-import { ElMessage } from 'element-plus'
+// import { ElMessage } from 'element-plus'
 import App from './App.vue'
 import router from './router'
+import pinia from './stores/index'
 
 const app = createApp(App)
 // 注册所有ElementUI的ICON
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
-app.use(createPinia())
+
 app.use(router)
+// 安装仓库
+app.use(pinia)
+
 app.use(ElementPlus, {
   locale: zhCn
 }) // 使用ElementPlus

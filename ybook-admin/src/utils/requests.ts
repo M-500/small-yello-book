@@ -22,7 +22,10 @@ request.interceptors.response.use(
     // 请求成功后的处理 这个成功只是网络成功，不是业务成功，业务成功需要根据业务状态码来判断
     // 业务成功需要和后端约定好状态码，一般是200，或者0，或者其他的
     // console.log('哈哈？', response.data)
-    return response.data.data // 简化数据，只返回data
+    // if (response.data.code === 0) {
+    //   return response.data.data // 简化数据，只返回data
+    // }
+    return response.data // 简化数据，只返回data
   },
   (error) => {
     // 请求失败后的处理：一般处理http的网络错误

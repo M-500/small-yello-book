@@ -76,13 +76,13 @@
             <div class="title">邮箱验证码登录</div>
             <div class="form-content">
               <div class="email-input-box">
-                <el-input v-model="email"
+                <el-input v-model="formData.email"
                           class="email-input"
                           placeholder="邮箱"
                           clearable />
               </div>
               <div class="code-input-box">
-                <el-input v-model="ver_code"
+                <el-input v-model="formData.ver_code"
                           :disabled="canSend"
                           class="code-input"
                           max="6"
@@ -108,20 +108,27 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+// 引入用户相关的pinia，用来存储token信息
+import useUserStore from '@/stores/moudules/user';
 import logo from '@/components/Logo/index.vue'
-import { ref, watch } from 'vue';
+import { type emialForm } from '@/api/user/types';
+import { reactive, ref, watch } from 'vue';
 import { getEmailCaptchas, login } from '@/api/user';
 import { ElMessage } from 'element-plus';
-const email = ref('1978992154@qq.com');
-const ver_code = ref('443254');
+// const email = ref('1978992154@qq.com');
+// const ver_code = ref('443254');
+const formData = reactive({
+  email: '1978992154@qq.com',
+  ver_code: '123123'  
+})
 const canSend = ref(true);
 const buttonText = ref('发送验证码');
 let countdown = 60;
 let timer = null;
-
+let userStore = useUserStore()
 // 监听Email输入框的值
-watch(() => email.value, (val) => {
+watch(() => formData.email, (val) => {
   if (val) {
     canSend.value = true;
   } else {
@@ -131,10 +138,10 @@ watch(() => email.value, (val) => {
 
 // 发送验证码点击事件
 function sendEmailBtn () {
-  let form = {
-    email: email.value,
-    type_code: 1
-  };
+  let form = reactive({
+    emial: formData.email,
+    type_code: '1'
+  })
   if (canSend.value) {
     getEmailCaptchas(form).then(res => {
       ElMessage.success('验证码发送成功');
@@ -160,18 +167,20 @@ function sendEmailBtn () {
 
 // 登录点击事件
 function loginHandler () {
-  login({
-    email: email.value,
-    ver_code: ver_code.value
-  }).then(res => {
-    ElMessage.success('登录成功');
-    
-    let jwt = res.token
-    console.log(res, jwt)
-    // 获取JWT信息
-  }).catch(err => {
-    console.log("")
-  });
+  userStore.userLogin(formData)
+  // login({
+  //   email: email.value,
+  //   ver_code: ver_code.value
+  // }).then(res => {
+  //   ElMessage.success('登录成功');
+
+  //   let jwt = res.token
+  //   console.log(res, jwt)
+  //   userStore.setToken(jwt) // 设置JWT信息
+  //   // 获取JWT信息
+  // }).catch(err => {
+  //   console.log("")
+  // });
 }
 </script>
 
