@@ -99,7 +99,7 @@
               </div>
               <div class="help-btn">收不到验证码？</div>
             </div>
-            <el-button>登录</el-button>
+            <el-button @click="loginHandler">登录</el-button>
           </div>
         </div>
       </div>
@@ -110,8 +110,10 @@
 <script setup>
 import logo from '@/components/Logo/index.vue'
 import { ref, watch } from 'vue';
+import { getEmailCaptchas } from '@/api/user';
+import func from '../../../vue-temp/vue-editor-bridge';
 
-const email = ref('');
+const email = ref('18574945291@163.com');
 const ver_code = ref('');
 const canSend = ref(false);
 const buttonText = ref('发送验证码');
@@ -130,6 +132,11 @@ watch(() => email.value, (val) => {
 // 发送验证码点击事件
 function sendEmailBtn () {
   if (canSend.value) {
+    getEmailCaptchas().then(res => {
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    });
     console.log('发送验证码');
     canSend.value = false;
     buttonText.value = `${countdown}s后重发`;
@@ -148,6 +155,10 @@ function sendEmailBtn () {
   }
 }
 
+// 登录点击事件
+function loginHandler () {
+  console.log('登录');
+}
 </script>
 
 <style lang="scss" scoped>
