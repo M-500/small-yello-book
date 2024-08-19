@@ -1,6 +1,7 @@
 <template>
   <div class="container">
-    <div class="before_publish">
+    <div class="before-publish"
+         v-show="false">
       <el-card>
         <el-tabs v-model="activeName"
                  class="demo-tabs"
@@ -19,6 +20,37 @@
       </el-card>
 
     </div>
+
+    <div class="main-publish">
+      <el-card>
+        <div class="header">
+          <span class="icon">
+            <el-icon>
+              <ArrowLeft />
+            </el-icon>
+          </span>
+          <span>
+            发布图文
+          </span>
+        </div>
+
+        <div class="content">
+          <div class="media-area-new">
+            <div class="img-list">
+              <div class="top">
+                <div class="title-area">
+                  <div class="title">图片编辑</div>
+                  <div class="status">(1/18)</div>
+                </div>
+              </div>
+              <div class="img-upload-area">
+                <img-upload></img-upload>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -26,6 +58,7 @@
 import { ref } from 'vue'
 import { TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
+import ImgUpload from '@/components/ImgUpload/index.vue'
 const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -36,7 +69,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 <style lang="scss" scoped>
 
 .container {
-  .before_publish {
+  .before-publish {
     height: 100%;
     .el-card{
       height: 100%;
@@ -44,8 +77,46 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
           
         }
       }
+  }
+  .main-publish{
+    height: 100%;
+    .el-card{
+      height: 100%;
+      .header{
+        line-height: 28px;
+        font-size: 20px;
+        font-weight: 900;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center; /* 垂直居中 */
+        // justify-content: center; /* 水平居中 */
+        .icon{
+          display: flex;
+          align-content: center;
+          margin-right: 4px; /* 图标和文字之间的间距 */
+          width: 20px;
+          height: 20px;
+        }
+      }
+      .content{
+        position: relative;
+        width: 100%;
+        padding: 0 300px 0 13px;
+        .media-area-new{
+          width: 100%;
+          .img-list{
+            .top{
+              
+            }
+            .img-upload-area{
+              
+            }
+          }
+        }
+      }
     }
   }
+}
 
 
 .el-tabs__header{
