@@ -28,16 +28,17 @@ const useUserStore = defineStore('User', {
   // 处理异步|逻辑的地方
   actions: {
     async userLogin(form: loginForm) {
-      const result = await login(form)
+      const result: any = await login(form)
       // 要么成功 200
       // 要么失败 != 200
       if (result.code === 0) {
         // 由于pinia|vuex存储数据其实就是用的js对象 所以还需要持久化存储
         this.token = result.data.token
         localStorage.setItem('TOKEN', result.data.token)
+        return 'ok'
       } else {
+        return Promise.reject(result.data.msg)
       }
-      console.log('pinia登陆结构', result)
     },
     setToken(token: string) {
       this.token = token

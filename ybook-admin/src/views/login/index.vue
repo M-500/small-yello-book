@@ -114,14 +114,16 @@ import useUserStore from '@/stores/moudules/user';
 import logo from '@/components/Logo/index.vue'
 import { type emialForm } from '@/api/user/types';
 import { reactive, ref, watch } from 'vue';
-import { getEmailCaptchas, login } from '@/api/user';
+import { getEmailCaptchas } from '@/api/user';
 import { ElMessage } from 'element-plus';
+import { useRouter } from 'vue-router';
 // const email = ref('1978992154@qq.com');
 // const ver_code = ref('443254');
 const formData = reactive({
   email: '1978992154@qq.com',
   ver_code: '123123'  
 })
+let $router = useRouter()
 const canSend = ref(true);
 const buttonText = ref('发送验证码');
 let countdown = 60;
@@ -165,23 +167,32 @@ function sendEmailBtn () {
   }
 }
 
-// 登录点击事件
-function loginHandler () {
-  userStore.userLogin(formData)
-  // login({
-  //   email: email.value,
-  //   ver_code: ver_code.value
-  // }).then(res => {
-  //   ElMessage.success('登录成功');
-
-  //   let jwt = res.token
-  //   console.log(res, jwt)
-  //   userStore.setToken(jwt) // 设置JWT信息
-  //   // 获取JWT信息
-  // }).catch(err => {
-  //   console.log("")
-  // });
+const loginHandler = async()=>{
+  try {
+    await userStore.userLogin(formData)
+    $router.push('/home')
+  }catch (err){
+    ElMessage.success(err)
+  }
 }
+
+// 登录点击事件
+// function loginHandler () {
+  
+//   // login({
+//   //   email: email.value,
+//   //   ver_code: ver_code.value
+//   // }).then(res => {
+//   //   ElMessage.success('登录成功');
+
+//   //   let jwt = res.token
+//   //   console.log(res, jwt)
+//   //   userStore.setToken(jwt) // 设置JWT信息
+//   //   // 获取JWT信息
+//   // }).catch(err => {
+//   //   console.log("")
+//   // });
+// }
 </script>
 
 <style lang="scss" scoped>
