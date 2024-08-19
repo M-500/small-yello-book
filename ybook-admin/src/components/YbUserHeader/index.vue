@@ -55,10 +55,10 @@ const open = () => {
       })
     })
     .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '',
-      })
+      // ElMessage({
+      //   type: 'info',
+      //   message: '取消',
+      // })
     })
 }
 </script>
@@ -123,9 +123,17 @@ const open = () => {
 					font-weight: 900;
 				}
 			}
+			.popover_text:hover{
+				background: #f5f5f5;
+				span{
+					color: $primary-buttom-active-colder;
+				}
+			}
 		}
 	}
 }
+
+
 </style>
 
 <style >
@@ -133,5 +141,7 @@ const open = () => {
 .message-logout{
 	border-radius: 10px !important;
 }
-
+::v-deep(.el-button--primary){
+	background-color: rgb(58, 100, 255) !important;
+}
 </style>
