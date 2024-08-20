@@ -50,22 +50,75 @@
               <div class="title-input">
                 <el-input v-model="noteTitle"
                           style="width: 240px"
-                          maxlength="10"
+                          maxlength="20"
                           placeholder="填写标题，可能会有更多赞哦~"
                           show-word-limit
                           type="text" />
               </div>
               <div class="topic-container">
-
+                <el-input v-model="noteContent"
+                          style="width: 240px"
+                          :rows="2"
+                          tabindex="0"
+                          maxlength="100"
+                          show-word-limit
+                          type="textarea"
+                          placeholder="填写更全面的描述信息，让更多的人看到你吧！" />
               </div>
               <div class="setting">
                 发布设置
               </div>
+              <div class="formbox">
+                <div class="flexbox">
+                  <div class="_title">自主申明</div>
+                  <el-select v-model="value"
+                             placeholder="点击设置笔记声明"
+                             size="middle"
+                             suffix-icon=""
+                             style="width: 420px">
+                    <el-option v-for="item in options"
+                               :key="item.value"
+                               :label="item.label"
+                               :value="item.value" />
+                  </el-select>
+                </div>
+                <div class="flexbox">
+                  <div class="_title">权限设置</div>
+                  <el-radio-group v-model="radio1">
+                    <el-radio value="1"
+                              size="large">
+                      <span>公开</span>
+                      <span class="see">(所有人可见)</span>
+                    </el-radio>
+                    <el-radio value="2"
+                              size="large">
+                      <span>私有</span>
+                      <span class="see">(仅自己可见)</span>
+                    </el-radio>
+                  </el-radio-group>
+                </div>
+                <div class="flexbox">
+                  <div class="_title">发布时间</div>
+                  <el-radio-group v-model="radio1">
+                    <el-radio value="1"
+                              size="large">
+                      立即发布
+                    </el-radio>
+                    <el-radio value="2"
+                              size="large">
+                      定时发布
+                    </el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
 
               <div class="submit">
                 <div class="submit-wrap">
-                  <el-button>发布</el-button>
-                  <el-button>取消</el-button>
+                  <el-button size="large"
+                             color="#ff2442"
+                             class="push">发布</el-button>
+                  <el-button size="large"
+                             class="cancel">取消</el-button>
                 </div>
               </div>
             </div>
@@ -81,11 +134,23 @@ import { ref } from 'vue'
 import { TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
-
 const activeName = ref('first')
 
 const noteTitle = ref('')
+const noteContent = ref('')
+const value = ref('')
+const radio1 = ref('1')
 
+const options = [
+  {
+    value: 'Option1',
+    label: '虚拟演绎，仅供娱乐',
+  },
+  {
+    value: 'Option2',
+    label: '笔记含AI合成内容',
+  }
+]
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
@@ -163,7 +228,53 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
               }
             }
             .img-upload-area{
-              
+              margin-bottom: 12px;
+            }
+            .title-input{
+              width: 100%;
+              margin-bottom: 12px;
+            }
+            .topic-container{
+              width: 100%;
+              margin-bottom: 12px;
+            }
+            .setting{
+              margin-top: 24px;
+              margin-bottom: 12px;
+              color: #262626;
+              font-family: PingFang SC;
+              font-size: 18px;
+              font-style: normal;
+              font-weight: 500;
+              line-height: 26px;
+            }
+            .formbox{
+              .flexbox{
+                display: flex;
+                height: 48px;
+                align-items: center;
+                ._title{
+                  align-items: center;
+                  margin: 0;
+                  font-size: 14px;
+                  color: #262626;
+                  padding: 8px 24px 8px 0;
+                }
+              }
+            }
+            .submit{
+              margin-top: 20px;
+              display: flex;
+              align-items: center;
+              .submit-wrap{
+                .push{
+                  width: 110px;
+                  margin-right: 20px;
+                }
+                .cancel{
+                  width: 110px;
+                }
+              }
             }
           }
         }
@@ -196,4 +307,24 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
   color: #ff2442 !important;
 }
 
+::v-deep(.el-input){
+  width: 100% !important;
+}
+::v-deep(.el-textarea){
+  width: 100% !important;
+}
+::v-deep(.el-input__wrapper):hover{
+  border: 1px solid $primary-buttom-active-colder !important;
+}
+
+// ::v-deep(.el-select__wrapper){
+//   width: 420px;
+// }
+
+::v-deep(.el-radio .is-checked){
+  .el-radio__input{
+    color: $primary-buttom-active-colder !important;
+  }
+  
+}
 </style>
