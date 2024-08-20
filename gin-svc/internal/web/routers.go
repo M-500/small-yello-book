@@ -29,10 +29,14 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	{
 		InitUserController(app).RegisterRoute(privateGroup)
 		InitRoleController(app).RegisterRoute(privateGroup)
+		InitFileController(app).RegisterRoute(privateGroup)
 
 	}
 
 	return engine
+}
+func InitFileController(app *internal.App) controller.BaseController {
+	return controller.NewFileUploadController()
 }
 
 func InitUserController(app *internal.App) controller.BaseController {

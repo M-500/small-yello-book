@@ -64,7 +64,7 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 			Email:         req.Email,
 			NickName:      utils.RandNickName(),
 			IPAddr:        "",
-			Avatar:        "",
+			Avatar:        "https://ybook-1257044385.cos.ap-guangzhou.myqcloud.com/default-avatar/GUpoE6bWMAAXwGD.jpeg",
 			Password:      "",
 			Signature:     "这家伙很懒，什么都没留下~",
 			FansCount:     0,

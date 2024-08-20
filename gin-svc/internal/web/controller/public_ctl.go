@@ -36,8 +36,8 @@ func NewPublicController(userSvc service.UserSvc, smtp service.SmtpServiceInterf
 func (p *publicController) EmailLoginCtl(ctx *gin.Context, req types.EmailLoginForm) (result ginx.JsonResult, err error) {
 	token, err := p.userSvc.EmailLogin(ctx, req)
 	if err != nil {
-		fmt.Println(err)
-		return ginx.Error(10011, "登陆失败"), err
+		//fmt.Println(err)
+		return ginx.Error(10011, err.Error()), err
 	}
 	res := resp.LoginResp{Token: token}
 	return ginx.JsonResult{Data: res}, nil

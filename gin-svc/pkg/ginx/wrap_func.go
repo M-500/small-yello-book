@@ -47,3 +47,24 @@ func WrapResponse(fn func(*gin.Context) (JsonResult, error)) gin.HandlerFunc {
 		ctx.JSON(http.StatusOK, res)
 	}
 }
+
+func WrapJWT[T any](fn func(ctx *gin.Context, claims T) (JsonResult, error)) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		val, ok := ctx.Get("UserId")
+		if !ok {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		uc, ok := val.(T)
+		if !ok {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		res, err := fn(ctx, uc)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, res)
+			return
+		}
+		ctx.JSON(http.StatusOK, res)
+	}
+}

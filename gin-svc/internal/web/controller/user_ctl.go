@@ -3,6 +3,7 @@ package controller
 import (
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
+	"gin-svc/internal/web/middleware/jwt"
 	"gin-svc/pkg/ginx"
 	"github.com/gin-gonic/gin"
 )
@@ -32,6 +33,12 @@ func (ctl *userController) UpdateUserInfo(ctx *gin.Context, req types.UserForm) 
 		return ginx.Error(10011, "更新失败"), err
 	}
 	return ginx.Success(), nil
+}
+
+func (ctrl *userController) GetUserInfo(ctx *gin.Context, claim jwt.UserClaims) (result ginx.JsonResult, err error) {
+	//id := claim.Uid
+
+	return ginx.JsonResult{}, nil
 }
 
 // DeleteUserCtl godoc

@@ -49,13 +49,13 @@ func (s *smtp163Service) SendEmail(to []string, subject, body string) error {
 func (s *smtp163Service) LoginEmailSend(ctx context.Context, to string) error {
 	// 生成6位随机数字
 	verificationCode := utils.GenerateRandomNumberStr()
-	fmt.Println("发送的验证码为:", verificationCode)
 	// 查询redis是否存在
 	code, err := s.cache.GetVerificationCode(ctx, to)
 	if err != nil && !errors.Is(err, redis.Nil) {
 		return err
 	}
 	if len(code) > 0 {
+		fmt.Println("发送的验证码为:", code)
 		// 重复发送
 		return errors.New("重复发送，请稍后再试")
 	}
