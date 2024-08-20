@@ -121,7 +121,7 @@ import { useRouter } from 'vue-router';
 // const ver_code = ref('443254');
 const formData = reactive({
   email: '1978992154@qq.com',
-  ver_code: '123123'  
+  ver_code: '' 
 })
 let $router = useRouter()
 const canSend = ref(true);
