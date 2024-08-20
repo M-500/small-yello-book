@@ -13,6 +13,10 @@ defineProps({
 	title: {
 		type: String,
 		default: ''
+	},
+	paddingTop: {
+		type: String,
+		default: '24px'
 	}
 })
 </script>

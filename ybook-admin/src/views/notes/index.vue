@@ -10,7 +10,15 @@
                  class="demo-tabs"
                  @tab-click="handleClick">
           <el-tab-pane label="全部笔记"
-                       name="first">User</el-tab-pane>
+                       name="first">
+            <div class="note-container-box">
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="已发布"
                        name="second">Config</el-tab-pane>
           <el-tab-pane label="审核中"
@@ -51,10 +59,14 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 		display: flex;
 		width: 100%;
 	}
-	.note-tabs{
-
+	.note-container-box{
+		display: flex;
+		flex-direction: column;
+		height: 500px;
+		overflow: auto;
 	}
 }
+
 ::v-deep(.el-card){
 	border-radius: 8px;
 }
