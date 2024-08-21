@@ -20,11 +20,35 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="已发布"
-                       name="second">Config</el-tab-pane>
+                       name="second">
+            <div class="note-container-box">
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="审核中"
-                       name="third">Role</el-tab-pane>
+                       name="third">
+            <div class="note-container-box">
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+            </div>
+          </el-tab-pane>
           <el-tab-pane label="未通过"
-                       name="fourth">Task</el-tab-pane>
+                       name="fourth">
+            <div class="note-container-box">
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+              <note-manager-card></note-manager-card>
+            </div>
+          </el-tab-pane>
         </el-tabs>
       </div>
     </el-card>
