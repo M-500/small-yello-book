@@ -20,14 +20,23 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watch,reactive } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
-
+import { defineProps } from 'vue';
 import type { UploadProps, UploadUserFile } from 'element-plus'
+const props = defineProps({
+  coverImge: {
+    type: String,
+    default: ''
+  }
+})
 
 const fileList = ref<UploadUserFile[]>([
+  {
+    name: '123.jpg',
+    url: 'http://127.0.0.1:8122/static/1724151324_GUqEnH4XYAEWyFf.jpeg'
+  }
 ])
-
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
@@ -39,6 +48,16 @@ const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
   dialogImageUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
+
+// 监听父组件传过来的值
+watch(() =>props.coverImge,(newVal)=>{
+  console.log("父组件传来的值：",newVal)
+  fileList.value.push({
+    name: 'food.jpg',
+    url: newVal
+  })
+  console.log("此时的fileList",fileList)
+})
 </script>
 
 

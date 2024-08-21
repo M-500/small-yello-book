@@ -37,3 +37,9 @@ npm run build
 ```sh
 npm run lint
 ```
+
+### Docker Run
+
+```shell
+docker-compose up --build
+```

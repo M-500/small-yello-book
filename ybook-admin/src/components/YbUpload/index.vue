@@ -3,7 +3,8 @@
     <div class="upload-wrap">
       <el-upload class="upload-box"
                  drag
-                 action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                 action="http://127.0.0.1:8122/api/v1/file/upload"
+                 :on-success="handlePreview"
                  multiple>
         <el-icon class="el-icon--upload">
           <upload-filled />
@@ -42,7 +43,16 @@
 </template>
 
 <script setup lang="ts">
+import { UploadProps } from 'element-plus';
+import { ref }  from 'vue';
+import { defineEmits } from 'vue';
+import { defineProps } from 'vue';
+const emit = defineEmits(['updateData']);
 
+// 这里是子组件定义的属性
+const coverImgUrl = ref('')
+
+// defineExpose({coverImgUrl})
 defineProps({
 	// 接受父组件传递的参数
 	mark: {
@@ -54,6 +64,11 @@ defineProps({
 		required: ''
 	}
 })
+
+const handlePreview: UploadProps['onSuccess'] = (uploadFile) => {
+	coverImgUrl.value = uploadFile.data.url
+	emit('updateData', coverImgUrl.value)
+}
 </script>
 
 <style lang="scss" scoped>

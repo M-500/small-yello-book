@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="before-publish"
-         v-show="false">
+         v-show="!step1">
       <el-card>
         <el-tabs v-model="activeName"
                  class="demo-tabs"
@@ -9,11 +9,13 @@
           <el-tab-pane label="上传视频"
                        name="first">
             <yb-upload mark="拖拽或者点击上传视频"
+                       @updateData="handleUpdateData"
                        btnTitle="上传视频"></yb-upload>
           </el-tab-pane>
           <el-tab-pane label="上传图文"
                        name="second">
             <yb-upload mark="拖拽图片到此或点击上传"
+                       @updateData="handleUpdateData"
                        btnTitle="上传图片"></yb-upload>
           </el-tab-pane>
         </el-tabs>
@@ -21,7 +23,8 @@
 
     </div>
 
-    <div class="main-publish">
+    <div class="main-publish"
+         v-show="step1">
       <el-card>
         <div class="header">
           <span class="icon">
@@ -42,10 +45,11 @@
                   <div class="title">图片编辑</div>
                   <div class="status">(1/18)</div>
                 </div>
-                <span class="reset-upload">清空并重新上传</span>
+                <span class="reset-upload"
+                      @click="handleResetUpload">清空并重新上传</span>
               </div>
               <div class="img-upload-area">
-                <img-upload></img-upload>
+                <img-upload :coverImge="coverImgeUrl"></img-upload>
               </div>
               <div class="title-input">
                 <el-input v-model="noteTitle"
@@ -73,7 +77,7 @@
                   <div class="_title">自主申明</div>
                   <el-select v-model="value"
                              placeholder="点击设置笔记声明"
-                             size="middle"
+                             size="default"
                              suffix-icon=""
                              style="width: 420px">
                     <el-option v-for="item in options"
@@ -84,13 +88,13 @@
                 </div>
                 <div class="flexbox">
                   <div class="_title">权限设置</div>
-                  <el-radio-group v-model="radio1">
-                    <el-radio value="1"
+                  <el-radio-group v-model="isPublic">
+                    <el-radio :value="true"
                               size="large">
                       <span>公开</span>
                       <span class="see">(所有人可见)</span>
                     </el-radio>
-                    <el-radio value="2"
+                    <el-radio :value="false"
                               size="large">
                       <span>私有</span>
                       <span class="see">(仅自己可见)</span>
@@ -99,12 +103,12 @@
                 </div>
                 <div class="flexbox">
                   <div class="_title">发布时间</div>
-                  <el-radio-group v-model="radio1">
-                    <el-radio value="1"
+                  <el-radio-group v-model="noCorn">
+                    <el-radio :value="true"
                               size="large">
                       立即发布
                     </el-radio>
-                    <el-radio value="2"
+                    <el-radio :value="false"
                               size="large">
                       定时发布
                     </el-radio>
@@ -130,17 +134,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
 const activeName = ref('first')
 
+const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
+
 const noteTitle = ref('')
 const noteContent = ref('')
 const value = ref('')
-const radio1 = ref('1')
-
+const isPublic = ref(true)
+const noCorn = ref(true)
+const step1 = ref(true)
 const options = [
   {
     value: 'Option1',
@@ -153,6 +160,14 @@ const options = [
 ]
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
+}
+function handleUpdateData(data: string) {
+  step1.value = false
+  coverImgeUrl.value = data
+}
+
+function handleResetUpload() {
+  console.log('清空并重新上传')
 }
 </script>
 
