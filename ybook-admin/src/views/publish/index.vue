@@ -49,7 +49,8 @@
                       @click="handleResetUpload">清空并重新上传</span>
               </div>
               <div class="img-upload-area">
-                <img-upload :coverImge="coverImgeUrl"></img-upload>
+                <img-upload :coverImge="coverImgeUrl"
+                            @itemImgListChanged="handleImgListChanged"></img-upload>
               </div>
               <div class="title-input">
                 <el-input v-model="noteTitle"
@@ -120,6 +121,7 @@
                 <div class="submit-wrap">
                   <el-button size="large"
                              color="#ff2442"
+                             @click="handlePublish"
                              class="push">发布</el-button>
                   <el-button size="large"
                              class="cancel">取消</el-button>
@@ -134,14 +136,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import { TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
+import type { UploadUserFile } from 'element-plus'
+
 const activeName = ref('first')
 
 const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
-
+const imgList = ref<UploadUserFile[]>([])  // 来自img-upload组件的属性 
 const noteTitle = ref('')
 const noteContent = ref('')
 const value = ref('')
@@ -158,6 +162,14 @@ const options = [
     label: '笔记含AI合成内容',
   }
 ]
+
+
+const handlePublish = () => {
+  console.log('发布')
+}
+
+
+
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
@@ -168,6 +180,11 @@ function handleUpdateData(data: string) {
 
 function handleResetUpload() {
   console.log('清空并重新上传')
+}
+
+function handleImgListChanged(data: UploadUserFile[]) {
+  imgList.value = data
+  console.log('imgList', imgList)
 }
 </script>
 

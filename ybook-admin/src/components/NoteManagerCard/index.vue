@@ -176,18 +176,24 @@ import { } from "vue"
         margin-top: 8px;
         display: flex;
         align-items: center;
+        align-content: center;
         .icon{
           color: #999;
+          display: flex;
+          align-items: center;
           .svg-ic{
             width: 16px;
             height: 16px;
             vertical-align: text-bottom;
             color: #999;
+            // margin-right: 8px;
           }
           span{
             margin-left: 5px;
             font-size: 12px;
             color: #999;
+            margin-right: 15px;
+            align-items: center;
           }
 
         }

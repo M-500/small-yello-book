@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <el-upload v-model="fileList"
+    <el-upload v-model:file-list="fileList"
                action="http://127.0.0.1:8122/api/v1/file/upload"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
@@ -24,24 +24,20 @@ import { ref, watch,reactive } from 'vue'
 import { Plus } from '@element-plus/icons-vue'
 import { defineProps } from 'vue';
 import type { UploadProps, UploadUserFile } from 'element-plus'
+import { defineEmits } from 'vue';
 const props = defineProps({
   coverImge: {
     type: String,
     default: ''
   }
 })
-
-const fileList = ref<UploadUserFile[]>([
-  {
-    name: '123.jpg',
-    url: 'http://127.0.0.1:8122/static/1724151324_GUqEnH4XYAEWyFf.jpeg'
-  }
-])
+const emit = defineEmits(['itemImgListChanged']);
+const fileList = ref<UploadUserFile[]>([])
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
 const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-  console.log(uploadFile, uploadFiles)
+  console.log("TMDE 哈哈哈哈",uploadFile, uploadFiles)
 }
 
 const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
@@ -51,13 +47,19 @@ const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
 
 // 监听父组件传过来的值
 watch(() =>props.coverImge,(newVal)=>{
-  console.log("父组件传来的值：",newVal)
+  // console.log("父组件传来的值：",newVal)
   fileList.value.push({
-    name: 'food.jpg',
+    name: 'cover.jpg',
     url: newVal
   })
-  console.log("此时的fileList",fileList)
+  // console.log("此时的fileList",fileList)
 })
+// 监听fileList的变化，实时传递给父组件
+watch(fileList,(newVal)=>{
+  // console.log("fileList变化了",newVal)
+  emit('itemImgListChanged',newVal)
+})
+
 </script>
 
 
