@@ -11,13 +11,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type publicController struct {
+type PublicController struct {
 	userSvc service.UserSvc
 	smtpSvc service.SmtpServiceInterface
 }
 
-func NewPublicController(userSvc service.UserSvc, smtp service.SmtpServiceInterface) BaseController {
-	return &publicController{
+func NewPublicController(userSvc service.UserSvc, smtp service.SmtpServiceInterface) *PublicController {
+	return &PublicController{
 		userSvc: userSvc,
 		smtpSvc: smtp,
 	}
@@ -33,7 +33,7 @@ func NewPublicController(userSvc service.UserSvc, smtp service.SmtpServiceInterf
 // @Success 200 {object} resp.LoginResp
 // @Failure 10011 {string} string "登陆失败"
 // @Router /api/v1/na/login [post]
-func (p *publicController) EmailLoginCtl(ctx *gin.Context, req types.EmailLoginForm) (result ginx.JsonResult, err error) {
+func (p *PublicController) EmailLoginCtl(ctx *gin.Context, req types.EmailLoginForm) (result ginx.JsonResult, err error) {
 	token, err := p.userSvc.EmailLogin(ctx, req)
 	if err != nil {
 		//fmt.Println(err)
@@ -52,7 +52,7 @@ func (p *publicController) EmailLoginCtl(ctx *gin.Context, req types.EmailLoginF
 // @Param user body types.EmailForm true "user"
 // @Success 200 {object} map[string]any
 // @Router /api/v1/na/email/send [post]
-func (p *publicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (result ginx.JsonResult, err error) {
+func (p *PublicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (result ginx.JsonResult, err error) {
 	// 校验邮箱格式是否合法
 	email := utils.IsValidEmail(req.Email)
 	if !email {
@@ -66,7 +66,7 @@ func (p *publicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (
 	return ginx.Success(), err
 }
 
-func (p *publicController) RegisterRoute(group *gin.RouterGroup) {
+func (p *PublicController) RegisterRoute(group *gin.RouterGroup) {
 	group.POST("/login", ginx.WrapJsonBody[types.EmailLoginForm](p.EmailLoginCtl))
 	group.POST("/email/send", ginx.WrapJsonBody[types.EmailForm](p.EmailSendCtl))
 	//group.OPTIONS("/email/send", ginx.WrapJsonBody[types.EmailForm](p.EmailSendCtl))

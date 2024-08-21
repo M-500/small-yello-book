@@ -18,6 +18,7 @@ import (
 func SetupWebEngine(app *internal.App) *gin.Engine {
 	engine := gin.Default()
 	engine.Use(middleware.CorsMdl())
+	engine.Static("/static", "./static")
 	rg := engine.Group("/api/v1")
 	publicGroup := rg.Group("/na")
 	{
@@ -36,7 +37,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	return engine
 }
 func InitFileController(app *internal.App) controller.BaseController {
-	return controller.NewFileUploadController()
+	return controller.NewFileController()
 }
 
 func InitUserController(app *internal.App) controller.BaseController {
@@ -49,7 +50,7 @@ func InitUserController(app *internal.App) controller.BaseController {
 	return controller.NewUserController(userSvc)
 }
 
-func InitPubController(app *internal.App) controller.BaseController {
+func InitPubController(app *internal.App) *controller.PublicController {
 	userDao := dao.NewUserDao(app.DB)
 	userRepo := repo.NewUserRepoInterface(userDao)
 	codeCache := cache.NewRedisVerificationCodeCache(app.Cli)
@@ -67,4 +68,8 @@ func InitRoleController(app *internal.App) controller.BaseController {
 	roleRepo := repo.NewRoleRepo(perDao, roleDao, cac)
 	roleSvc := service.NewRoleService(roleRepo)
 	return controller.NewRoleController(roleSvc)
+}
+
+func InitNoteController(app *internal.App) *controller.NoteCtl {
+	return controller.NewNoteCtl()
 }

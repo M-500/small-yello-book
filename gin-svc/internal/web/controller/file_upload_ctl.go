@@ -4,20 +4,21 @@ import (
 	"fmt"
 	"gin-svc/pkg/ginx"
 	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
 )
 
-type FileUploadController struct {
+type FileController struct {
 }
 
-func NewFileUploadController() BaseController {
-	return &FileUploadController{}
+func NewFileController() BaseController {
+	return &FileController{}
 }
 
-func (f *FileUploadController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
+func (f *FileController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
 	file, err := ctx.FormFile("file")
 	if err != nil {
 		return ginx.Error(http.StatusBadRequest, "Failed to get file"), err
@@ -36,9 +37,31 @@ func (f *FileUploadController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonR
 
 	// Return the file access URL
 	fileURL := fmt.Sprintf("/%s/%s", staticDir, filename)
-	return ginx.JsonResult{Data: gin.H{"url": fileURL}}, nil
+	return ginx.JsonResult{Data: gin.H{"url": "http://127.0.0.1:8122" + fileURL}}, nil
 }
 
-func (f *FileUploadController) RegisterRoute(group *gin.RouterGroup) {
+func (f *FileController) ReadFileCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
+	filePath := ctx.Query("path")
+	if filePath == "" {
+		return ginx.Error(http.StatusBadRequest, "File path is required"), fmt.Errorf("file path is required")
+	}
+
+	// Ensure the file path is within the static directory
+	staticDir := "static"
+	fullPath := filepath.Join(staticDir, filepath.Clean(filePath))
+	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
+		return ginx.Error(http.StatusNotFound, "File not found"), err
+	}
+
+	// Read the file content
+	content, err := ioutil.ReadFile(fullPath)
+	if err != nil {
+		return ginx.Error(http.StatusInternalServerError, "Failed to read file"), err
+	}
+
+	return ginx.JsonResult{Data: gin.H{"content": string(content)}}, nil
+}
+func (f *FileController) RegisterRoute(group *gin.RouterGroup) {
 	group.POST("/file/upload", ginx.WrapResponse(f.UploadImgCtl))
+	group.GET("/file", ginx.WrapResponse(f.ReadFileCtl))
 }
