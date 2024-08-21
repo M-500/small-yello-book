@@ -57,6 +57,7 @@ func (n *noteDaoImpl) ListByStatus(ctx context.Context, status int, page, size i
 func (n *noteDaoImpl) Insert(ctx context.Context, note *models.NoteModel) error {
 	query := n.db.WithContext(ctx).Create(note)
 	if err := query.Error; err != nil {
+		// 主键冲突？ 没主键冲突吧
 		return err
 	}
 	return nil

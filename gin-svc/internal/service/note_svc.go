@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"gin-svc/internal/domain"
+	"gin-svc/internal/repo"
 )
 
 type NoteService interface {
@@ -26,11 +27,18 @@ type NoteService interface {
 }
 
 type noteSvcImpl struct {
+	repo repo.NoteRepoInterface
 }
 
 func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote) error {
-	//TODO implement me
-	panic("implement me")
+	err := n.repo.CreateNote(ctx, note)
+	// 1. 保存文章
+
+	// 2. 保存所有图片
+
+	// 3. 将图片迁移到OSS，因为本地图片是临时图片，不会永久保存
+
+	return err
 }
 
 func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id int) (domain.DNote, error) {
