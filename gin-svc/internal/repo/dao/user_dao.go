@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
+//go:generate mockgen -source=./user_dao.go -package=daomocks -destination=./mocks/user_dao.mock.go UserDao
 type UserDao interface {
 	Upsert(ctx context.Context, user *models.UserModel, rid []int) error
 	Delete(ctx context.Context, id int) error
@@ -67,6 +68,7 @@ func (u *userDaoImpl) FindByUserName(ctx context.Context, userName string) (*mod
 	}
 	return user, nil
 }
+
 func (u *userDaoImpl) FindByEmail(ctx context.Context, email string) (*models.UserModel, error) {
 	user := &models.UserModel{}
 	query := u.db.WithContext(ctx).Where("email = ?", email).First(user)

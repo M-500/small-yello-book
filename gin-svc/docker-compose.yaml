@@ -5,11 +5,11 @@ services:
   mysql8:
     image: mysql:8.0
     restart: always
-    command:
-      #      - 加入参数，设置 binlog 和主节点
-      - --default_authentication_plugin=mysql_native_password
-      - --binlog-format=ROW
-      - --server-id=1
+#    command:
+#      #      - 加入参数，设置 binlog 和主节点
+#      - --default_authentication_plugin=mysql_native_password
+#      - --binlog-format=ROW
+#      - --server-id=1
     environment:
       MYSQL_ROOT_PASSWORD: root
 #    volumes:

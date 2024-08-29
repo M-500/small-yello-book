@@ -29,6 +29,7 @@ func NewMySQLScheduler(maxCnt int, dao SchedulerDao) SchedulerInterface {
 		executors: make(map[TaskType]ExecutorInterface),
 		stopCh:    make(chan struct{}),
 		//tasks:        make([]TaskInterface, 0),
+		dao:          dao,
 		maxWorkerCnt: maxCnt,
 	}
 }
