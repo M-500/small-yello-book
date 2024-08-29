@@ -1,5 +1,9 @@
 # small-yello-book
 
+本项目有做笔记，写在我的个人博客：
+
+https://www.daimaxiaoxuesheng.xyz/project-list/ybook/setup/
+
 模拟小红书网页版的一个前端+后端项目。主要用于学习
 
 创作平台：
