@@ -71,5 +71,8 @@ func InitRoleController(app *internal.App) controller.BaseController {
 }
 
 func InitNoteController(app *internal.App) *controller.NoteCtl {
-	return controller.NewNoteCtl()
+	dao := dao.NewNoteDao(app.DB)
+	repo := repo.NewNoteRepo(dao)
+	svc := service.NewNoteSvcImpl(repo)
+	return controller.NewNoteCtl(svc)
 }

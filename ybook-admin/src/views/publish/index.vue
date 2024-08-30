@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="before-publish"
-         v-show="!step1">
+         v-show="step1">
       <el-card>
         <el-tabs v-model="activeName"
                  class="demo-tabs"
@@ -24,7 +24,7 @@
     </div>
 
     <div class="main-publish"
-         v-show="step1">
+         v-show="!step1">
       <el-card>
         <div class="header">
           <span class="icon">
@@ -146,8 +146,9 @@ const activeName = ref('first')
 
 const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
 const imgList = ref<UploadUserFile[]>([])  // 来自img-upload组件的属性 
-const noteTitle = ref('')
-const noteContent = ref('')
+// const noteTitle = ref('')
+const noteTitle = ref('库里起飞')
+const noteContent = ref('就是库里咯')
 const value = ref('')
 const isPublic = ref(true)
 const noCorn = ref(true)
@@ -165,6 +166,7 @@ const options = [
 
 
 const handlePublish = () => {
+  console.log('发布',imgList.value)
   console.log('发布')
 }
 

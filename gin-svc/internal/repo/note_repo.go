@@ -13,6 +13,10 @@ type NoteRepoInterface interface {
 	CreateNote(ctx context.Context, note domain.DNote) error
 }
 
+func NewNoteRepo(dao dao.NoteDaoInterface) NoteRepoInterface {
+	return &noteRepo{dao: dao}
+}
+
 type noteRepo struct {
 	dao dao.NoteDaoInterface
 }

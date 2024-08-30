@@ -28,6 +28,5 @@ WORKDIR /app
 
 EXPOSE 8082
 
-ENV ENV=docker
 
 CMD ["./ybook-server"]

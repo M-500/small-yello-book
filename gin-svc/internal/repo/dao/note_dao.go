@@ -17,6 +17,10 @@ type NoteDaoInterface interface {
 	HardDelete(ctx context.Context, id int) error
 }
 
+func NewNoteDao(db *gorm.DB) NoteDaoInterface {
+	return NewNoteDaoImpl(db)
+}
+
 type noteDaoImpl struct {
 	db *gorm.DB
 }

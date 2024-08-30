@@ -31,6 +31,10 @@ type noteSvcImpl struct {
 	repo repo.NoteRepoInterface
 }
 
+func NewNoteSvcImpl(repo repo.NoteRepoInterface) NoteService {
+	return &noteSvcImpl{repo: repo}
+}
+
 func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote) error {
 	// 1. 检查所有图片的链接是否存在
 	for _, img := range note.ImgList {
