@@ -2,16 +2,16 @@ package dao
 
 import (
 	"context"
-	"errors"
 	"gin-svc/internal/models"
 	"gorm.io/gorm"
 )
 
 type NoteDaoInterface interface {
-	FindById(ctx context.Context, id int) (*models.NoteModel, error)
+	FindById(ctx context.Context, id int) (models.NoteModel, error)
 	ListByKey(ctx context.Context, keyword string, page, size int) ([]models.NoteModel, error)
 	ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
-	Insert(ctx context.Context, note *models.NoteModel) error
+	Insert(ctx context.Context, note models.NoteModel) error
+	SaveNoteWithTx(ctx context.Context, note models.NoteModel, imgList []models.ImageModel) error
 	Update(ctx context.Context, note *models.NoteModel) error
 	Delete(ctx context.Context, id int) error
 	HardDelete(ctx context.Context, id int) error
@@ -21,14 +21,27 @@ type noteDaoImpl struct {
 	db *gorm.DB
 }
 
-func (n *noteDaoImpl) FindById(ctx context.Context, id int) (*models.NoteModel, error) {
-	note := &models.NoteModel{}
-	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("id = ?", id).First(note)
-	if err := query.Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, ErrRecordNotFound
+func NewNoteDaoImpl(db *gorm.DB) NoteDaoInterface {
+	return &noteDaoImpl{db: db}
+}
+
+func (n *noteDaoImpl) SaveNoteWithTx(ctx context.Context, note models.NoteModel, imgList []models.ImageModel) error {
+	return n.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+		for _, img := range imgList {
+			err := tx.Model(&models.ImageModel{}).Create(&img).Error
+			if err != nil {
+				return err
+			}
 		}
-		return nil, err
+		return tx.Model(&models.NoteModel{}).Create(&note).Error
+	})
+}
+
+func (n *noteDaoImpl) FindById(ctx context.Context, id int) (models.NoteModel, error) {
+	note := models.NoteModel{}
+	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("id = ?", id).First(&note)
+	if query.Error != nil {
+		return note, query.Error
 	}
 	return note, nil
 }
@@ -54,7 +67,7 @@ func (n *noteDaoImpl) ListByStatus(ctx context.Context, status int, page, size i
 	return notes, nil
 }
 
-func (n *noteDaoImpl) Insert(ctx context.Context, note *models.NoteModel) error {
+func (n *noteDaoImpl) Insert(ctx context.Context, note models.NoteModel) error {
 	query := n.db.WithContext(ctx).Create(note)
 	if err := query.Error; err != nil {
 		// 主键冲突？ 没主键冲突吧

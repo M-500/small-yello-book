@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"gin-svc/internal/domain"
 	"gin-svc/internal/repo"
 )
@@ -31,10 +32,12 @@ type noteSvcImpl struct {
 }
 
 func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote) error {
-	err := n.repo.CreateNote(ctx, note)
+	// 1. 检查所有图片的链接是否存在
+	for _, img := range note.ImgList {
+		fmt.Println(img)
+	}
 	// 1. 保存文章
-
-	// 2. 保存所有图片
+	err := n.repo.CreateNote(ctx, note)
 
 	// 3. 将图片迁移到OSS，因为本地图片是临时图片，不会永久保存
 

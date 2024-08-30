@@ -7,4 +7,4 @@ type BaseController interface {
 }
 
 // 用于在编译期间确保 实现了BaseController接口
-var _ BaseController = (*userController)(nil)
+var _ BaseController = (*UserController)(nil)

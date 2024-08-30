@@ -36,11 +36,11 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 
 	return engine
 }
-func InitFileController(app *internal.App) controller.BaseController {
+func InitFileController(app *internal.App) *controller.FileController {
 	return controller.NewFileController()
 }
 
-func InitUserController(app *internal.App) controller.BaseController {
+func InitUserController(app *internal.App) *controller.UserController {
 	userDao := dao.NewUserDao(app.DB)
 	userRepo := repo.NewUserRepoInterface(userDao)
 

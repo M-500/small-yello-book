@@ -14,7 +14,7 @@ import (
 type FileController struct {
 }
 
-func NewFileController() BaseController {
+func NewFileController() *FileController {
 	return &FileController{}
 }
 
