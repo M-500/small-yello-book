@@ -9,7 +9,7 @@ package main
 import (
 	"flag"
 	"gin-svc/internal"
-	"gin-svc/internal/ioc"
+	"gin-svc/internal/initialize"
 	"gin-svc/internal/models"
 	"gin-svc/internal/web"
 )
@@ -24,9 +24,9 @@ var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
 // @name Authorization
 // @BasePath /
 func main() {
-	config := ioc.SetUpConfig(*configFile)
-	db := ioc.SetUpDB(&config.Database)
-	redisCli := ioc.SetUpRedis(&config.Redis)
+	config := initialize.SetUpConfig(*configFile)
+	db := initialize.SetUpDB(&config.Database)
+	redisCli := initialize.SetUpRedis(&config.Redis)
 	err := models.InitTables(db)
 	if err != nil {
 		return

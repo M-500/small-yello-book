@@ -1,4 +1,4 @@
-package ioc
+package initialize
 
 import (
 	"gin-svc/internal/conf"
