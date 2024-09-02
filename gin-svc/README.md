@@ -27,5 +27,11 @@ swag init
 http://127.0.0.1:8122/na/swagger/index.html
 ```
 
+
+如何部署
+```go
+docker build .  --file=./Dockerfile  --platform=linux/amd64 -t ybook:v1.0.1
+```
+
 ## License
 
