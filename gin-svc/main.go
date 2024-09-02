@@ -1,45 +1,20 @@
-//@Author: wulinlin
-//@Description: main文件启动
-//@File:  main
-//@Version: 1.0.0
-//@Date: 2024/07/15 17:43
-
 package main
 
 import (
 	"flag"
-	"gin-svc/internal"
-	"gin-svc/internal/ioc"
-	"gin-svc/internal/models"
-	"gin-svc/internal/web"
+	"fmt"
+	"gin-svc/internel/initialize"
+	"gin-svc/internel/web"
+	"github.com/gin-gonic/gin"
 )
 
-var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
+var configFile = flag.String("config", "etc/local.yaml", "配置文件路径")
 
-// @title Swagger YBOOK API
-// @version 0.0.1
-// @description Y_BOOK 的API文档
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-// @BasePath /
 func main() {
-	config := ioc.SetUpConfig(*configFile)
-	db := ioc.SetUpDB(&config.Database)
-	redisCli := ioc.SetUpRedis(&config.Redis)
-	err := models.InitTables(db)
-	if err != nil {
-		return
-	}
-	app := &internal.App{
-		Engine: nil,
-		DB:     db,
-		Cli:    redisCli,
-		Cfg:    config,
-	}
-	app.Engine = web.SetupWebEngine(app)
-	err = app.Engine.Run(":8122")
-	if err != nil {
-		panic(err)
-	}
+
+	cfg := initialize.MustSetupCfg(*configFile)
+	engine := gin.Default()
+	web.RegisterRouters(engine) // 注册路由
+	addr := fmt.Sprintf(":%d", cfg.Server.Port)
+	engine.Run(addr)
 }
