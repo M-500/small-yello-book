@@ -112,7 +112,7 @@
 // 引入用户相关的pinia，用来存储token信息
 import useUserStore from '@/stores/moudules/user';
 import logo from '@/components/Logo/index.vue'
-import { type emialForm } from '@/api/user/types';
+import type { emialForm } from '@/api/user/types';
 import { reactive, ref, watch } from 'vue';
 import { getEmailCaptchas } from '@/api/user';
 import { ElMessage,ElNotification } from 'element-plus';
@@ -127,7 +127,7 @@ let $router = useRouter()
 const canSend = ref(true);
 const buttonText = ref('发送验证码');
 let countdown = 60;
-let timer = null;
+let timer:any = null;
 let userStore = useUserStore()
 // 监听Email输入框的值
 watch(() => formData.email, (val) => {
@@ -140,9 +140,9 @@ watch(() => formData.email, (val) => {
 
 // 发送验证码点击事件
 function sendEmailBtn () {
-  let form = reactive({
+  let form:emialForm = reactive({
     email: formData.email,
-    type_code: 1
+    type_code: '1'
   })
   if (canSend.value) {
     getEmailCaptchas(form).then(res => {

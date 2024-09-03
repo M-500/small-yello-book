@@ -137,7 +137,7 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
-import { TabsPaneContext } from 'element-plus'
+import type {  TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
 import type { UploadUserFile } from 'element-plus'

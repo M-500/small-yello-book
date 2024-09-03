@@ -1,5 +1,14 @@
-import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
+import HomeView from '@/views/home/index.vue'
+import Layout from '@/layout/index.vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { defineComponent, defineAsyncComponent } from 'vue'
+
+// const IndeView = defineComponent(() => import('@/layout/index.vue'))
+const PublishView = defineAsyncComponent(() => import('@/views/publish/index.vue'))
+// const HomeView = defineComponent(() => import('@/views/home/index.vue'))
+const NotesManagerView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
+const NotesDashboardView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
+const FansDashboardView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,32 +16,32 @@ const router = createRouter({
     {
       path: '/',
       name: 'home1',
-      component: () => import('@/layout/index.vue'),
+      component: Layout,
       children: [
         {
           path: '/publish',
           name: 'publish',
-          component: () => import('@/views/publish/index.vue')
+          component: PublishView
         },
         {
           path: '/home',
           name: 'home',
-          component: () => import('@/views/home/index.vue')
+          component: HomeView
         },
         {
           path: '/notes-manager',
           name: 'notes-manager',
-          component: () => import('@/views/notes/index.vue')
+          component: NotesManagerView
         },
         {
           path: '/notes-dashboard',
           name: 'notes-dashboard',
-          component: () => import('@/views/notedashboard/index.vue')
+          component: NotesDashboardView
         },
         {
           path: '/fans-dashboard',
           name: 'fans-dashboard',
-          component: () => import('@/views/fans/index.vue')
+          component: FansDashboardView
         }
       ]
     },

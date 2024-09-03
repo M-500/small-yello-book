@@ -18,7 +18,7 @@ const useUserStore = defineStore('User', {
   }),
   // 计算属性
   getters: {
-    getToken(): string {
+    getToken(): string | null {
       return this.token
     },
     getUserInfo(): any {

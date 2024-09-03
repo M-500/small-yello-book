@@ -1,6 +1,6 @@
 import SvgIcon from '@/components/SvgIcon/index.vue'
 
-const allGlbComponents = {
+const allGlbComponents: any = {
   SvgIcon
 }
 

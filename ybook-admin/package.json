@@ -10,6 +10,7 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "fix": "eslint src --fix",
     "format": "prettier --write src/"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "vue-router": "^4.3.3"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "^7.25.1",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/node": "^20.14.5",
@@ -31,7 +33,11 @@
     "@vue/tsconfig": "^0.5.1",
     "axios": "^1.7.4",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.23.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-vue": "^9.27.0",
     "npm-run-all2": "^6.2.0",
     "prettier": "^3.2.5",
     "sass-embedded": "^1.77.8",

@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { UploadProps } from 'element-plus';
+import type { UploadProps } from 'element-plus';
 import { ref }  from 'vue';
 import { defineEmits } from 'vue';
 import { defineProps } from 'vue';
@@ -61,7 +61,7 @@ defineProps({
 	},
 	btnTitle: {
 		type: String,
-		required: ''
+		required: true
 	}
 })
 
