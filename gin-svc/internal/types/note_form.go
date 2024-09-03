@@ -37,3 +37,19 @@ func (c *CreateNoteForm) ToNoteDomain() domain.DNote {
 	}
 	return res
 }
+
+var state uint
+
+//const (
+//	NoteStateNormal       = iota
+//	NoteStateDeleted      // 删除
+//	NoteStateDraft        // 草稿
+//	NoteStateReviewed     // 审核通过
+//	NoteStateReviewFailed // 审核未通过
+//)
+
+type QueryNoteForm struct {
+	State int `form:"state" json:"state"` // 状态
+	Page  int `form:"page" json:"page"`   // 页码
+	Size  int `form:"size" json:"size"`   // 每页数量
+}

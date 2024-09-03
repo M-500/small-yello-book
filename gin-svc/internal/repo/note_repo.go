@@ -10,6 +10,7 @@ import (
 
 type NoteRepoInterface interface {
 	FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error)
+	FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
 	CreateNote(ctx context.Context, note domain.DNote) error
 }
 
@@ -24,6 +25,10 @@ type noteRepo struct {
 func (n *noteRepo) FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error) {
 	//TODO implement me
 	panic("implement me")
+}
+
+func (n *noteRepo) FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, error) {
+	return n.dao.ListByStatus(ctx, status, page, size)
 }
 
 func (n *noteRepo) CreateNote(ctx context.Context, note domain.DNote) error {

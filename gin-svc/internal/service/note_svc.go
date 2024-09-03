@@ -3,9 +3,11 @@ package service
 import (
 	"context"
 	"gin-svc/internal/domain"
+	"gin-svc/internal/models"
 	"gin-svc/internal/repo"
 	"gin-svc/pkg/utils"
 	"gin-svc/pkg/ylog"
+	"strconv"
 )
 
 type NoteService interface {
@@ -15,8 +17,8 @@ type NoteService interface {
 	// 获取笔记详情
 	GetNoteDetail(ctx context.Context, id int) (domain.DNote, error)
 
-	// 获取某个用户的笔记列表
-	ListUserNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)
+	// 获取所有文章列表
+	ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)
 
 	// 更新笔记
 	UpdateNote(ctx context.Context, note domain.DNote) error
@@ -68,11 +70,40 @@ func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id int) (domain.DNote, 
 	panic("implement me")
 }
 
-func (n *noteSvcImpl) ListUserNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error) {
-	//TODO implement me
-	panic("implement me")
+func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error) {
+	list, err := n.repo.FindNoteList(ctx, status, offset, limit)
+	if err != nil {
+		return nil, 0, err
+	}
+	res := make([]domain.DNote, 0, len(list))
+	for _, model := range list {
+		res = append(res, n.toDomain(model))
+	}
+	return res, len(list), nil
 }
 
+func (n *noteSvcImpl) toDomain(note models.NoteModel) domain.DNote {
+	return domain.DNote{
+		ID:          int(note.Model.ID),
+		NoteTitle:   note.Title,
+		NoteContent: note.Mark,
+		Cover:       note.Cover,
+		//Address:     note.Address,
+		Statement: strconv.Itoa(note.Status),
+		//PublishTime: note.Model.CreatedAt,
+		//Private:     note.,
+		ViewCnt:    note.ViewCnt,
+		LikeCnt:    note.LikeCnt,
+		ShareCnt:   note.ShareCnt,
+		CommentCnt: note.CommentCnt,
+		CollectCnt: note.CollectCnt,
+		Status:     note.Status,
+		AuthorId:   int(note.AuthorId),
+		CreateTime: "",
+		UpdateTime: "",
+		ImgList:    nil,
+	}
+}
 func (n *noteSvcImpl) UpdateNote(ctx context.Context, note domain.DNote) error {
 	//TODO implement me
 	panic("implement me")

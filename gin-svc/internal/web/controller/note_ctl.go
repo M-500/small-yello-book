@@ -17,6 +17,7 @@ func NewNoteCtl(svc service.NoteService) *NoteCtl {
 
 func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
 	group.POST("/notes", ginx.WrapJsonBody[types.CreateNoteForm](n.CreateNoteCtl))
+	group.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))
 }
 
 func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (result ginx.JsonResult, err error) {
@@ -25,4 +26,12 @@ func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (res
 		return ginx.Error(500, err.Error()), err
 	}
 	return ginx.Success(), nil
+}
+
+func (n *NoteCtl) NoteListCtl(ctx *gin.Context, req types.QueryNoteForm) (result ginx.JsonResult, err error) {
+	notes, total, err := n.svc.ListNote(ctx, req.State, req.Page, req.Size)
+	if err != nil {
+		return ginx.Error(500, err.Error()), err
+	}
+	return ginx.SuccessPageList(notes, total), nil
 }
