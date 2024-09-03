@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd())
 
   return {
+    base: '/admin/', // 设置 base 路径为 /admin/
     plugins: [
       vue(),
 

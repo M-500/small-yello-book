@@ -142,29 +142,30 @@ watch(() => formData.email, (val) => {
 function sendEmailBtn () {
   let form:emialForm = reactive({
     email: formData.email,
-    type_code: '1'
+    type_code: 1
   })
   if (canSend.value) {
     getEmailCaptchas(form).then(res => {
       ElMessage.success('验证码发送成功');
-    }).catch(err => {
-      // canSend.value = true
-      return 
-    });
-    canSend.value = false;
-    buttonText.value = `${countdown}s后重发`;
-
-    timer = setInterval(() => {
+      canSend.value = false;
+      buttonText.value = `${countdown}s后重发`;
+      timer = setInterval(() => {
       countdown--;
       buttonText.value = `${countdown}s后重发`;
 
       if (countdown === 0) {
         clearInterval(timer);
         countdown = 60;
-        buttonText.value = '发送验证码';
         canSend.value = true;
+        buttonText.value = '发送验证码';
       }
     }, 1000);
+    }).catch(err => {
+      console.log("哈哈哈",err)
+      canSend.value = true
+      return 
+    });
+    
   }
 }
 
@@ -185,23 +186,6 @@ const loginHandler = async()=>{
   }
 }
 
-// 登录点击事件
-// function loginHandler () {
-  
-//   // login({
-//   //   email: email.value,
-//   //   ver_code: ver_code.value
-//   // }).then(res => {
-//   //   ElMessage.success('登录成功');
-
-//   //   let jwt = res.token
-//   //   console.log(res, jwt)
-//   //   userStore.setToken(jwt) // 设置JWT信息
-//   //   // 获取JWT信息
-//   // }).catch(err => {
-//   //   console.log("")
-//   // });
-// }
 </script>
 
 <style lang="scss" scoped>

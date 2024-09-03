@@ -11,7 +11,7 @@ const NotesDashboardView = defineAsyncComponent(() => import('@/views/notes/inde
 const FansDashboardView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/admin/'),
   routes: [
     {
       path: '/',

@@ -1,6 +1,6 @@
 export interface emialForm {
   email: string
-  type_code: string
+  type_code: number
 }
 
 export interface loginForm {
