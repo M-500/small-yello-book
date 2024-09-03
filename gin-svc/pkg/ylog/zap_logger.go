@@ -1,4 +1,4 @@
-package logger
+package ylog
 
 import "go.uber.org/zap"
 

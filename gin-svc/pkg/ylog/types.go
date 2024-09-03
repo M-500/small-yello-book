@@ -1,4 +1,4 @@
-package logger
+package ylog
 
 type Logger interface {
 	Debug(msg string, args ...Field)

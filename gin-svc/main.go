@@ -27,6 +27,7 @@ func main() {
 	config := initialize.SetUpConfig(*configFile)
 	db := initialize.SetUpDB(&config.Database)
 	redisCli := initialize.SetUpRedis(&config.Redis)
+	logger := initialize.SetUpLogger(config)
 	err := models.InitTables(db)
 	if err != nil {
 		return
@@ -35,6 +36,7 @@ func main() {
 		Engine: nil,
 		DB:     db,
 		Cli:    redisCli,
+		Lg:     logger,
 		Cfg:    config,
 	}
 	app.Engine = web.SetupWebEngine(app)

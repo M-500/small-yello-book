@@ -1,3 +1,19 @@
+
+server:
+  addr: 8000
+  mode: "debug"
+
+logs:
+  is_dev: true
+  file_name: "logs/app.log"
+  err_file_name: "logs/err.log"
+  max_size: 10
+  max_backups: 10
+  max_age: 10
+  compress: true
+
+
+
 database:
   dsn: "root:root@tcp(127.0.0.1:13306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"
   max_idle_conn: 10  # 最大空闲连接数

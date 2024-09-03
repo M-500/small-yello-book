@@ -1,4 +1,4 @@
-package logger
+package ylog
 
 func Error(err error) Field {
 	return Field{Key: "error", Val: err}
