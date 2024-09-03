@@ -10,7 +10,7 @@ logs:
   max_size: 10
   max_backups: 10
   max_age: 10
-  compress: true
+  compress: false
 
 
 
