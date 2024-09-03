@@ -5,6 +5,7 @@ type Logger interface {
 	Info(msg string, args ...Field)
 	Warn(msg string, args ...Field)
 	Error(msg string, args ...Field)
+	Fatal(msg string, args ...Field)
 }
 
 type Field struct {

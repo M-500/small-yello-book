@@ -28,6 +28,10 @@ func (z *ZapLogger) Error(msg string, args ...Field) {
 	z.l.Error(msg, z.toArgs(args)...)
 }
 
+func (z *ZapLogger) Fatal(msg string, args ...Field) {
+	z.l.Fatal(msg, z.toArgs(args)...)
+}
+
 func (z *ZapLogger) toArgs(args []Field) []zap.Field {
 	res := make([]zap.Field, 0, len(args))
 	for _, arg := range args {
