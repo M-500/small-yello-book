@@ -53,7 +53,7 @@
                             @itemImgListChanged="handleImgListChanged"></img-upload>
               </div>
               <div class="title-input">
-                <el-input v-model="noteTitle"
+                <el-input v-model="pubNotForm.noteTitle"
                           style="width: 240px"
                           maxlength="20"
                           placeholder="填写标题，可能会有更多赞哦~"
@@ -61,7 +61,7 @@
                           type="text" />
               </div>
               <div class="topic-container">
-                <el-input v-model="noteContent"
+                <el-input v-model="pubNotForm.noteContent"
                           style="width: 240px"
                           :rows="2"
                           tabindex="0"
@@ -76,7 +76,7 @@
               <div class="formbox">
                 <div class="flexbox">
                   <div class="_title">自主申明</div>
-                  <el-select v-model="value"
+                  <el-select v-model="pubNotForm.statement"
                              placeholder="点击设置笔记声明"
                              size="default"
                              suffix-icon=""
@@ -89,7 +89,7 @@
                 </div>
                 <div class="flexbox">
                   <div class="_title">权限设置</div>
-                  <el-radio-group v-model="isPublic">
+                  <el-radio-group v-model="pubNotForm.private">
                     <el-radio :value="true"
                               size="large">
                       <span>公开</span>
@@ -104,12 +104,13 @@
                 </div>
                 <div class="flexbox">
                   <div class="_title">发布时间</div>
-                  <el-radio-group v-model="noCorn">
-                    <el-radio :value="true"
+                  <el-radio-group v-model="pubNotForm.publishTime"
+                                  @change="handlePublishTimeChange">
+                    <el-radio :label="currentTimestamp"
                               size="large">
                       立即发布
                     </el-radio>
-                    <el-radio :value="false"
+                    <el-radio :label="0"
                               size="large">
                       定时发布
                     </el-radio>
@@ -137,6 +138,8 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref, watch } from 'vue'
+import type { publishNoteForm,image } from '@/api/note/type'
+import { publishNote } from '@/api/note'
 import type {  TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
@@ -147,27 +150,46 @@ const activeName = ref('first')
 const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
 const imgList = ref<UploadUserFile[]>([])  // 来自img-upload组件的属性 
 // const noteTitle = ref('')
-const noteTitle = ref('库里起飞')
-const noteContent = ref('就是库里咯')
 const value = ref('')
-const isPublic = ref(true)
-const noCorn = ref(true)
 const step1 = ref(true)
+
+const currentTimestamp = Math.floor(Date.now() / 1000);
+
+function handlePublishTimeChange(value) {
+  if (value === currentTimestamp) {
+    pubNotForm.publishTime = value;
+  } else {
+    pubNotForm.publishTime = value;
+  }
+}
+
 const options = [
   {
-    value: 'Option1',
+    value: 'VIRTUAL-ENTERTAINMENT',
     label: '虚拟演绎，仅供娱乐',
   },
   {
-    value: 'Option2',
+    value: 'AI-MERGER',
     label: '笔记含AI合成内容',
   }
 ]
 
+const pubNotForm:publishNoteForm = reactive({
+  noteTitle: '库里起飞',
+  noteContent: '就是库里咯',
+  private: true,
+  statement: '',
+  publishTime: 0,
+  imgList: imgList
+})
 
 const handlePublish = () => {
-  console.log('发布',imgList.value)
-  console.log('发布')
+  pubNotForm.imgList = imgList
+  publishNote(pubNotForm).then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.log(err)
+  })
 }
 
 
@@ -186,7 +208,7 @@ function handleResetUpload() {
 
 function handleImgListChanged(data: UploadUserFile[]) {
   imgList.value = data
-  console.log('imgList', imgList)
+  console.log('imgList', pubNotForm)
 }
 </script>
 

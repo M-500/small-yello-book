@@ -13,6 +13,7 @@ func InitTables(db *gorm.DB) error {
 		&NoteModel{},
 		&TagModel{},
 		&NoteTagModel{},
+		&ImageModel{},
 
 		&CommentModel{},
 	)

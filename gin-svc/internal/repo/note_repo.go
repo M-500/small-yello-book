@@ -27,7 +27,7 @@ func (n *noteRepo) FindNoteListById(ctx context.Context, status int, page, size 
 }
 
 func (n *noteRepo) CreateNote(ctx context.Context, note domain.DNote) error {
-	err := n.dao.SaveNoteWithTx(ctx, n.toModel(note), nil)
+	err := n.dao.SaveNoteWithTx(ctx, n.toModel(note), n.toImageModel(note))
 	// 隐藏掉底层的错误
 	return err
 }
@@ -47,4 +47,18 @@ func (n *noteRepo) toModel(note domain.DNote) models.NoteModel {
 		CollectCnt: 0,
 		AuthorId:   0,
 	}
+}
+
+func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
+	imgList := make([]models.ImageModel, 0, len(data.ImgList))
+	for _, i2 := range data.ImgList {
+		imgList = append(imgList, models.ImageModel{
+			Model:   gorm.Model{},
+			Width:   i2.ImgWidth,
+			OldPath: i2.LocalPath,
+			Hash:    i2.HashStr,
+			Size:    i2.ImgHeight,
+		})
+	}
+	return imgList
 }

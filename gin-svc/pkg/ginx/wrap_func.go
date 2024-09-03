@@ -1,6 +1,7 @@
 package ginx
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -9,6 +10,7 @@ func WrapJsonBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.H
 	return func(ctx *gin.Context) {
 		var req Req
 		if err := ctx.ShouldBindJSON(&req); err != nil {
+			fmt.Println("参数校验错误", err)
 			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
 			return
 		}

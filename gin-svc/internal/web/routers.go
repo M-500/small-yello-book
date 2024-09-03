@@ -31,7 +31,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		InitUserController(app).RegisterRoute(privateGroup)
 		InitRoleController(app).RegisterRoute(privateGroup)
 		InitFileController(app).RegisterRoute(privateGroup)
-
+		InitNoteController(app).RegisterRoute(privateGroup)
 	}
 
 	return engine
@@ -73,6 +73,6 @@ func InitRoleController(app *internal.App) controller.BaseController {
 func InitNoteController(app *internal.App) *controller.NoteCtl {
 	dao := dao.NewNoteDao(app.DB)
 	repo := repo.NewNoteRepo(dao)
-	svc := service.NewNoteSvcImpl(repo)
+	svc := service.NewNoteSvcImpl(repo, app.Lg)
 	return controller.NewNoteCtl(svc)
 }

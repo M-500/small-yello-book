@@ -31,4 +31,5 @@ type ImageNote struct {
 	CreateTime string `json:"createTime"`
 	UpdateTime string `json:"updateTime"`
 	LocalPath  string `json:"localPath"`
+	HashStr    string `json:"hashStr"`
 }

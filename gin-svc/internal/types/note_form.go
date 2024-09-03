@@ -1,6 +1,9 @@
 package types
 
-import "gin-svc/internal/domain"
+import (
+	"gin-svc/internal/domain"
+	"strings"
+)
 
 type CreateNoteForm struct {
 	NoteTitle   string    `form:"noteTitle" json:"noteTitle" binding:"required"`      // 标记
@@ -27,8 +30,9 @@ func (c *CreateNoteForm) ToNoteDomain() domain.DNote {
 	}
 	for _, img := range c.ImgList {
 		res.ImgList = append(res.ImgList, domain.ImageNote{
-			ImgName: img.Name,
-			ImgUrl:  img.Url,
+			ImgName:   img.Name,
+			ImgUrl:    img.Url,
+			LocalPath: strings.Replace(img.Url, "http://127.0.0.1:8122", "", 1),
 		})
 	}
 	return res

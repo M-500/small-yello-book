@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type ImageModel struct {
 	gorm.Model
+	NoteId  uint   `gorm:"type:int;column:note_id;not null;comment:图片对应的NoteID"`         // NoteID
 	OssUrl  string `gorm:"type:varchar(255);column:oss_url;not null;comment:OSS对应的URL"`  // OssUrl地址
 	Width   int    `gorm:"type:int;column:width;not null;comment:图片宽度"`                  // 宽度
 	Height  int    `gorm:"type:int;column:height;not null;comment:图片高度"`                 // 高度

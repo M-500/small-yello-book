@@ -16,7 +16,7 @@ func NewNoteCtl(svc service.NoteService) *NoteCtl {
 }
 
 func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
-	group.POST("/note", ginx.WrapJsonBody[types.CreateNoteForm](n.CreateNoteCtl))
+	group.POST("/notes", ginx.WrapJsonBody[types.CreateNoteForm](n.CreateNoteCtl))
 }
 
 func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (result ginx.JsonResult, err error) {
