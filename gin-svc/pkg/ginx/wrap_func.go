@@ -1,8 +1,8 @@
 package ginx
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"net/http"
 )
 
@@ -10,8 +10,12 @@ func WrapJsonBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.H
 	return func(ctx *gin.Context) {
 		var req Req
 		if err := ctx.ShouldBindJSON(&req); err != nil {
-			fmt.Println("参数校验错误", err)
-			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
+			errs, ok := err.(validator.ValidationErrors)
+			if !ok {
+				ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
+				return
+			}
+			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request 2", Data: removeTopStruct(errs.Translate(InstanceTrans))})
 			return
 		}
 		res, err := fn(ctx, req)
@@ -27,7 +31,12 @@ func WrapQueryBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.
 	return func(ctx *gin.Context) {
 		var req Req
 		if err := ctx.ShouldBindQuery(&req); err != nil {
-			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
+			errs, ok := err.(validator.ValidationErrors)
+			if !ok {
+				ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
+				return
+			}
+			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request 2", Data: removeTopStruct(errs.Translate(InstanceTrans))})
 			return
 		}
 		res, err := fn(ctx, req)
