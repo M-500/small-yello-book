@@ -12,11 +12,9 @@
           <el-tab-pane label="全部笔记"
                        name="first">
             <div class="note-container-box">
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
+              <note-manager-card v-for="item in noteList"
+                                 :key="item.id"
+                                 :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
           <el-tab-pane label="已发布"
@@ -59,15 +57,35 @@
 <script setup lang="ts">
 import YbTitle from '@/components/YbTitle/index.vue'
 import NoteManagerCard from '@/components/NoteManagerCard/index.vue'
+import { getNoteList } from '@/api/note'
+import type { queryNoteListForm } from '@/api/note/type'
 
-import { ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 
+
 const activeName = ref('first')
+const noteList = ref([])
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
+
+// 获取笔记列表
+const getNoteListData = async () => {
+  const params: queryNoteListForm = {
+    state: 0,
+    page: 1,
+    size: 10
+  }
+  const res = await getNoteList(params)
+  noteList.value = res.data.list
+}
+
+onMounted(() => {
+  getNoteListData()
+})
+
 </script>
 
 <style lang="scss" scoped>

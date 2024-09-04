@@ -11,3 +11,9 @@ export interface image {
   name: string
   url: string
 }
+
+export interface queryNoteListForm {
+  page: number
+  size: number
+  state: number
+}

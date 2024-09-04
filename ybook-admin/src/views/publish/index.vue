@@ -155,7 +155,7 @@ const step1 = ref(true)
 
 const currentTimestamp = Math.floor(Date.now() / 1000);
 
-function handlePublishTimeChange(value) {
+function handlePublishTimeChange(value:any) {
   if (value === currentTimestamp) {
     pubNotForm.publishTime = value;
   } else {
@@ -180,11 +180,11 @@ const pubNotForm:publishNoteForm = reactive({
   private: true,
   statement: '',
   publishTime: 0,
-  imgList: imgList
+  imgList: imgList.value
 })
 
 const handlePublish = () => {
-  pubNotForm.imgList = imgList
+  pubNotForm.imgList = imgList.value
   publishNote(pubNotForm).then(res => {
     console.log(res)
   }).catch(err => {

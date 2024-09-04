@@ -29,6 +29,12 @@ func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (res
 }
 
 func (n *NoteCtl) NoteListCtl(ctx *gin.Context, req types.QueryNoteForm) (result ginx.JsonResult, err error) {
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.Size <= 0 {
+		req.Size = 10
+	}
 	notes, total, err := n.svc.ListNote(ctx, req.State, req.Page, req.Size)
 	if err != nil {
 		return ginx.Error(500, err.Error()), err

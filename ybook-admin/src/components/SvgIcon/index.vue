@@ -24,7 +24,7 @@ defineProps({
     type: String,
     default: ''
   },
-  wight: {
+  width: {
     type: String,
     default: '16px'
   },

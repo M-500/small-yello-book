@@ -2,12 +2,15 @@
   <div class="container">
     <div class="img">
       <div class="media">
-        <img src="@/assets/imgs/curry.jpeg"
+        <img :src="props.item ? props.item.cover : ''"
              alt="">
         <div class="mask"></div>
-        <div class="play-permission">
+        <div class="play-permission"
+             v-if="props.item ? props.item.private : 'true'">
           <svg-icon class="per-icon"
                     color="#fff"
+                    hight="16px"
+                    width="16px"
                     name="lock" />
           <span class="per-title">仅自己可见</span>
         </div>
@@ -15,7 +18,7 @@
     </div>
     <div class="info">
       <div class="box">
-        <div class="title">辞职啦</div>
+        <div class="title">{{ props.item ? props.item.noteTitle : '' }}</div>
         <div class="icon-list">
           <div class="icon">
             <svg-icon name="eye"
@@ -67,28 +70,28 @@
         <div class="control">
           <svg-icon name="permission"
                     class="svg-ic1"
-                    hight="16px"
+                    height="16px"
                     width="16px" />
           <span class="title">权限设置</span>
         </div>
         <div class="control">
           <svg-icon name="cancel-top"
                     class="svg-ic1"
-                    hight="16px"
+                    height="16px"
                     width="16px" />
           <span class="title">取消置顶</span>
         </div>
         <div class="control">
           <svg-icon name="edit"
                     class="svg-ic1"
-                    hight="16px"
+                    height="16px"
                     width="16px" />
           <span class="title">编辑</span>
         </div>
         <div class="control">
           <svg-icon name="delete"
                     class="svg-ic1"
-                    hight="16px"
+                    height="16px"
                     width="16px" />
           <span class="title">删除</span>
         </div>
@@ -97,8 +100,18 @@
   </div>
 </template>
 
-<script setup>
-import { } from "vue"
+<script lang="ts" setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  item: {
+    type: Object,
+    required: true,
+    default: () => ({}) as any,
+  },
+});
+
+console.log("啊哈？", props.item);
 </script>
 
 <style lang="scss" scoped>
