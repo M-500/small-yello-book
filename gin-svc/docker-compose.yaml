@@ -19,7 +19,7 @@ services:
 #    networks:
 #      - my_network
   mysql8:
-    image: mysql:8.0
+    image: mysql:latest
     restart: always
 #    command:
 #      #      - 加入参数，设置 binlog 和主节点
@@ -36,7 +36,7 @@ services:
 #    networks:
 #      - my_network
   redis:
-    image: 'bitnami/redis:7.2'
+    image: 'redis:latest'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
