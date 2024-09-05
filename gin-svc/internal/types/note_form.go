@@ -1,6 +1,7 @@
 package types
 
 import (
+	"gin-svc/internal/conf/cfg"
 	"gin-svc/internal/domain"
 	"strings"
 )
@@ -20,7 +21,7 @@ type ImgItem struct {
 	Url  string `json:"url"`
 }
 
-func (c *CreateNoteForm) ToNoteDomain() domain.DNote {
+func (c *CreateNoteForm) ToNoteDomain(cfg cfg.ServerCfg) domain.DNote {
 	res := domain.DNote{
 		NoteTitle:   c.NoteTitle,
 		NoteContent: c.NoteContent,
@@ -32,7 +33,7 @@ func (c *CreateNoteForm) ToNoteDomain() domain.DNote {
 		res.ImgList = append(res.ImgList, domain.ImageNote{
 			ImgName:   img.Name,
 			ImgUrl:    img.Url,
-			LocalPath: strings.Replace(img.Url, "http://127.0.0.1:8122", "", 1),
+			LocalPath: strings.Replace(img.Url, cfg.FileUploadHost, "", 1),
 		})
 	}
 	return res
