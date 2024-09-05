@@ -33,16 +33,16 @@ services:
 #      - ./script/mysql/:/docker-entrypoint-initdb.d/
     ports:
       - "13306:3306"
-    networks:
-      - my_network
+#    networks:
+#      - my_network
   redis:
     image: 'bitnami/redis:7.2'
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - '16379:6379'
-    networks:
-      - my_network
+#    networks:
+#      - my_network
 #  etcd:
 #    image: 'bitnami/etcd:3.5'
 #    environment:
