@@ -2,15 +2,15 @@
   <div class="footer">
     <a href=""
        class="title">
-      <span>库里又在日天</span>
+      <span>{{ props.item.noteTitle }}</span>
     </a>
     <div class="author_wrapper">
       <a href=""
          class="author">
-        <img src="../../assets/imgs/avatar.jpeg"
+        <img :src="props.item.author.avatar"
              class="author-avatar"
              alt="">
-        <span>王木木</span>
+        <span>{{ props.item.author.nickName }}</span>
       </a>
       <span class="like_wrapper">
         <span class="like-lottie"></span>
@@ -24,8 +24,15 @@
   </div>
 </template>
 
-<script setup>
-import { } from "vue"
+<script lang="ts" setup>
+import { defineProps } from 'vue';
+const props = defineProps({
+  item: {
+    type: Object,
+    required: true,
+    default: () => ({}) as any,
+  },
+});
 </script>
 
 <style lang="scss" scoped>

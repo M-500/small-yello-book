@@ -4,16 +4,25 @@
       <a href=""></a>
       <a href=""
          class="cover">
-        <img src="../../assets/imgs/avatar.jpeg"
+        <img :src="props.item.cover"
              alt="">
       </a>
-      <NoteFooter />
+      <NoteFooter :item="props.item" />
     </div>
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import NoteFooter from "@/components/NoteFooter/index.vue"
+import { defineProps } from "vue";
+
+const props = defineProps({
+  item: {
+    type: Object,
+    required: true,
+    default: () => ({}) as any,
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -21,6 +30,7 @@ import NoteFooter from "@/components/NoteFooter/index.vue"
 	// position: absolute;
 	// left: 0;
 	// top: 0;
+	// margin-right: 20px;
 	width: 221.33px; // 这个需要后期需要根据屏幕来适配
 	.container{
 		width: 100%;

@@ -200,6 +200,12 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 function handleUpdateData(data: string) {
   step1.value = false
   coverImgeUrl.value = data
+  // 追加写入到imgList
+  imgList.value.push({
+    url: data,
+    name: 'coverImge',
+  })
+  console.log('imgList', imgList.value)
 }
 
 function handleResetUpload() {
