@@ -20,31 +20,25 @@
           <el-tab-pane label="已发布"
                        name="second">
             <div class="note-container-box">
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
+              <note-manager-card v-for="item in noteList"
+                                 :key="item.id"
+                                 :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
           <el-tab-pane label="审核中"
                        name="third">
             <div class="note-container-box">
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
+              <note-manager-card v-for="item in noteList"
+                                 :key="item.id"
+                                 :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
           <el-tab-pane label="未通过"
                        name="fourth">
             <div class="note-container-box">
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
-              <note-manager-card></note-manager-card>
+              <note-manager-card v-for="item in noteList"
+                                 :key="item.id"
+                                 :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -54,7 +48,7 @@
 
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import YbTitle from '@/components/YbTitle/index.vue'
 import NoteManagerCard from '@/components/NoteManagerCard/index.vue'
 import { getNoteList } from '@/api/note'
@@ -67,8 +61,9 @@ import type { TabsPaneContext } from 'element-plus'
 const activeName = ref('first')
 const noteList = ref([])
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
+const handleClick = (tab:TabsPaneContext, event: Event) => {
+  console.log("我尼玛",tab, event)
+  // getNoteListData()
 }
 
 // 获取笔记列表

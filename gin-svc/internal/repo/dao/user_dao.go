@@ -14,6 +14,7 @@ type UserDao interface {
 	Delete(ctx context.Context, id int) error
 	FindByUserName(ctx context.Context, userName string) (*models.UserModel, error)
 	FindByEmail(ctx context.Context, email string) (*models.UserModel, error)
+	GetByID(ctx context.Context, id int) (*models.UserModel, error)
 }
 
 func NewUserDao(db *gorm.DB) UserDao {
@@ -22,6 +23,15 @@ func NewUserDao(db *gorm.DB) UserDao {
 
 type userDaoImpl struct {
 	db *gorm.DB
+}
+
+func (u *userDaoImpl) GetByID(ctx context.Context, id int) (*models.UserModel, error) {
+	var user models.UserModel
+	err := u.db.WithContext(ctx).First(&user, id).Error
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (u *userDaoImpl) Delete(ctx context.Context, id int) error {

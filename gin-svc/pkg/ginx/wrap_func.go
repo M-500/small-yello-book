@@ -15,7 +15,7 @@ func WrapJsonBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.H
 				ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
 				return
 			}
-			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request 2", Data: removeTopStruct(errs.Translate(InstanceTrans))})
+			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "请求参数错误", Data: removeTopStruct(errs.Translate(InstanceTrans))})
 			return
 		}
 		res, err := fn(ctx, req)
@@ -36,7 +36,7 @@ func WrapQueryBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.
 				ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request", Data: nil})
 				return
 			}
-			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "bad request 2", Data: removeTopStruct(errs.Translate(InstanceTrans))})
+			ctx.JSON(http.StatusBadRequest, JsonResult{Code: 400, Msg: "请求参数错误", Data: removeTopStruct(errs.Translate(InstanceTrans))})
 			return
 		}
 		res, err := fn(ctx, req)

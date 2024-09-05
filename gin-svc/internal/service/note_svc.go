@@ -20,6 +20,8 @@ type NoteService interface {
 	// 获取所有文章列表
 	ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)
 
+	FeedListNote(ctx context.Context, TagId int, offset int, limit int) ([]domain.DNote, error)
+
 	// 更新笔记
 	UpdateNote(ctx context.Context, note domain.DNote) error
 
@@ -33,6 +35,21 @@ type NoteService interface {
 type noteSvcImpl struct {
 	repo repo.NoteRepoInterface
 	lg   ylog.Logger
+}
+
+func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, limit int) ([]domain.DNote, error) {
+	list, err := n.repo.FeedNoteList(ctx, TagId, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	for i := range list {
+		info, err := n.repo.FindAuthorInfo(ctx, list[i].AuthorId)
+		if err != nil {
+			continue
+		}
+		list[i].AuthorInfo = info
+	}
+	return list, nil
 }
 
 func NewNoteSvcImpl(repo repo.NoteRepoInterface, lg ylog.Logger) NoteService {

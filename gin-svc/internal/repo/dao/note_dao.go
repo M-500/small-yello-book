@@ -15,6 +15,8 @@ type NoteDaoInterface interface {
 	Update(ctx context.Context, note *models.NoteModel) error
 	Delete(ctx context.Context, id int) error
 	HardDelete(ctx context.Context, id int) error
+
+	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]models.NoteModel, error)
 }
 
 func NewNoteDao(db *gorm.DB) NoteDaoInterface {
@@ -23,6 +25,16 @@ func NewNoteDao(db *gorm.DB) NoteDaoInterface {
 
 type noteDaoImpl struct {
 	db *gorm.DB
+}
+
+func (n *noteDaoImpl) FeedNoteList(ctx context.Context, tagID int, page, size int) ([]models.NoteModel, error) {
+	// TODO: 这里有问题，其实应该从大数据平台/推荐算法平台获取数据
+	notes := make([]models.NoteModel, 0, size)
+	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("status = ?", 1).Limit(size).Offset((page - 1) * size).Find(&notes)
+	if query.Error != nil {
+		return nil, query.Error
+	}
+	return notes, nil
 }
 
 func NewNoteDaoImpl(db *gorm.DB) NoteDaoInterface {

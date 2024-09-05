@@ -53,3 +53,9 @@ type QueryNoteForm struct {
 	Page  int `form:"page" json:"page"`   // 页码
 	Size  int `form:"size" json:"size"`   // 每页数量
 }
+
+type FeedNoteQueryForm struct {
+	TagId int `json:"tag_id" binding:""`
+	Page  int `form:"page" json:"page"` // 页码
+	Size  int `form:"size" json:"size"` // 每页数量
+}

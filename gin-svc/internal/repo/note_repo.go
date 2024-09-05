@@ -6,20 +6,44 @@ import (
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/dao"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type NoteRepoInterface interface {
 	FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error)
 	FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
+	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]domain.DNote, error)
+	FindAuthorInfo(ctx context.Context, authorID int) (*domain.Author, error)
 	CreateNote(ctx context.Context, note domain.DNote) error
 }
 
-func NewNoteRepo(dao dao.NoteDaoInterface) NoteRepoInterface {
-	return &noteRepo{dao: dao}
+func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao) NoteRepoInterface {
+	return &noteRepo{dao: dao, userDao: userDao}
 }
 
 type noteRepo struct {
-	dao dao.NoteDaoInterface
+	dao     dao.NoteDaoInterface
+	userDao dao.UserDao
+}
+
+func (n *noteRepo) FindAuthorInfo(ctx context.Context, authorID int) (*domain.Author, error) {
+	user, err := n.userDao.GetByID(ctx, authorID)
+	if err != nil {
+		return &domain.Author{}, err
+	}
+	return n.toDMAuthor(user), nil
+}
+
+func (n *noteRepo) FeedNoteList(ctx context.Context, tagID int, page, size int) ([]domain.DNote, error) {
+	res := make([]domain.DNote, 0, size)
+	list, err := n.dao.FeedNoteList(ctx, tagID, page, size)
+	if err != nil {
+		return nil, err
+	}
+	for _, item := range list {
+		res = append(res, n.toDMNote(item))
+	}
+	return res, nil
 }
 
 func (n *noteRepo) FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error) {
@@ -54,6 +78,29 @@ func (n *noteRepo) toModel(note domain.DNote) models.NoteModel {
 	}
 }
 
+func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
+	return domain.DNote{
+		ID:          int(note.Model.ID),
+		NoteTitle:   note.Title,
+		NoteContent: note.Mark,
+		Cover:       note.Cover,
+		//Address:     note.Address,
+		Statement: strconv.Itoa(note.Status),
+		//PublishTime: note.Model.CreatedAt,
+		//Private:     note.,
+		ViewCnt:    note.ViewCnt,
+		LikeCnt:    note.LikeCnt,
+		ShareCnt:   note.ShareCnt,
+		CommentCnt: note.CommentCnt,
+		CollectCnt: note.CollectCnt,
+		Status:     note.Status,
+		AuthorId:   int(note.AuthorId),
+		CreateTime: "",
+		UpdateTime: "",
+		ImgList:    nil,
+	}
+}
+
 func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 	imgList := make([]models.ImageModel, 0, len(data.ImgList))
 	for _, i2 := range data.ImgList {
@@ -66,4 +113,12 @@ func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 		})
 	}
 	return imgList
+}
+
+func (n *noteRepo) toDMAuthor(user *models.UserModel) *domain.Author {
+	return &domain.Author{
+		ID:       int(user.ID),
+		NickName: user.NickName,
+		Avatar:   user.Avatar,
+	}
 }
