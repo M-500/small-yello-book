@@ -13,10 +13,10 @@ import (
 )
 
 type FileController struct {
-	cfg conf.ConfigInstance
+	cfg *conf.ConfigInstance
 }
 
-func NewFileController(cfg conf.ConfigInstance) *FileController {
+func NewFileController(cfg *conf.ConfigInstance) *FileController {
 	return &FileController{
 		cfg: cfg,
 	}
