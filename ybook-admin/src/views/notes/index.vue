@@ -84,24 +84,58 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+::v-deep(.el-card__body){
+  padding: 0px;
+  height: 100%;
+}
+::v-deep(el-tabs__content){
+  height: 100%;
+  overflow: auto;
+}
+::v-deep(.el-tab-pane){
+    height: 100%;
+    overflow: auto;
+  }
 .container{
 	height: 100%;
 	width: 100%;
-	.note-box{
-		height: 100%;
-		width: 100%;
-		padding: 0px 8px 22px ;
-	}
-	.note-info{
-		display: flex;
-		width: 100%;
-	}
-	.note-container-box{
-		display: flex;
-		flex-direction: column;
-		height: 500px;
-		overflow: auto;
-	}
+  .el-card{
+    height: 100%;
+    width: 100%;
+    padding: 0px 8px 22px ;
+    .note-info{
+      display: flex;
+      width: 100%;
+    }
+    .note-tabs{
+      height: calc(100% - 76px);
+      .el-tabs{
+        height: 100%;
+        .note-container-box{
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          overflow: auto;
+        }
+      }
+    }
+  }
+  
+	// .note-box{
+	// 	height: 100%;
+	// 	width: 100%;
+	// 	padding: 0px 8px 22px ;
+	// }
+	// .note-info{
+	// 	display: flex;
+	// 	width: 100%;
+	// }
+	// .note-container-box{
+	// 	display: flex;
+	// 	flex-direction: column;
+	// 	height: 100%;
+	// 	overflow: auto;
+	// }
 }
 
 ::v-deep(.el-card){

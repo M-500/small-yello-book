@@ -27,7 +27,8 @@
          v-show="!step1">
       <el-card>
         <div class="header">
-          <span class="icon">
+          <span class="icon"
+                @click="goback">
             <el-icon>
               <ArrowLeft />
             </el-icon>
@@ -210,11 +211,18 @@ function handleUpdateData(data: string) {
 
 function handleResetUpload() {
   console.log('清空并重新上传')
+  imgList.value = []
 }
 
 function handleImgListChanged(data: UploadUserFile[]) {
   imgList.value = data
   console.log('imgList', pubNotForm)
+}
+
+function goback (){
+  imgList.value = []
+  coverImgeUrl.value = ""
+  step1.value = true
 }
 </script>
 

@@ -58,7 +58,7 @@ const uploadUrl = computed(() => {
 // 这里是子组件定义的属性
 const coverImgUrl = ref('')
 
-// defineExpose({coverImgUrl})
+
 defineProps({
 	// 接受父组件传递的参数
 	mark: {
@@ -72,7 +72,7 @@ defineProps({
 })
 
 const handlePreview: UploadProps['onSuccess'] = (uploadFile) => {
-	coverImgUrl.value = uploadFile.data.url
+	coverImgUrl.value = uploadFile.data
 	emit('updateData', coverImgUrl.value)
 }
 </script>
