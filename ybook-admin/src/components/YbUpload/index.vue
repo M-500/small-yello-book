@@ -3,7 +3,7 @@
     <div class="upload-wrap">
       <el-upload class="upload-box"
                  drag
-                 action="http://127.0.0.1:8122/api/v1/file/upload"
+                 :action="uploadUrl"
                  :on-success="handlePreview"
                  multiple>
         <el-icon class="el-icon--upload">
@@ -48,7 +48,13 @@ import { ref }  from 'vue';
 import { defineEmits } from 'vue';
 import { defineProps } from 'vue';
 const emit = defineEmits(['updateData']);
+import { computed } from 'vue';
+// 获取环境变量中的 VITE_SERVER
+const serverUrl = import.meta.env.VITE_SERVER;
 
+const uploadUrl = computed(() => {
+  return `${serverUrl}/api/v1/file/upload`;
+});
 // 这里是子组件定义的属性
 const coverImgUrl = ref('')
 

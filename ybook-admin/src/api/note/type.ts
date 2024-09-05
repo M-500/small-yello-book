@@ -8,8 +8,8 @@ export interface publishNoteForm {
 }
 
 export interface image {
-  name: string
-  url: string
+  name: string | undefined
+  url: string | undefined
 }
 
 export interface queryNoteListForm {

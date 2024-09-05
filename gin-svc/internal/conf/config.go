@@ -9,4 +9,5 @@ type ConfigInstance struct {
 	Redis    cfg.RedisCfg    `mapstructure:"redis"`
 	Email    cfg.EmailCfg    `mapstructure:"email"`
 	Logs     cfg.LogCfg      `mapstructure:"logs"`
+	Server   cfg.ServerCfg   `mapstructure:"server"`
 }

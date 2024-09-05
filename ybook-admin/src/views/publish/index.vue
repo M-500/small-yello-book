@@ -8,15 +8,15 @@
                  @tab-click="handleClick">
           <el-tab-pane label="上传视频"
                        name="first">
-            <yb-upload mark="拖拽或者点击上传视频"
-                       @updateData="handleUpdateData"
-                       btnTitle="上传视频"></yb-upload>
+            <YbUpload mark="拖拽或者点击上传视频"
+                      @updateData="handleUpdateData"
+                      btnTitle="上传视频"></YbUpload>
           </el-tab-pane>
           <el-tab-pane label="上传图文"
                        name="second">
-            <yb-upload mark="拖拽图片到此或点击上传"
-                       @updateData="handleUpdateData"
-                       btnTitle="上传图片"></yb-upload>
+            <YbUpload mark="拖拽图片到此或点击上传"
+                      @updateData="handleUpdateData"
+                      btnTitle="上传图片"></YbUpload>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -49,8 +49,8 @@
                       @click="handleResetUpload">清空并重新上传</span>
               </div>
               <div class="img-upload-area">
-                <img-upload :coverImge="coverImgeUrl"
-                            @itemImgListChanged="handleImgListChanged"></img-upload>
+                <ImgUpload :coverImge="coverImgeUrl"
+                           @itemImgListChanged="handleImgListChanged"></ImgUpload>
               </div>
               <div class="title-input">
                 <el-input v-model="pubNotForm.noteTitle"
@@ -137,18 +137,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import type { publishNoteForm,image } from '@/api/note/type'
 import { publishNote } from '@/api/note'
 import type {  TabsPaneContext } from 'element-plus'
+import YbUpload from '@/components/YbUpload/index.vue'
+import ImgUpload from '@/components/ImgUpload/index.vue'
 import type { UploadUserFile } from 'element-plus'
 
 const activeName = ref('first')
 
 const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
 const imgList = ref<UploadUserFile[]>([])  // 来自img-upload组件的属性 
-
-
+// const noteTitle = ref('')
+const value = ref('')
 const step1 = ref(true)
 
 const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -182,7 +184,7 @@ const pubNotForm:publishNoteForm = reactive({
 })
 
 const handlePublish = () => {
-  // pubNotForm.imgList.value = imgList.value
+  pubNotForm.imgList = imgList.value.map(item => ({ url: item.url, name: item.name }));
   publishNote(pubNotForm).then(res => {
     console.log(res)
   }).catch(err => {

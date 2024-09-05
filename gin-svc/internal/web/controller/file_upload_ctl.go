@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"gin-svc/internal/conf"
 	"gin-svc/pkg/ginx"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -12,10 +13,13 @@ import (
 )
 
 type FileController struct {
+	cfg conf.ConfigInstance
 }
 
-func NewFileController() *FileController {
-	return &FileController{}
+func NewFileController(cfg conf.ConfigInstance) *FileController {
+	return &FileController{
+		cfg: cfg,
+	}
 }
 
 func (f *FileController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
@@ -37,7 +41,8 @@ func (f *FileController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonResult,
 
 	// Return the file access URL
 	fileURL := fmt.Sprintf("/%s/%s", staticDir, filename)
-	return ginx.JsonResult{Data: gin.H{"url": "http://127.0.0.1:8122" + fileURL}}, nil
+	url := f.cfg.Server.FileUploadHost + fileURL
+	return ginx.SuccessJson(url), nil
 }
 
 func (f *FileController) ReadFileCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {

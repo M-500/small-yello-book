@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <el-upload v-model:file-list="fileList"
-               action="http://127.0.0.1:8122/api/v1/file/upload"
+               :action="uploadUrl"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
                :on-remove="handleRemove">
@@ -25,6 +25,14 @@ import { Plus } from '@element-plus/icons-vue'
 import { defineProps } from 'vue';
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import { defineEmits } from 'vue';
+import { computed } from 'vue';
+// 获取环境变量中的 VITE_SERVER
+const serverUrl = import.meta.env.VITE_SERVER;
+
+const uploadUrl = computed(() => {
+  return `${serverUrl}/api/v1/file/upload`;
+});
+
 const props = defineProps({
   coverImge: {
     type: String,

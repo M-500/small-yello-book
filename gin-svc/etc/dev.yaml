@@ -2,6 +2,7 @@
 server:
   addr: 8122
   mode: "debug"
+  file_upload_host: "http://127.0.0.1:8122"
 
 logs:
   is_dev: true
