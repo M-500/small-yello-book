@@ -14,7 +14,7 @@ import (
 	"gin-svc/internal/web"
 )
 
-var configFile = flag.String("config", "etc/prod.yaml", "配置文件路径")
+var configFile = flag.String("config", "etc/dev.yaml", "配置文件路径")
 
 // @title Swagger YBOOK API
 // @version 0.0.1

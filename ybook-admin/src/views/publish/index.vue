@@ -145,7 +145,9 @@ import type {  TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
 import ImgUpload from '@/components/ImgUpload/index.vue'
 import type { UploadUserFile } from 'element-plus'
+import { useRouter } from 'vue-router'
 
+let $router = useRouter()
 const activeName = ref('first')
 
 const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
@@ -188,6 +190,9 @@ const handlePublish = () => {
   pubNotForm.imgList = imgList.value.map(item => ({ url: item.url, name: item.name }));
   publishNote(pubNotForm).then(res => {
     console.log(res)
+
+    // TODO 发布成功后跳转到笔记管理页面
+    $router.push('/notes-manager')
   }).catch(err => {
     console.log(err)
   })

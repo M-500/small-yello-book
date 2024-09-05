@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"gin-svc/internal/conf"
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
 	"gin-svc/pkg/ginx"
@@ -9,10 +10,14 @@ import (
 
 type NoteCtl struct {
 	svc service.NoteService
+	cfg *conf.ConfigInstance
 }
 
-func NewNoteCtl(svc service.NoteService) *NoteCtl {
-	return &NoteCtl{svc: svc}
+func NewNoteCtl(svc service.NoteService, cfg *conf.ConfigInstance) *NoteCtl {
+	return &NoteCtl{
+		svc: svc,
+		cfg: cfg,
+	}
 }
 
 func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
@@ -22,7 +27,7 @@ func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
 }
 
 func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (result ginx.JsonResult, err error) {
-	err = n.svc.CreateNote(ctx, req.ToNoteDomain())
+	err = n.svc.CreateNote(ctx, req.ToNoteDomain(n.cfg.Server))
 	if err != nil {
 		return ginx.Error(500, err.Error()), err
 	}

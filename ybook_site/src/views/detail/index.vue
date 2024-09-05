@@ -25,7 +25,22 @@
             </div>
           </div>
         </div>
-        <div class="note-scoller"></div>
+        <div class="note-scoller">
+          <div class="note-content">
+            <div class="desc">
+              <span>库里起飞</span>
+            </div>
+            <div class="bottom-container">
+              <span class="date">08-08 浙江</span>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="comment-el">
+            <div class="comment-container">
+              <div class="total">共360条评论</div>
+            </div>
+          </div>
+        </div>
         <div class="fotter"></div>
       </div>
     </div>
@@ -42,7 +57,7 @@ import { RouterLink } from 'vue-router';
 	justify-content: center;
 	align-items: center;
 	height: 100%;
-	padding: 0 20px;
+	padding: 0 100px 20px;
 	.note-container {
 		display: flex;
 		width: 100%;
@@ -125,6 +140,40 @@ import { RouterLink } from 'vue-router';
 							color: #fff;
 							border-radius: 100px;
 						}
+					}
+				}
+			}
+			.note-scoller{
+				transition: scroll .4s; // 滚动效果
+				overflow-y: scroll; // 纵向滚动
+				flex-grow: 1;  // 自适应高度
+				.note-content{
+					padding: 0 20px 20px;
+					.desc{
+						margin: 0;
+						font-weight: 400;
+						font-size: 16px;
+						line-height: 150%;
+						color: #333;
+						white-space: pre-wrap;
+						overflow-wrap: break-word;
+					}
+					.bottom-container{
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						margin-top: 12px;
+						.date{
+							font-size: 14px;
+							line-height: 120%;
+						}
+					}
+					.divider{
+						margin: 0 20px;
+						list-style: none;
+						height: 1px;
+						border: solid rgba(0,0,0,0.08);
+						border-width: 1px 0 0;
 					}
 				}
 			}

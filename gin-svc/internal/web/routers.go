@@ -75,5 +75,5 @@ func InitNoteController(app *internal.App) *controller.NoteCtl {
 	userDao := dao.NewUserDao(app.DB)
 	noteRepo := repo.NewNoteRepo(noteDao, userDao)
 	svc := service.NewNoteSvcImpl(noteRepo, app.Lg)
-	return controller.NewNoteCtl(svc)
+	return controller.NewNoteCtl(svc, app.Cfg)
 }
