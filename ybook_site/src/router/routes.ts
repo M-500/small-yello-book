@@ -31,6 +31,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/user/index.vue')
       },
       {
+        path: '/explore/:uuid',
+        name: 'user-profile',
+        component: () => import('@/views/detail/index.vue')
+      },
+      {
         path: '/404',
         name: '404',
         component: () => import('@/views/404/index.vue')

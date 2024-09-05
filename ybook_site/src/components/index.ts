@@ -1,6 +1,6 @@
 import SvgIcon from './global/SvgIcon.vue'
 
-const allGlbComponents = {
+const allGlbComponents: { [key: string]: ComponentOptions } = {
   SvgIcon
 }
 // export default {

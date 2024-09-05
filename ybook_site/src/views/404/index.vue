@@ -2,8 +2,7 @@
   <div class="container">
     <!-- 404页面 -->
     <div class="not-found">
-      <img src="../../assets/images/404.png"
-           alt="404" />
+      <!-- <img src="@/assets/images/404.png" /> -->
       <p class="title">你访问的页面不在了</p>
       <p>3秒后自动返回首页</p>
       <button class="goback_btn">返回首页</button>

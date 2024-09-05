@@ -13,7 +13,7 @@ const getFeedNoteList = async () => {
   let params: NoteFeedQuery = {
     tagId: 0,
     page: 1,
-    size: 10,
+    size: 20,
   };
   getNoteListRequest(params).then((res) => {
     noteList.value = res.data.list
@@ -43,12 +43,6 @@ onMounted(() => {
       <note_item v-for="item in noteList"
                  :key="item.id"
                  :item="item" />
-      <!-- <div v-if="noteList.length > 0">
-        
-      </div> -->
-      <!-- <note_item style="width: 221.33333333333334px; padding-bottom: 16px; left: blur(42.5px); transform: translate(0px, 0px);" />
-          <note_item />
-          <note_item /> -->
     </div>
 
   </div>
