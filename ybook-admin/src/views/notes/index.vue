@@ -12,32 +12,32 @@
           <el-tab-pane label="全部笔记"
                        name="first">
             <div class="note-container-box">
-              <note-manager-card v-for="item in noteList"
-                                 :key="item.id"
+              <note-manager-card v-for="(item,index) in noteList"
+                                 :key="index"
                                  :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
           <el-tab-pane label="已发布"
                        name="second">
             <div class="note-container-box">
-              <note-manager-card v-for="item in noteList"
-                                 :key="item.id"
+              <note-manager-card v-for="(item,index) in noteList"
+                                 :key="index"
                                  :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
           <el-tab-pane label="审核中"
                        name="third">
             <div class="note-container-box">
-              <note-manager-card v-for="item in noteList"
-                                 :key="item.id"
+              <note-manager-card v-for="(item,index) in noteList"
+                                 :key="index"
                                  :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
           <el-tab-pane label="未通过"
                        name="fourth">
             <div class="note-container-box">
-              <note-manager-card v-for="item in noteList"
-                                 :key="item.id"
+              <note-manager-card v-for="(item,index) in noteList"
+                                 :key="index"
                                  :item="item"></note-manager-card>
             </div>
           </el-tab-pane>
@@ -54,7 +54,7 @@ import NoteManagerCard from '@/components/NoteManagerCard/index.vue'
 import { getNoteList } from '@/api/note'
 import type { queryNoteListForm } from '@/api/note/type'
 
-import { onMounted, reactive, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 
 

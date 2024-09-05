@@ -18,7 +18,7 @@
                  width="16"
                  height="16"
                  class="like_icon" />
-        <span class="count">1万+</span>
+        <span class="count">{{ props.item.likeCnt }}</span>
       </span>
     </div>
   </div>

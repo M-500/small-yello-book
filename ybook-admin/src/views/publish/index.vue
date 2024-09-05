@@ -137,20 +137,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import type { publishNoteForm,image } from '@/api/note/type'
 import { publishNote } from '@/api/note'
 import type {  TabsPaneContext } from 'element-plus'
-import YbUpload from '@/components/YbUpload/index.vue'
-import ImgUpload from '@/components/ImgUpload/index.vue'
 import type { UploadUserFile } from 'element-plus'
 
 const activeName = ref('first')
 
 const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
 const imgList = ref<UploadUserFile[]>([])  // 来自img-upload组件的属性 
-// const noteTitle = ref('')
-const value = ref('')
+
+
 const step1 = ref(true)
 
 const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -180,11 +178,11 @@ const pubNotForm:publishNoteForm = reactive({
   private: true,
   statement: '',
   publishTime: 0,
-  imgList: imgList.value
+  imgList: imgList.value as image[]
 })
 
 const handlePublish = () => {
-  pubNotForm.imgList = imgList.value
+  // pubNotForm.imgList.value = imgList.value
   publishNote(pubNotForm).then(res => {
     console.log(res)
   }).catch(err => {
