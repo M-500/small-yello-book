@@ -10,7 +10,7 @@
         <img :src="props.item.author.avatar"
              class="author-avatar"
              alt="">
-        <span>{{ props.item.author.nickName }}</span>
+        <span>{{ props.item.author.nickName   }}</span>
       </a>
       <span class="like_wrapper">
         <span class="like-lottie"></span>
@@ -26,11 +26,11 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
-const props = defineProps({
+const props:any = defineProps({
   item: {
     type: Object,
     required: true,
-    default: () => ({}) as any,
+    default: () => ({} as any),
   },
 });
 </script>

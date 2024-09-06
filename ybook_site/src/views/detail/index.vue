@@ -3,6 +3,13 @@
     <div class="note-container">
       <div class="left-card">
         <div class="note-cover">
+          <!-- <el-carousel indicator-position="outside">
+            <el-carousel-item v-for="item in 4"
+                              :key="item">
+              <h3 text="2xl"
+                  justify="center">{{ item }}</h3>
+            </el-carousel-item>
+          </el-carousel> -->
           <img src="@/assets/imgs/avatar.jpeg"
                alt="">
         </div>
@@ -52,6 +59,12 @@ import { RouterLink } from 'vue-router';
 </script>
 
 <style lang="scss" scoped>
+::v-deep(.el-carousel__container){
+	// height: 100%;
+}
+::v-deep(.el-carousel__container){
+	// height: 100%;
+}
 .outer-link-container {
 	display: flex;
 	justify-content: center;

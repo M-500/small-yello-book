@@ -16,7 +16,7 @@
 import NoteFooter from "@/components/NoteFooter/index.vue"
 import { defineProps } from "vue";
 
-const props = defineProps({
+const props:any = defineProps({
   item: {
     type: Object,
     required: true,

@@ -3,6 +3,7 @@
 import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
 import { pa } from 'element-plus/es/locales.mjs'
 import path from 'path'
+import type { RouteRecordRaw } from 'vue-router'
 
 export const constantRoutes: Array<RouteRecordRaw> = [
   {
