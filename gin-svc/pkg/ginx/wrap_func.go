@@ -3,6 +3,7 @@ package ginx
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 )
 
@@ -27,6 +28,34 @@ func WrapJsonBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.H
 	}
 }
 
+func WrapJsonBodyAndClaims[Req any, Claims jwt.Claims](
+	bizFn func(ctx *gin.Context, req Req, uc Claims) (JsonResult, error),
+) gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var req Req
+		if err := ctx.Bind(&req); err != nil {
+
+			return
+		}
+
+		val, ok := ctx.Get("user")
+		if !ok {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		uc, ok := val.(Claims)
+		if !ok {
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		res, err := bizFn(ctx, req, uc)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, err.Error())
+			return
+		}
+		ctx.JSON(http.StatusOK, res)
+	}
+}
 func WrapQueryBody[Req any](fn func(*gin.Context, Req) (JsonResult, error)) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req Req

@@ -6,6 +6,7 @@ import (
 	"gin-svc/internal/conf"
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
+	"gin-svc/internal/web/middleware/jwt"
 	"gin-svc/pkg/ginx"
 	"gin-svc/pkg/utils"
 	"github.com/gin-gonic/gin"
@@ -24,15 +25,16 @@ func NewNoteCtl(svc service.NoteService, cfg *conf.ConfigInstance) *NoteCtl {
 }
 
 func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
-	group.POST("/notes", ginx.WrapJsonBody[types.CreateNoteForm](n.CreateNoteCtl))
+	group.POST("/notes", ginx.WrapJsonBodyAndClaims[types.CreateNoteForm, jwt.UserClaims](n.CreateNoteCtl))
 	group.PUT("/notes/:uuid/pass", ginx.WrapResponse(n.PassNoteCtl))
 	group.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))
 	group.GET("/notes/:uuid", ginx.WrapResponse(n.NoteDetail))                               // 获取文章详情信息
 	group.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl)) // 获取推荐文章列表  后续要改成feed流模式
 }
 
-func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (result ginx.JsonResult, err error) {
-	err = n.svc.CreateNote(ctx, req.ToNoteDomain(n.cfg.Server))
+func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm, uc jwt.UserClaims) (result ginx.JsonResult, err error) {
+	fmt.Println(uc)
+	err = n.svc.CreateNote(ctx, req.ToNoteDomain(n.cfg.Server), uc.Uid)
 	if err != nil {
 		return ginx.Error(500, err.Error()), err
 	}

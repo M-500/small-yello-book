@@ -16,7 +16,7 @@ type DNote struct {
 	CommentCnt  int         `json:"commentCnt"`
 	CollectCnt  int         `json:"collectCnt"`
 	Status      NoteStatus  `json:"status"`
-	AuthorId    int         `json:"authorId"`
+	AuthorId    string      `json:"authorId"`
 	CreateTime  string      `json:"createTime"`
 	UpdateTime  string      `json:"updateTime"`
 	ImgList     []ImageNote `json:"imgList"`

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"gin-svc/internal/conf/cfg"
 	myJwt "gin-svc/internal/web/middleware/jwt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -11,12 +12,14 @@ import (
 
 type JWTMiddlewareBuilder struct {
 	myJwt.Handler
+	cfg  cfg.JwtCfg
 	path []string // 不需要权限校验的路径
 }
 
-func NewJwtMiddlewareBuilder(hdl myJwt.Handler) *JWTMiddlewareBuilder {
+func NewJwtMiddlewareBuilder(hdl myJwt.Handler, cfg cfg.JwtCfg) *JWTMiddlewareBuilder {
 	return &JWTMiddlewareBuilder{
 		Handler: hdl,
+		cfg:     cfg,
 	}
 }
 
@@ -33,14 +36,14 @@ func (j *JWTMiddlewareBuilder) Build() gin.HandlerFunc {
 		tokenStr := j.ExtractToken(ctx)
 		var uc myJwt.UserClaims
 		token, err := jwt.ParseWithClaims(tokenStr, &uc, func(token *jwt.Token) (interface{}, error) {
-			return myJwt.RCJWTKey, nil
+			return []byte(j.cfg.Secret), nil
 		})
 		if err != nil {
 			// token 不对，token 是伪造的
 			//ctx.AbortWithStatus(401)
 			ctx.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
-				"msg":  "token过期",
+				"msg":  "token校验失败",
 			})
 			ctx.Abort()
 			return
@@ -59,6 +62,7 @@ func (j *JWTMiddlewareBuilder) Build() gin.HandlerFunc {
 		}
 
 		ctx.Set("uid", uc.Uid)
+		ctx.Set("user", uc)
 		ctx.Next()
 	}
 }

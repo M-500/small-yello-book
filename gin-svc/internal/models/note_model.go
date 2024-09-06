@@ -15,7 +15,7 @@ type NoteModel struct {
 	ShareCnt    int    `json:"share_cnt" gorm:"column:share_cnt;type:int;comment:分享数"`                                   // 分享数
 	CommentCnt  int    `json:"comment_cnt" gorm:"column:comment_cnt;type:int;comment:评论数"`                               // 评论数
 	CollectCnt  int    `json:"collect_cnt" gorm:"column:collect_cnt;type:int;comment:收藏数"`                               // 收藏数
-	AuthorId    uint   `json:"author_id" gorm:"column:author_id;type:int;comment:作者ID"`
+	AuthorId    string `json:"author_id" gorm:"column:author_id;type:varchar(36);comment:作者UUID"`
 }
 
 func (NoteModel) TableName() string {

@@ -19,7 +19,10 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	engine := gin.Default()
 
 	jwtHdl := jwt.NewRedisJWTHandler(app.Cli, app.Cfg)
-	builder := middleware.NewJwtMiddlewareBuilder(jwtHdl).Build()
+	builder := middleware.NewJwtMiddlewareBuilder(jwtHdl, app.Cfg.Jwt).
+		IgnorePath("/api/v1/file/upload").
+		IgnorePath("/api/v1/feed/notes").
+		Build()
 	engine.Use(middleware.CorsMdl())
 	engine.Static("/static", "./static")
 	rg := engine.Group("/api/v1")

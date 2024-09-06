@@ -12,7 +12,7 @@ import (
 
 type NoteService interface {
 	// 创建笔记
-	CreateNote(ctx context.Context, note domain.DNote) error
+	CreateNote(ctx context.Context, note domain.DNote, uuid string) error
 
 	// 获取笔记详情
 	GetNoteDetail(ctx context.Context, id int) (domain.DNote, error)
@@ -62,7 +62,7 @@ func NewNoteSvcImpl(repo repo.NoteRepoInterface, lg ylog.Logger) NoteService {
 	return &noteSvcImpl{repo: repo, lg: lg}
 }
 
-func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote) error {
+func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid string) error {
 
 	if note.ContentType == 1 {
 		// 保存图文笔记
@@ -81,7 +81,7 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote) error {
 			img.ImgWidth, img.ImgHeight, _ = utils.GetImageSize(img.LocalPath)
 		}
 		// 1. 保存文章
-		err := n.repo.CreateNote(ctx, note)
+		err := n.repo.CreateNote(ctx, note, uuid)
 		if err != nil {
 			n.lg.Warn("create note failed", ylog.String("err", err.Error()))
 			return err
@@ -127,7 +127,7 @@ func (n *noteSvcImpl) toDomain(note models.NoteModel) domain.DNote {
 		CommentCnt: note.CommentCnt,
 		CollectCnt: note.CollectCnt,
 		Status:     domain.NoteStatus(note.Status),
-		AuthorId:   int(note.AuthorId),
+		AuthorId:   note.AuthorId,
 		CreateTime: "",
 		UpdateTime: "",
 		ImgList:    nil,
