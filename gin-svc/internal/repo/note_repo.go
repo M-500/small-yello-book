@@ -5,6 +5,7 @@ import (
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/dao"
+	"gin-svc/pkg/utils"
 	"gorm.io/gorm"
 	"strconv"
 )
@@ -15,6 +16,7 @@ type NoteRepoInterface interface {
 	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]domain.DNote, error)
 	FindAuthorInfo(ctx context.Context, authorID int) (*domain.Author, error)
 	CreateNote(ctx context.Context, note domain.DNote) error
+	ChangeStatus(ctx context.Context, noteID string, status domain.NoteStatus) error
 }
 
 func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao) NoteRepoInterface {
@@ -24,6 +26,10 @@ func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao) NoteRepoInterfac
 type noteRepo struct {
 	dao     dao.NoteDaoInterface
 	userDao dao.UserDao
+}
+
+func (n *noteRepo) ChangeStatus(ctx context.Context, noteID string, status domain.NoteStatus) error {
+	return n.dao.ChangeStatus(ctx, noteID, int(status))
 }
 
 func (n *noteRepo) FindAuthorInfo(ctx context.Context, authorID int) (*domain.Author, error) {
@@ -56,6 +62,7 @@ func (n *noteRepo) FindNoteList(ctx context.Context, status int, page, size int)
 }
 
 func (n *noteRepo) CreateNote(ctx context.Context, note domain.DNote) error {
+	note.Status = domain.NoteStateDraft // 限制死状态
 	err := n.dao.SaveNoteWithTx(ctx, n.toModel(note), n.toImageModel(note))
 	// 隐藏掉底层的错误
 	return err
@@ -63,24 +70,24 @@ func (n *noteRepo) CreateNote(ctx context.Context, note domain.DNote) error {
 
 func (n *noteRepo) toModel(note domain.DNote) models.NoteModel {
 	return models.NoteModel{
-		Model:      gorm.Model{},
-		Title:      note.NoteTitle,
-		Cover:      note.ImgList[0].ImgUrl,
-		Mark:       note.NoteContent,
-		Type:       "",
-		Status:     0,
-		LikeCnt:    0,
-		ViewCnt:    0,
-		ShareCnt:   0,
-		CommentCnt: 0,
-		CollectCnt: 0,
-		AuthorId:   0,
+		Model:       gorm.Model{},
+		UUID:        note.ID,
+		Title:       note.NoteTitle,
+		Cover:       note.ImgList[0].ImgUrl,
+		Mark:        note.NoteContent,
+		ContentType: note.ContentType,
+		Status:      0,
+		LikeCnt:     0,
+		ViewCnt:     0,
+		ShareCnt:    0,
+		CommentCnt:  0,
+		CollectCnt:  0,
+		AuthorId:    0,
 	}
 }
 
 func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
-	return domain.DNote{
-		ID:          int(note.Model.ID),
+	dNote := domain.DNote{
 		NoteTitle:   note.Title,
 		NoteContent: note.Mark,
 		Cover:       note.Cover,
@@ -93,18 +100,23 @@ func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
 		ShareCnt:   note.ShareCnt,
 		CommentCnt: note.CommentCnt,
 		CollectCnt: note.CollectCnt,
-		Status:     note.Status,
+		Status:     domain.NoteStatus(note.Status),
 		AuthorId:   int(note.AuthorId),
 		CreateTime: "",
 		UpdateTime: "",
 		ImgList:    nil,
 	}
+	if utils.IsBlank(dNote.ID) {
+		dNote.ID = utils.UUID()
+	}
+	return dNote
 }
 
 func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 	imgList := make([]models.ImageModel, 0, len(data.ImgList))
 	for _, i2 := range data.ImgList {
 		imgList = append(imgList, models.ImageModel{
+			UUID:    i2.ID,
 			Model:   gorm.Model{},
 			Width:   i2.ImgWidth,
 			OldPath: i2.LocalPath,
@@ -117,7 +129,7 @@ func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 
 func (n *noteRepo) toDMAuthor(user *models.UserModel) *domain.Author {
 	return &domain.Author{
-		ID:       int(user.ID),
+		ID:       user.GlobalNumber,
 		NickName: user.NickName,
 		Avatar:   user.Avatar,
 	}

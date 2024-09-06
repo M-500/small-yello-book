@@ -32,8 +32,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/user/index.vue')
       },
       {
-        path: '/explore/:uuid',
-        name: 'user-profile',
+        path: '/note/detail/:uuid',
+        name: 'note-detail',
         component: () => import('@/views/detail/index.vue')
       },
       {

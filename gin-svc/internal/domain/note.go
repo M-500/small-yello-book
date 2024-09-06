@@ -1,7 +1,7 @@
 package domain
 
 type DNote struct {
-	ID          int         `json:"id"`
+	ID          string      `json:"uuid"`
 	NoteTitle   string      `json:"noteTitle"`
 	NoteContent string      `json:"noteContent"`
 	ContentType int         `json:"contentType"` // 文章类型，图文/视频
@@ -15,7 +15,7 @@ type DNote struct {
 	ShareCnt    int         `json:"shareCnt"`
 	CommentCnt  int         `json:"commentCnt"`
 	CollectCnt  int         `json:"collectCnt"`
-	Status      int         `json:"status"`
+	Status      NoteStatus  `json:"status"`
 	AuthorId    int         `json:"authorId"`
 	CreateTime  string      `json:"createTime"`
 	UpdateTime  string      `json:"updateTime"`
@@ -25,13 +25,13 @@ type DNote struct {
 }
 
 type Author struct {
-	ID       int    `json:"id"`
+	ID       string `json:"id"`
 	NickName string `json:"nickName"`
 	Avatar   string `json:"avatar"`
 }
 
 type ImageNote struct {
-	ID         int    `json:"id"`
+	ID         string `json:"id"`
 	NoteId     int    `json:"noteId"`
 	ImgName    string `json:"imgName"`
 	ImgUrl     string `json:"imgUrl"`
@@ -44,5 +44,6 @@ type ImageNote struct {
 }
 
 type VideoInfo struct {
-	ID int `json:"id"`
+	ID        string `json:"id"` // 视频ID
+	LocalPath string `json:"localPath"`
 }

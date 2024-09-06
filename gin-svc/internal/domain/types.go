@@ -1,18 +1,10 @@
 package domain
 
-var NoteStates uint
+type NoteStatus int
 
 const (
-	// 草稿
-	NoteStateDraft uint = iota
-	// 审核中
-	NoteStateReviewing
-	// 审核通过
-	NoteStateReviewed
-	// 审核未通过
-	NoteStateReviewFailed
-	// 已发布
-	NoteStatePublished
-	// 已删除
-	NoteStateDeleted
+	NoteStateDraft     NoteStatus = iota
+	NoteStatePublished            // 删除
+	NoteStateRefuse               // 草稿
+	NoteStateDeleted              // 审核通过
 )

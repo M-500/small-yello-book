@@ -1,11 +1,13 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
 	"gin-svc/internal/conf"
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
 	"gin-svc/pkg/ginx"
+	"gin-svc/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,6 +25,7 @@ func NewNoteCtl(svc service.NoteService, cfg *conf.ConfigInstance) *NoteCtl {
 
 func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
 	group.POST("/notes", ginx.WrapJsonBody[types.CreateNoteForm](n.CreateNoteCtl))
+	group.PUT("/notes/:uuid/pass", ginx.WrapResponse(n.PassNoteCtl))
 	group.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))
 	group.GET("/notes/:uuid", ginx.WrapResponse(n.NoteDetail))                               // 获取文章详情信息
 	group.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl)) // 获取推荐文章列表  后续要改成feed流模式
@@ -30,6 +33,18 @@ func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
 
 func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm) (result ginx.JsonResult, err error) {
 	err = n.svc.CreateNote(ctx, req.ToNoteDomain(n.cfg.Server))
+	if err != nil {
+		return ginx.Error(500, err.Error()), err
+	}
+	return ginx.Success(), nil
+}
+
+func (n *NoteCtl) PassNoteCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
+	uuid := ctx.Param("uuid")
+	if utils.IsBlank(uuid) {
+		return ginx.Error(400, "文章ID为空"), errors.New("文章ID为空")
+	}
+	err = n.svc.PassNote(ctx, uuid)
 	if err != nil {
 		return ginx.Error(500, err.Error()), err
 	}

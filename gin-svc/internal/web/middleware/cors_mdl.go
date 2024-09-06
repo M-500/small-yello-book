@@ -12,8 +12,8 @@ import (
 
 func CorsMdl() gin.HandlerFunc {
 	return cors.New(cors.Config{
-		//AllowOrigins:     []string{"http://localhost:5173", "*"},              // 允许的前端来源
-		AllowOrigins:     []string{"http://localhost:5173"},                   // 允许前端的地址
+		AllowOrigins: []string{"*"}, // 允许的前端来源
+		//AllowOrigins:     []string{"http://localhost:5173"},                   // 允许前端的地址
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // 允许的HTTP方法
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"}, // 允许的请求头
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},          // 允许的响应头

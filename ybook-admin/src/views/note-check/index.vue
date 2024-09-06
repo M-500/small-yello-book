@@ -25,11 +25,11 @@
                          label="发布日期" />
         <el-table-column fixed="right"
                          label="操作"
-                         min-width="15">
-          <template #default>
+                         min-width="30">
+          <template #default="{row}">
             <el-button type="primary"
                        size="small"
-                       @click="passHandler">
+                       @click="passHandler(row.uuid)">
               通过
             </el-button>
             <el-button type="primary"
@@ -55,17 +55,22 @@
 
 <script lang="ts" setup>
 import YbTitle from '@/components/YbTitle/index.vue'
-import { getNoteList } from '@/api/note'
+import { getNoteList,passNote } from '@/api/note'
 import type { queryNoteListForm } from '@/api/note/type'
 import { ref } from 'vue'
 
-const passHandler = () => {
-  console.log('click')
+const passHandler = (noteId:string) => {
+  passNoteReq(noteId)
 }
 const refuseHandler = () => {
   console.log('click')
 }
 const tableData = ref([])
+
+const passNoteReq = async (noteId:string) => {
+  const res = await passNote(noteId)
+  console.log(res)
+}
 
 // 获取笔记列表
 const getNoteListData = async () => {

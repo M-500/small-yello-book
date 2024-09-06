@@ -2,11 +2,16 @@
   <div class="note-item">
     <div class="container">
       <a href=""></a>
-      <a href=""
+      <router-link :to="'/note/detail/' + props.item.id"
+                   class="cover">
+        <img :src="props.item.cover"
+             alt="">
+      </router-link>
+      <!-- <a href=""
          class="cover">
         <img :src="props.item.cover"
              alt="">
-      </a>
+      </a> -->
       <NoteFooter :item="props.item" />
     </div>
   </div>
@@ -14,6 +19,7 @@
 
 <script lang="ts" setup>
 import NoteFooter from "@/components/NoteFooter/index.vue"
+import { RouterLink } from "vue-router";
 import { defineProps } from "vue";
 
 const props:any = defineProps({

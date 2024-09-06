@@ -25,6 +25,8 @@ type NoteService interface {
 	// 更新笔记
 	UpdateNote(ctx context.Context, note domain.DNote) error
 
+	PassNote(ctx context.Context, uuid string) error
+
 	// 删除笔记
 	DeleteNote(ctx context.Context, id int) error
 
@@ -35,6 +37,10 @@ type NoteService interface {
 type noteSvcImpl struct {
 	repo repo.NoteRepoInterface
 	lg   ylog.Logger
+}
+
+func (n *noteSvcImpl) PassNote(ctx context.Context, uuid string) error {
+	return n.repo.ChangeStatus(ctx, uuid, domain.NoteStatePublished)
 }
 
 func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, limit int) ([]domain.DNote, error) {
@@ -57,29 +63,35 @@ func NewNoteSvcImpl(repo repo.NoteRepoInterface, lg ylog.Logger) NoteService {
 }
 
 func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote) error {
-	// 1. 检查所有图片的链接是否存在
-	for _, img := range note.ImgList {
-		exist := utils.IsFileExist(img.LocalPath)
-		if !exist {
-			n.lg.Warn("image not exist", ylog.String("path", img.LocalPath))
-			continue
+
+	if note.ContentType == 1 {
+		// 保存图文笔记
+		for _, img := range note.ImgList {
+			exist := utils.IsFileExist(img.LocalPath)
+			if !exist {
+				n.lg.Warn("image not exist", ylog.String("path", img.LocalPath))
+				continue
+			}
+			md5, err := utils.FileMd5(img.LocalPath)
+			if err != nil {
+				continue
+			}
+			img.HashStr = md5
+			//img., _ := utils.GetFileSize(img.LocalPath)
+			img.ImgWidth, img.ImgHeight, _ = utils.GetImageSize(img.LocalPath)
 		}
-		md5, err := utils.FileMd5(img.LocalPath)
+		// 1. 保存文章
+		err := n.repo.CreateNote(ctx, note)
 		if err != nil {
-			continue
+			n.lg.Warn("create note failed", ylog.String("err", err.Error()))
+			return err
 		}
-		img.HashStr = md5
-		//img., _ := utils.GetFileSize(img.LocalPath)
-		img.ImgWidth, img.ImgHeight, _ = utils.GetImageSize(img.LocalPath)
+		// TODO 3. 将图片迁移到OSS，因为本地图片是临时图片，不会永久保存
+		return nil
 	}
-	// 1. 保存文章
-	err := n.repo.CreateNote(ctx, note)
-	if err != nil {
-		n.lg.Warn("create note failed", ylog.String("err", err.Error()))
-		return err
-	}
-	// 3. 将图片迁移到OSS，因为本地图片是临时图片，不会永久保存
-	return err
+	// 保存视频笔记
+
+	return nil
 }
 
 func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id int) (domain.DNote, error) {
@@ -101,7 +113,7 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 
 func (n *noteSvcImpl) toDomain(note models.NoteModel) domain.DNote {
 	return domain.DNote{
-		ID:          int(note.Model.ID),
+		ID:          note.UUID,
 		NoteTitle:   note.Title,
 		NoteContent: note.Mark,
 		Cover:       note.Cover,
@@ -114,7 +126,7 @@ func (n *noteSvcImpl) toDomain(note models.NoteModel) domain.DNote {
 		ShareCnt:   note.ShareCnt,
 		CommentCnt: note.CommentCnt,
 		CollectCnt: note.CollectCnt,
-		Status:     note.Status,
+		Status:     domain.NoteStatus(note.Status),
 		AuthorId:   int(note.AuthorId),
 		CreateTime: "",
 		UpdateTime: "",

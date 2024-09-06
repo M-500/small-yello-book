@@ -17,6 +17,7 @@ type NoteDaoInterface interface {
 	HardDelete(ctx context.Context, id int) error
 
 	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]models.NoteModel, error)
+	ChangeStatus(ctx context.Context, id string, i int) error
 }
 
 func NewNoteDao(db *gorm.DB) NoteDaoInterface {
@@ -25,6 +26,10 @@ func NewNoteDao(db *gorm.DB) NoteDaoInterface {
 
 type noteDaoImpl struct {
 	db *gorm.DB
+}
+
+func (n *noteDaoImpl) ChangeStatus(ctx context.Context, id string, i int) error {
+	return n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("uuid = ?", id).Update("status", i).Error
 }
 
 func (n *noteDaoImpl) FeedNoteList(ctx context.Context, tagID int, page, size int) ([]models.NoteModel, error) {

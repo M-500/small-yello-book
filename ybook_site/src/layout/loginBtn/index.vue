@@ -8,7 +8,14 @@
                v-model="dialogTableVisible">
       <div class="content">
         <div class="left">
+          <div class="header">
+            <div class="login-reason">登录后推荐更懂你的笔记</div>
+            <img src=""
+                 alt="">
+          </div>
+          <div class="code-area">
 
+          </div>
         </div>
         <div class="right">
           <div class="title">邮箱验证码登录</div>
@@ -97,7 +104,29 @@ function handleClick () {
 				width: 400px;
 				height: 100%;
 				border-radius: 15px 0 0 15px;
-				
+				.header{
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					flex-direction: column;
+					padding: 32px 24px 16px;
+					width: 100%;
+					.login-reason{
+						height: 48px;
+						padding: 0 20px;
+						background: rgba(61,138,245,0.1);
+						color: #3d8af5;
+						border-radius: 999px;
+						font-size: 16px;
+						font-weight: 600;
+						line-height: 120%;
+						margin-bottom: 20px;
+						max-width: 100%;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+					}	
+				}
 			}
 			.right{
 				border-left: 1px solid rgba(0,0,0,0.08);
@@ -126,6 +155,10 @@ function handleClick () {
 							border-radius: 999px;
 							padding: 0 22px;
 							background: rgba(0,0,0,0.03);
+							
+						}
+						::v-deep(.is-focus){
+							box-shadow: 0 0 0 1px #ff2442;
 						}
 						.emial{
 							margin-bottom: 16px;
@@ -170,9 +203,12 @@ function handleClick () {
 							margin-top: 16px;
     					height: 48px;
 							::v-deep(.el-button){
+								border: none;
 								width: 100%;
 								border-radius: 999px;
 								height: 48px;
+								font-size: 16px;
+    						font-weight: 600;
 								background: #ff2442;
 							}
 						}
