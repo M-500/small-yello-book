@@ -85,7 +85,7 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 		}
 	}
 	// 处理登录逻辑
-	tokenStr, err := u.GenJWTToken(int64(user.ID))
+	tokenStr, err := u.GenJWTToken(user.GlobalNumber)
 	if err != nil {
 		return "", err
 	}

@@ -9,8 +9,8 @@ import (
 type Handler interface {
 	ClearToken(ctx *gin.Context) error
 	ExtractToken(ctx *gin.Context) string
-	GenJWTToken(uid int64) (string, error)
-	SetLoginToken(ctx *gin.Context, uid int64) error
+	GenJWTToken(uid string) (string, error)
+	SetLoginToken(ctx *gin.Context, uid string) error
 }
 
 type RefreshClaims struct {
@@ -20,9 +20,8 @@ type RefreshClaims struct {
 
 type UserClaims struct {
 	jwt.RegisteredClaims
-	Uid int64
+	Uid string
 	//UserAgent string
 }
 
-var JWTKey = []byte("k6CswdUm77WKcbM68UQUuxVsHSpTCwgK")
 var RCJWTKey = []byte("k6CswdUm77WKcbM68UQUuxVsHSpTCwgA")

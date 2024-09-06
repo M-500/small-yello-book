@@ -10,4 +10,5 @@ type ConfigInstance struct {
 	Email    cfg.EmailCfg    `mapstructure:"email"`
 	Logs     cfg.LogCfg      `mapstructure:"logs"`
 	Server   cfg.ServerCfg   `mapstructure:"server"`
+	Jwt      cfg.JwtCfg      `mapstructure:"jwt"`
 }

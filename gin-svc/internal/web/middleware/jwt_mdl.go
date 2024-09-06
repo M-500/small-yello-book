@@ -33,18 +33,28 @@ func (j *JWTMiddlewareBuilder) Build() gin.HandlerFunc {
 		tokenStr := j.ExtractToken(ctx)
 		var uc myJwt.UserClaims
 		token, err := jwt.ParseWithClaims(tokenStr, &uc, func(token *jwt.Token) (interface{}, error) {
-			return myJwt.JWTKey, nil
+			return myJwt.RCJWTKey, nil
 		})
 		if err != nil {
 			// token 不对，token 是伪造的
-			ctx.AbortWithStatus(401)
+			//ctx.AbortWithStatus(401)
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"code": 401,
+				"msg":  "token过期",
+			})
+			ctx.Abort()
 			return
 		}
 		if token == nil || !token.Valid {
 			// 在这里发现 access_token 过期了，生成一个新的 access_token
 
 			// token 解析出来了，但是 token 可能是非法的，或者过期了的
-			ctx.AbortWithStatus(http.StatusUnauthorized)
+			//ctx.AbortWithStatus(http.StatusUnauthorized)
+			ctx.JSON(http.StatusUnauthorized, gin.H{
+				"code": 401,
+				"msg":  "token过期",
+			})
+			ctx.Abort()
 			return
 		}
 

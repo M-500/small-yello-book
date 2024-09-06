@@ -17,6 +17,9 @@ import (
 
 func SetupWebEngine(app *internal.App) *gin.Engine {
 	engine := gin.Default()
+
+	jwtHdl := jwt.NewRedisJWTHandler(app.Cli, app.Cfg)
+	builder := middleware.NewJwtMiddlewareBuilder(jwtHdl).Build()
 	engine.Use(middleware.CorsMdl())
 	engine.Static("/static", "./static")
 	rg := engine.Group("/api/v1")
@@ -27,6 +30,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	}
 
 	privateGroup := rg.Group("")
+	privateGroup.Use(builder)
 	{
 		InitUserController(app).RegisterRoute(privateGroup)
 		InitRoleController(app).RegisterRoute(privateGroup)
@@ -45,7 +49,7 @@ func InitUserController(app *internal.App) *controller.UserController {
 	userRepo := repo.NewUserRepoInterface(userDao)
 
 	codeCache := cache.NewRedisVerificationCodeCache(app.Cli)
-	jwtHdl := jwt.NewRedisJWTHandler(app.Cli)
+	jwtHdl := jwt.NewRedisJWTHandler(app.Cli, app.Cfg)
 	userSvc := service.NewUserSvc(userRepo, codeCache, jwtHdl)
 	return controller.NewUserController(userSvc)
 }
@@ -54,7 +58,7 @@ func InitPubController(app *internal.App) *controller.PublicController {
 	userDao := dao.NewUserDao(app.DB)
 	userRepo := repo.NewUserRepoInterface(userDao)
 	codeCache := cache.NewRedisVerificationCodeCache(app.Cli)
-	jwtHdl := jwt.NewRedisJWTHandler(app.Cli)
+	jwtHdl := jwt.NewRedisJWTHandler(app.Cli, app.Cfg)
 	userSvc := service.NewUserSvc(userRepo, codeCache, jwtHdl)
 	redisVerificationCodeCache := cache.NewRedisVerificationCodeCache(app.Cli)
 	emailSvc := service.NewSMTPService(redisVerificationCodeCache)

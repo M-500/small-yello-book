@@ -12,8 +12,12 @@ const request = axios.create({
 // request 请求拦截器
 request.interceptors.request.use((config) => {
   // 请求前的处理
-
-  return config // 务必记得返回config
+  const token = localStorage.getItem('TOKEN') || sessionStorage.getItem('TOKEN')
+  if (token) {
+    // 如果存在 token，则在请求头中携带
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+  return config
 })
 
 // request 响应拦截器
