@@ -7,9 +7,9 @@ import { defineComponent, defineAsyncComponent } from 'vue'
 const PublishView = defineAsyncComponent(() => import('@/views/publish/index.vue'))
 // const HomeView = defineComponent(() => import('@/views/home/index.vue'))
 const NotesManagerView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
-const NotesDashboardView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
-const FansDashboardView = defineAsyncComponent(() => import('@/views/notes/index.vue'))
-
+const NotesDashboardView = defineAsyncComponent(() => import('@/views/notedashboard/index.vue'))
+const FansDashboardView = defineAsyncComponent(() => import('@/views/fans/index.vue'))
+const NoteCheckView = defineAsyncComponent(() => import('@/views/note-check/index.vue'))
 const router = createRouter({
   history: createWebHistory('/admin/'),
   routes: [
@@ -32,6 +32,11 @@ const router = createRouter({
           path: '/notes-manager',
           name: 'notes-manager',
           component: NotesManagerView
+        },
+        {
+          path: '/notes-check',
+          name: 'notes-check',
+          component: NoteCheckView
         },
         {
           path: '/notes-dashboard',

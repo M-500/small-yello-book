@@ -5,6 +5,7 @@ export interface publishNoteForm {
   statement: string
   publishTime: number
   private: boolean
+  contentType: number
 }
 
 export interface image {

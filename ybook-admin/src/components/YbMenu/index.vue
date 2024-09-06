@@ -18,6 +18,12 @@
         </el-icon>
         <span>笔记管理</span>
       </el-menu-item>
+      <el-menu-item index="/notes-check">
+        <el-icon>
+          <Stamp />
+        </el-icon>
+        <span>笔记审核</span>
+      </el-menu-item>
       <el-sub-menu index="1">
         <template #title>
           <el-icon>
@@ -32,6 +38,7 @@
           <el-menu-item index="1-2">粉丝数据</el-menu-item>
         </el-menu-item-group> -->
       </el-sub-menu>
+
     </el-menu>
   </div>
 </template>

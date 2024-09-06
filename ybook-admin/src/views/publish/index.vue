@@ -183,6 +183,7 @@ const pubNotForm:publishNoteForm = reactive({
   private: true,
   statement: '',
   publishTime: 0,
+  contentType: 1,
   imgList: imgList.value as image[]
 })
 

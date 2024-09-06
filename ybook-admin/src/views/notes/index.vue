@@ -114,7 +114,7 @@ onMounted(() => {
         .note-container-box{
           display: flex;
           flex-direction: column;
-          height: 100%;
+          // height: 100%;
           overflow: auto;
         }
       }
