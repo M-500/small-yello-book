@@ -8,6 +8,7 @@ import (
 
 type CreateNoteForm struct {
 	NoteTitle   string    `form:"noteTitle" json:"noteTitle" binding:"required"`      // 标记
+	ContentType int       `form:"contentType" json:"contentType" binding:"required"`  // 文章类型，图文/视频
 	NoteContent string    `form:"noteContent" json:"noteContent"  binding:"required"` // 内容
 	ImgList     []ImgItem `form:"imgList" json:"imgList" binding:"required"`          // 图片列表
 	//Address     string    `form:"address" json:"address"`

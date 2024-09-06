@@ -4,6 +4,7 @@ type DNote struct {
 	ID          int         `json:"id"`
 	NoteTitle   string      `json:"noteTitle"`
 	NoteContent string      `json:"noteContent"`
+	ContentType int         `json:"contentType"` // 文章类型，图文/视频
 	Cover       string      `json:"cover"`
 	Address     string      `json:"address"`
 	Statement   string      `json:"statement"`
@@ -19,6 +20,7 @@ type DNote struct {
 	CreateTime  string      `json:"createTime"`
 	UpdateTime  string      `json:"updateTime"`
 	ImgList     []ImageNote `json:"imgList"`
+	VideoInfo   *VideoInfo  `json:"videoInfo"`
 	AuthorInfo  *Author     `json:"author"`
 }
 
@@ -39,4 +41,8 @@ type ImageNote struct {
 	UpdateTime string `json:"updateTime"`
 	LocalPath  string `json:"localPath"`
 	HashStr    string `json:"hashStr"`
+}
+
+type VideoInfo struct {
+	ID int `json:"id"`
 }
