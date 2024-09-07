@@ -7,7 +7,7 @@ import (
 )
 
 type NoteDaoInterface interface {
-	FindById(ctx context.Context, id int) (models.NoteModel, error)
+	FindByUUID(ctx context.Context, id string) (models.NoteModel, error)
 	ListByKey(ctx context.Context, keyword string, page, size int) ([]models.NoteModel, error)
 	ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
 	Insert(ctx context.Context, note models.NoteModel) error
@@ -58,9 +58,9 @@ func (n *noteDaoImpl) SaveNoteWithTx(ctx context.Context, note models.NoteModel,
 	})
 }
 
-func (n *noteDaoImpl) FindById(ctx context.Context, id int) (models.NoteModel, error) {
+func (n *noteDaoImpl) FindByUUID(ctx context.Context, id string) (models.NoteModel, error) {
 	note := models.NoteModel{}
-	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("id = ?", id).First(&note)
+	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("uuid = ?", id).First(&note)
 	if query.Error != nil {
 		return note, query.Error
 	}

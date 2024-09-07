@@ -2,7 +2,7 @@
   <div class="note-item">
     <div class="container">
       <a href=""></a>
-      <router-link :to="'/note/detail/' + props.item.id"
+      <router-link :to="'/note/detail/' + props.item.uuid"
                    class="cover">
         <img :src="props.item.cover"
              alt="">

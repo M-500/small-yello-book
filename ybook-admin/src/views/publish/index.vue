@@ -188,6 +188,7 @@ const pubNotForm:publishNoteForm = reactive({
 })
 
 const handlePublish = () => {
+  // console.log("hahahah ",imgList)
   pubNotForm.imgList = imgList.value.map(item => ({ url: item.url, name: item.name }));
   publishNote(pubNotForm).then(res => {
     console.log(res)
@@ -221,8 +222,9 @@ function handleResetUpload() {
 }
 
 function handleImgListChanged(data: UploadUserFile[]) {
+  console.log("子组件传回来的",data)
   imgList.value = data
-  console.log('imgList', pubNotForm)
+  // console.log('我干你娘', pubNotForm)
 }
 
 function goback (){

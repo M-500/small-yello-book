@@ -3,6 +3,7 @@ package middleware
 import (
 	"gin-svc/internal/conf/cfg"
 	myJwt "gin-svc/internal/web/middleware/jwt"
+	"gin-svc/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"net/http"
@@ -28,7 +29,7 @@ func (j *JWTMiddlewareBuilder) Build() gin.HandlerFunc {
 		uri := ctx.Request.URL.Path
 		// 判断uri是否在path中
 		for _, p := range j.path {
-			if p == uri {
+			if p == uri || utils.KeyMatch2(uri, p) {
 				ctx.Next() // 直接放行
 				return
 			}

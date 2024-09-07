@@ -32,7 +32,7 @@ type Author struct {
 
 type ImageNote struct {
 	ID         string `json:"id"`
-	NoteId     int    `json:"noteId"`
+	NoteId     string `json:"noteId"`
 	ImgName    string `json:"imgName"`
 	ImgUrl     string `json:"imgUrl"`
 	ImgWidth   int    `json:"imgWidth"`
@@ -40,6 +40,7 @@ type ImageNote struct {
 	CreateTime string `json:"createTime"`
 	UpdateTime string `json:"updateTime"`
 	LocalPath  string `json:"localPath"`
+	Url        string `json:"url"`
 	HashStr    string `json:"hashStr"`
 }
 

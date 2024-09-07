@@ -22,6 +22,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	builder := middleware.NewJwtMiddlewareBuilder(jwtHdl, app.Cfg.Jwt).
 		IgnorePath("/api/v1/file/upload").
 		IgnorePath("/api/v1/feed/notes").
+		IgnorePath("/api/v1/notes/detail/:uuid").
 		Build()
 	engine.Use(middleware.CorsMdl())
 	engine.Static("/static", "./static")
@@ -80,7 +81,8 @@ func InitRoleController(app *internal.App) controller.BaseController {
 func InitNoteController(app *internal.App) *controller.NoteCtl {
 	noteDao := dao.NewNoteDao(app.DB)
 	userDao := dao.NewUserDao(app.DB)
-	noteRepo := repo.NewNoteRepo(noteDao, userDao)
+	imgDao := dao.NewImageDao(app.DB)
+	noteRepo := repo.NewNoteRepo(noteDao, userDao, imgDao)
 	svc := service.NewNoteSvcImpl(noteRepo, app.Lg)
 	return controller.NewNoteCtl(svc, app.Cfg)
 }

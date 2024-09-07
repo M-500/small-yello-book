@@ -3,15 +3,17 @@
     <div class="note-container">
       <div class="left-card">
         <div class="note-cover">
-          <!-- <el-carousel indicator-position="outside">
-            <el-carousel-item v-for="item in 4"
+          <el-carousel indicator-position="outside">
+            <el-carousel-item v-for="item in noteDetail.imgList"
                               :key="item">
-              <h3 text="2xl"
-                  justify="center">{{ item }}</h3>
+              <!-- <h3 text="2xl"
+                  justify="center">{{ item }}</h3> -->
+              <img :src="item.localPath"
+                   alt="">
             </el-carousel-item>
-          </el-carousel> -->
-          <img src="@/assets/imgs/avatar.jpeg"
-               alt="">
+          </el-carousel>
+          <!-- <img :src="noteDetail.cover"
+               alt=""> -->
         </div>
       </div>
       <div class="right-card">
@@ -35,7 +37,7 @@
         <div class="note-scoller">
           <div class="note-content">
             <div class="desc">
-              <span>库里起飞</span>
+              <span>{{noteDetail.noteTitle}}</span>
             </div>
             <div class="bottom-container">
               <span class="date">08-08 浙江</span>
@@ -56,6 +58,25 @@
 
 <script setup>
 import { RouterLink } from 'vue-router';
+import { getNoteDetailRequest } from '@/api/note';
+import { useRoute } from 'vue-router';
+import { onMounted, reactive, ref } from 'vue';
+// 获取路由参数
+const route = useRoute();
+const noteId = route.params.uuid; // 获取路由参数上的uuid
+const noteDetail = ref({});
+
+
+// 获取数据
+const getNoteDetail = async () => {
+  const res = await getNoteDetailRequest(noteId);
+  noteDetail.value = res.data;
+};
+
+
+onMounted(() => {
+  getNoteDetail();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -84,11 +105,14 @@ import { RouterLink } from 'vue-router';
 			.note-cover {
 				width: 100%;
 				height: 100%;
-				img {
-					width: 100%;
+				.outside{
 					height: 100%;
-					object-fit: cover;
 				}
+				// img {
+				// 	width: 100%;
+				// 	height: 100%;
+				// 	object-fit: cover;
+				// }
 			}
 		}
 		.right-card {
@@ -192,5 +216,16 @@ import { RouterLink } from 'vue-router';
 			}
 		}
 	}
+}
+::v-deep(.el-carousel__container){
+	height: 100%;
+	img{
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+::v-deep(.el-carousel){
+	height: 100%;
 }
 </style>

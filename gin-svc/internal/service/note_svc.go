@@ -15,7 +15,7 @@ type NoteService interface {
 	CreateNote(ctx context.Context, note domain.DNote, uuid string) error
 
 	// 获取笔记详情
-	GetNoteDetail(ctx context.Context, id int) (domain.DNote, error)
+	GetNoteDetail(ctx context.Context, noteId string) (domain.DNote, error)
 
 	// 获取所有文章列表
 	ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)
@@ -94,9 +94,8 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid st
 	return nil
 }
 
-func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id int) (domain.DNote, error) {
-	//TODO implement me
-	panic("implement me")
+func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id string) (domain.DNote, error) {
+	return n.repo.NoteDetail(ctx, id)
 }
 
 func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error) {

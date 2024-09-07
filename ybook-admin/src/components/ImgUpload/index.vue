@@ -4,6 +4,7 @@
                :action="uploadUrl"
                list-type="picture-card"
                :on-preview="handlePictureCardPreview"
+               :on-success="handleSuccess"
                :on-remove="handleRemove">
       <el-icon>
         <Plus />
@@ -26,6 +27,7 @@ import { defineProps } from 'vue';
 import type { UploadProps, UploadUserFile } from 'element-plus'
 import { defineEmits } from 'vue';
 import { computed } from 'vue';
+import { el } from 'element-plus/es/locales.mjs';
 // 获取环境变量中的 VITE_SERVER
 const serverUrl = import.meta.env.VITE_SERVER;
 
@@ -45,17 +47,23 @@ const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
 
 const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
-  console.log("TMDE 哈哈哈哈",uploadFile, uploadFiles)
+  console.log("删除咯",uploadFile, uploadFiles)
 }
 
 const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
+  console.log("TMDE 哈哈哈哈",uploadFile)
   dialogImageUrl.value = uploadFile.url!
   dialogVisible.value = true
 }
 
+const handleSuccess: UploadProps['onSuccess'] = (response, file, fileList) => {
+  console.log("上传成功",response, file, fileList)
+  file.url = response.data
+}
+
 // 监听父组件传过来的值
 watch(() =>props.coverImge,(newVal)=>{
-  // console.log("父组件传来的值：",newVal)
+  console.log("父组件传来的值：",newVal)
   fileList.value.push({
     name: 'cover.jpg',
     url: newVal
@@ -64,7 +72,6 @@ watch(() =>props.coverImge,(newVal)=>{
 })
 // 监听fileList的变化，实时传递给父组件
 watch(fileList,(newVal)=>{
-  // console.log("fileList变化了",newVal)
   emit('itemImgListChanged',newVal)
 })
 

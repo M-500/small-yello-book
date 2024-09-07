@@ -111,7 +111,6 @@ const props = defineProps({
   },
 });
 
-console.log("啊哈？", props.item);
 </script>
 
 <style lang="scss" scoped>

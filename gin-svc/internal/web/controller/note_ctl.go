@@ -28,7 +28,7 @@ func (n *NoteCtl) RegisterRoute(group *gin.RouterGroup) {
 	group.POST("/notes", ginx.WrapJsonBodyAndClaims[types.CreateNoteForm, jwt.UserClaims](n.CreateNoteCtl))
 	group.PUT("/notes/:uuid/pass", ginx.WrapResponse(n.PassNoteCtl))
 	group.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))
-	group.GET("/notes/:uuid", ginx.WrapResponse(n.NoteDetail))                               // 获取文章详情信息
+	group.GET("/notes/detail/:uuid", ginx.WrapResponse(n.NoteDetail))                        // 获取文章详情信息
 	group.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl)) // 获取推荐文章列表  后续要改成feed流模式
 }
 
@@ -76,8 +76,14 @@ func (n *NoteCtl) NoteListCtl(ctx *gin.Context, req types.QueryNoteForm) (result
 //	@return err
 func (n *NoteCtl) NoteDetail(ctx *gin.Context) (result ginx.JsonResult, err error) {
 	uuid := ctx.Param("uuid")
-	fmt.Println(uuid)
-	return ginx.Success(), nil
+	if utils.IsBlank(uuid) {
+		return ginx.Error(400, "文章ID为空"), errors.New("文章ID为空")
+	}
+	note, err := n.svc.GetNoteDetail(ctx, uuid)
+	if err != nil {
+		return ginx.Error(500, err.Error()), err
+	}
+	return ginx.SuccessJson(note), nil
 }
 
 func (n *NoteCtl) FeedNoteListCtl(ctx *gin.Context, req types.FeedNoteQueryForm) (result ginx.JsonResult, err error) {

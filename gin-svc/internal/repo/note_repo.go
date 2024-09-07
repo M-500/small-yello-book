@@ -17,15 +17,43 @@ type NoteRepoInterface interface {
 	FindAuthorInfo(ctx context.Context, authorID string) (*domain.Author, error)
 	CreateNote(ctx context.Context, note domain.DNote, uid string) error
 	ChangeStatus(ctx context.Context, noteID string, status domain.NoteStatus) error
+	NoteDetail(ctx context.Context, noteID string) (domain.DNote, error)
 }
 
-func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao) NoteRepoInterface {
-	return &noteRepo{dao: dao, userDao: userDao}
+func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao, imgDao dao.ImageDao) NoteRepoInterface {
+	return &noteRepo{
+		dao:     dao,
+		imgDao:  imgDao,
+		userDao: userDao}
 }
 
 type noteRepo struct {
 	dao     dao.NoteDaoInterface
+	imgDao  dao.ImageDao
 	userDao dao.UserDao
+}
+
+func (n *noteRepo) NoteDetail(ctx context.Context, noteID string) (domain.DNote, error) {
+	note, err := n.dao.FindByUUID(ctx, noteID)
+	if err != nil {
+		return domain.DNote{}, err
+	}
+	res := n.toDMNote(note)
+	// 获取图片列表 / 视频信息
+	res.ImgList = make([]domain.ImageNote, 0)
+	imgList, err := n.imgDao.FindListByNoteId(ctx, noteID)
+	if err != nil {
+		return res, err
+	}
+	imgs := make([]domain.ImageNote, 0, len(imgList))
+	for _, data := range imgList {
+		//tmp := n.toImageNote(data)
+		//tmp.Url = "http://127.0.0.1:8122" + tmp.LocalPath
+		imgs = append(imgs, n.toImageNote(data))
+	}
+	res.ImgList = imgs
+	// 获取用户信息
+	return res, nil
 }
 
 func (n *noteRepo) ChangeStatus(ctx context.Context, noteID string, status domain.NoteStatus) error {
@@ -89,9 +117,11 @@ func (n *noteRepo) toModel(note domain.DNote) models.NoteModel {
 
 func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
 	dNote := domain.DNote{
+		ID:          note.UUID,
 		NoteTitle:   note.Title,
 		NoteContent: note.Mark,
 		Cover:       note.Cover,
+		ContentType: note.ContentType,
 		//Address:     note.Address,
 		Statement: strconv.Itoa(note.Status),
 		//PublishTime: note.Model.CreatedAt,
@@ -105,7 +135,6 @@ func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
 		AuthorId:   note.AuthorId,
 		CreateTime: "",
 		UpdateTime: "",
-		ImgList:    nil,
 	}
 	if utils.IsBlank(dNote.ID) {
 		dNote.ID = utils.UUID()
@@ -118,6 +147,7 @@ func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 	for _, i2 := range data.ImgList {
 		imgList = append(imgList, models.ImageModel{
 			UUID:    i2.ID,
+			NoteId:  data.ID,
 			Model:   gorm.Model{},
 			Width:   i2.ImgWidth,
 			OldPath: i2.LocalPath,
@@ -126,6 +156,17 @@ func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 		})
 	}
 	return imgList
+}
+
+func (n *noteRepo) toImageNote(data models.ImageModel) domain.ImageNote {
+	return domain.ImageNote{
+		ID:        data.UUID,
+		NoteId:    data.NoteId,
+		ImgWidth:  data.Width,
+		LocalPath: "http://127.0.0.1:8122" + data.OldPath,
+		HashStr:   data.Hash,
+		ImgHeight: data.Size,
+	}
 }
 
 func (n *noteRepo) toDMAuthor(user *models.UserModel) *domain.Author {
