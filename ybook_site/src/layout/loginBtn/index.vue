@@ -35,14 +35,15 @@
               <el-form-item class="code">
                 <el-input placeholder="请输入验证码"
                           v-model="form.ver_code"></el-input>
-                <span class="verfi-code">获取验证码</span>
+                <span class="verfi-code"
+                      @click="getEmailCode">获取验证码</span>
               </el-form-item>
               <div class="err-msg">
 
               </div>
               <el-form-item class="btn">
                 <el-button type="primary"
-                           @click="onSubmit">登陆</el-button>
+                           @click="loginHdl">登陆</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -68,6 +69,14 @@ let $router = useRouter()
 function handleClick () {
   dialogTableVisible.value = true
   // $router.push('/login')
+}
+
+const loginHdl = () => {
+	console.log('login')
+}
+
+const getEmailCode = () => {
+	console.log('get email code')
 }
 </script>
 
@@ -179,6 +188,8 @@ function handleClick () {
 							position: relative;
 							margin-bottom: 16px;
 							.verfi-code{
+								// 鼠标悬浮变手
+								cursor: pointer;
 								position: absolute;
 								height: 48px;
 								right: 20px;

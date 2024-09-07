@@ -53,6 +53,11 @@ func (n *noteRepo) NoteDetail(ctx context.Context, noteID string) (domain.DNote,
 	}
 	res.ImgList = imgs
 	// 获取用户信息
+	user, err := n.FindAuthorInfo(ctx, note.AuthorId)
+	if err != nil {
+		return res, err
+	}
+	res.AuthorInfo = user
 	return res, nil
 }
 

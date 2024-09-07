@@ -79,9 +79,14 @@ func (n *noteDaoImpl) ListByKey(ctx context.Context, keyword string, page, size 
 
 func (n *noteDaoImpl) ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error) {
 	var notes []models.NoteModel
-	query := n.db.WithContext(ctx).Model(&models.NoteModel{}).
-		Where("status = ?", status).Limit(size).Offset((page - 1) * size).
-		Find(&notes)
+	query := n.db.WithContext(ctx).Model(&models.NoteModel{})
+	if status == -1 {
+		query.Limit(size).Offset((page - 1) * size).
+			Find(&notes)
+	} else {
+		query.Where("status = ?", status).Limit(size).Offset((page - 1) * size).
+			Find(&notes)
+	}
 	if err := query.Error; err != nil {
 		return nil, err
 	}

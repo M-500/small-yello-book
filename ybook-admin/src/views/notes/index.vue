@@ -69,7 +69,7 @@ const handleClick = (tab:TabsPaneContext, event: Event) => {
 // 获取笔记列表
 const getNoteListData = async () => {
   const params: queryNoteListForm = {
-    state: 0,
+    state: -1,
     page: 1,
     size: 10
   }

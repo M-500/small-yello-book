@@ -21,6 +21,29 @@
         <el-table-column prop="name"
                          label="作者"
                          width="180" />
+        <el-table-column prop="noteTitle"
+                         label="标题"
+                         width="180" />
+        <el-table-column prop="noteContent"
+                         label="内容"
+                         width="180" />
+        <el-table-column prop="name"
+                         label="状态"
+                         width="180">
+          <template #default="{row}">
+            <el-tag v-if="row.status === 0"
+                    type="primary">待审核</el-tag>
+            <el-tag v-else-if="row.status === 1"
+                    type="success">审核通过</el-tag>
+            <el-tag v-else-if="row.status === 2"
+                    type="danger">未通过</el-tag>
+            <el-tag v-else-if="row.status === 3"
+                    type="danger">已删除</el-tag>
+            <el-tag v-else
+                    type="info">其他</el-tag>
+          </template>
+
+        </el-table-column>
         <el-table-column prop="address"
                          label="发布日期" />
         <el-table-column fixed="right"
@@ -28,13 +51,19 @@
                          min-width="30">
           <template #default="{row}">
             <el-button type="primary"
+                       v-if="row.status === 0"
                        size="small"
                        @click="passHandler(row.uuid)">
               通过
             </el-button>
-            <el-button type="primary"
+            <el-button type="danger"
+                       v-if="row.status === 0"
                        @click="refuseHandler"
                        size="small">拒绝</el-button>
+            <el-button v-if="row.status === 1"
+                       type="danger"
+                       @click="refuseHandler"
+                       size="small">下架</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -75,7 +104,7 @@ const passNoteReq = async (noteId:string) => {
 // 获取笔记列表
 const getNoteListData = async () => {
   const params: queryNoteListForm = {
-    state: 0,
+    state: -1,
     page: 1,
     size: 10
   }

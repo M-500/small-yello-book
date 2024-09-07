@@ -3,17 +3,19 @@
     <div class="note-container">
       <div class="left-card">
         <div class="note-cover">
-          <el-carousel indicator-position="outside">
-            <el-carousel-item v-for="item in noteDetail.imgList"
-                              :key="item">
-              <!-- <h3 text="2xl"
-                  justify="center">{{ item }}</h3> -->
-              <img :src="item.localPath"
-                   alt="">
-            </el-carousel-item>
-          </el-carousel>
-          <!-- <img :src="noteDetail.cover"
-               alt=""> -->
+          <template v-if="noteDetail.contentType === 1">
+            <el-carousel indicator-position="outside">
+              <el-carousel-item v-for="item in noteDetail.imgList"
+                                :key="item">
+                <img class="note-img"
+                     :src="item.localPath"
+                     alt="">
+              </el-carousel-item>
+            </el-carousel>
+          </template>
+          <template v-else>
+            <!-- 展示视频了 -->
+          </template>
         </div>
       </div>
       <div class="right-card">
@@ -26,7 +28,8 @@
                      alt="">
               </router-link>
               <router-link class="name">
-                <span class="username">吴狗林</span>
+                <!-- <span class="username">{{ noteDetail.value.author.nickName }}</span> -->
+                <span class="username">王木木</span>
               </router-link>
             </div>
             <div class="follow-btn">
@@ -36,8 +39,11 @@
         </div>
         <div class="note-scoller">
           <div class="note-content">
+            <div class="title">
+              {{noteDetail.noteTitle}}
+            </div>
             <div class="desc">
-              <span>{{noteDetail.noteTitle}}</span>
+              <span class="detail-desc">{{ noteDetail.noteContent }}</span>
             </div>
             <div class="bottom-container">
               <span class="date">08-08 浙江</span>
@@ -47,6 +53,11 @@
           <div class="comment-el">
             <div class="comment-container">
               <div class="total">共360条评论</div>
+              <div class="list-container">
+                <comment-card></comment-card>
+                <comment-card></comment-card>
+                <comment-card></comment-card>
+              </div>
             </div>
           </div>
         </div>
@@ -60,7 +71,9 @@
 import { RouterLink } from 'vue-router';
 import { getNoteDetailRequest } from '@/api/note';
 import { useRoute } from 'vue-router';
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, ref } from 'vue';
+
+import CommentCard from '@/components/comment-card/index.vue';
 // 获取路由参数
 const route = useRoute();
 const noteId = route.params.uuid; // 获取路由参数上的uuid
@@ -98,21 +111,27 @@ onMounted(() => {
 		height: 100%;
 		border-radius: 16px;
 		overflow: hidden;
+		border:1px solid rgba(0,0,0,0.08);
 		box-shadow: 0 0 10px rgba(0,0,0,0.1);
 		.left-card {
 			width: 65%;
 			height: 100%;
+			border-right: 1px solid rgba(0,0,0,0.1);;
 			.note-cover {
 				width: 100%;
 				height: 100%;
 				.outside{
 					height: 100%;
+					.note-img {
+						max-width: 100%;
+    				max-height: 100%;
+						width: 100%;
+						height: 100%;
+						object-fit: contain;
+    				overflow: clip;
+					}
 				}
-				// img {
-				// 	width: 100%;
-				// 	height: 100%;
-				// 	object-fit: cover;
-				// }
+				
 			}
 		}
 		.right-card {
@@ -186,6 +205,12 @@ onMounted(() => {
 				flex-grow: 1;  // 自适应高度
 				.note-content{
 					padding: 0 20px 20px;
+					.title{
+						margin-bottom: 8px;
+						font-weight: 600;
+						font-size: 18px;
+						line-height: 140%;
+					}
 					.desc{
 						margin: 0;
 						font-weight: 400;
@@ -194,6 +219,14 @@ onMounted(() => {
 						color: #333;
 						white-space: pre-wrap;
 						overflow-wrap: break-word;
+						.detail-desc{
+							margin-top: 12px;
+							span{
+								font-size: 16px;
+								line-height: 150%;
+								color: #333;
+							}
+						}
 					}
 					.bottom-container{
 						display: flex;
@@ -205,12 +238,26 @@ onMounted(() => {
 							line-height: 120%;
 						}
 					}
-					.divider{
+					
+				}
+				.divider{
 						margin: 0 20px;
 						list-style: none;
 						height: 1px;
 						border: solid rgba(0,0,0,0.08);
 						border-width: 1px 0 0;
+				}
+				.comment-el{
+					position: relative;
+					// height: 100%;
+					.comment-container{
+						padding: 16px 8px;
+						.total{
+							font-size: 14px;
+							color: rgba(51,51,51,0.6);
+							margin-left: 8px;
+							margin-bottom: 12px;
+						}
 					}
 				}
 			}
@@ -227,5 +274,9 @@ onMounted(() => {
 }
 ::v-deep(.el-carousel){
 	height: 100%;
+}
+::v-deep(.el-carousel__container img){
+	// height: 100%;
+	object-fit: contain;
 }
 </style>
