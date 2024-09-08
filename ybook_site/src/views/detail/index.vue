@@ -3,7 +3,7 @@
     <div class="note-container">
       <div class="left-card">
         <div class="note-cover">
-          <template v-if="noteDetail.contentType === 1">
+          <template v-if="noteDetail.contentType === 2">
             <el-carousel indicator-position="outside">
               <el-carousel-item v-for="item in noteDetail.imgList"
                                 :key="item">
@@ -15,6 +15,13 @@
           </template>
           <template v-else>
             <!-- 展示视频了 -->
+            <video width="100%"
+                   style="background-color: #000"
+                   height="100%"
+                   controls>
+              <source src="http://127.0.0.1:8122/static/1725721792_%E2%80%9C%E6%88%91%E4%B8%8D%E9%9C%80%E8%A6%81%E5%90%91%E4%BD%A0%E8%A7%A3%E9%87%8A!%E2%80%9D.mp4"
+                      type="video/mp4">
+            </video>
           </template>
         </div>
       </div>
@@ -61,7 +68,11 @@
             </div>
           </div>
         </div>
-        <div class="fotter"></div>
+        <div class="fotter">
+          <div class="bar-container">
+            <comment-fotter></comment-fotter>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -74,6 +85,7 @@ import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 
 import CommentCard from '@/components/comment-card/index.vue';
+import CommentFotter from '@/components/comment-fotter/index.vue';
 // 获取路由参数
 const route = useRoute();
 const noteId = route.params.uuid; // 获取路由参数上的uuid
@@ -259,6 +271,18 @@ onMounted(() => {
 							margin-bottom: 12px;
 						}
 					}
+				}
+			}
+			.fotter{
+				padding: 16px 16px env(safe-area-inset-bottom); // 底部安全区域
+				border-top: 1px solid rgba(0,0,0,0.08);  // 顶部边框
+				flex-basis: unset; // 重置flex-basis 用来撑开高度
+				height: unset;  // 重置高度 用来撑开高度
+				.bar-container{
+					width: 100%;
+    			position: relative;
+					// height: 100%;
+					// width: 100%;
 				}
 			}
 		}
