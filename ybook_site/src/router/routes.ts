@@ -26,7 +26,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import('@/views/notices/index.vue')
       },
       {
-        path: '/user/profile/:id',
+        path: '/user/profile/:uuid',
         name: 'user-profile',
         component: () => import('@/views/user/index.vue')
       },

@@ -42,8 +42,11 @@ func (u *UserController) FindUserInfo(ctx *gin.Context) (result ginx.JsonResult,
 	if utils.IsBlank(userUID) {
 		return ginx.Error(10011, "参数错误"), nil
 	}
-
-	return ginx.JsonResult{}, nil
+	user, err := u.userSvc.FindByUserUUID(ctx, userUID)
+	if err != nil {
+		return ginx.Error(10011, "查询失败"), err
+	}
+	return ginx.SuccessJson(user), nil
 }
 
 func (u *UserController) AdminUserDetail(ctx *gin.Context, claim jwt.UserClaims) (result ginx.JsonResult, err error) {
