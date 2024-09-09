@@ -11,7 +11,9 @@ enum UserApi {
   // 退出登录
   LogoutAPI = '/logout',
   // 获取验证码
-  GetCaptchaAPI = '/api/v1/na/email/send'
+  GetCaptchaAPI = '/api/v1/na/email/send',
+  // 获取用户信息
+  GET_USER_INFO = '/api/v1/users/info'
 }
 
 // 对外暴露请求函数
@@ -24,4 +26,9 @@ export const loginRequest = (data: loginForm) => {
 // 获取邮箱验证码
 export const getCaptchaRequest = (data: emailForm) => {
   return request.post(UserApi.GetCaptchaAPI, data)
+}
+
+// 获取用户信息
+export const getUserInfo = () => {
+  return request.get(UserApi.GET_USER_INFO)
 }

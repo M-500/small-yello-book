@@ -1,4 +1,4 @@
-import { loginRequest } from '@/api/user/index'
+import { loginRequest, getUserInfo } from '@/api/user/index'
 import { type loginForm } from '@/api/user/types'
 import { type loginResponseData } from '@/api/user/types'
 import { defineStore } from 'pinia'
@@ -7,7 +7,7 @@ const useUserStore = defineStore({
   id: 'User',
   state: () => ({
     token: localStorage.getItem('x-token') || '',
-    userInfo: {}
+    userInfo: JSON.parse(localStorage.getItem('USER_INFO') || '{}')
   }),
   // 计算属性
   getters: {
@@ -28,6 +28,15 @@ const useUserStore = defineStore({
         return res.msg
       }
     },
+    async queryUserInfo() {
+      const result: any = await getUserInfo()
+      if (result.code === 0) {
+        this.setUserInfo(result.data)
+        return 'ok'
+      } else {
+        return Promise.reject(new Error(result.data.data.msg))
+      }
+    },
     userLogout() {
       this.clearToke()
     },
@@ -45,6 +54,7 @@ const useUserStore = defineStore({
     },
     setUserInfo(userInfo: any) {
       this.userInfo = userInfo
+      localStorage.setItem('USER_INFO', JSON.stringify(userInfo))
     }
   }
 })

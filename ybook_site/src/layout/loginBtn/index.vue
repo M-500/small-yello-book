@@ -89,6 +89,7 @@ const loginHdl = async () => {
 	try {
 		await userStore.login(form.value)
 		ElNotification.success('登录成功')
+		await userStore.queryUserInfo()
 	}catch (err) {
 		ElNotification.error('登录失败')
 	}

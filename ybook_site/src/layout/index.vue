@@ -4,7 +4,7 @@
       <Logo />
       <div class="sider_main">
         <Channel />
-        <card />
+        <card v-if="!userStore.getToken" />
       </div>
     </div>
 
@@ -18,13 +18,14 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import Logo from "./logo/index.vue";
 import Channel from "./channel/index.vue";
 import card from "./card/index.vue";
 import search from "../components/search/index.vue";
 import { RouterView } from 'vue-router'
-
+import useUserStore from '@/stores/modules/user';
+const userStore = useUserStore();
 </script>
 
 <style scoped lang="scss" >

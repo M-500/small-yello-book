@@ -27,9 +27,9 @@
     </router-link>
     <router-link class="item"
                  v-if="userStore.isLogin()"
-                 to="/user/profile/1">
+                 :to="`/user/profile/${userInfo.globalNumber}`">
       <div class="icon">
-        <img src="../../assets/imgs/avatar.jpeg"
+        <img :src="userInfo.avatar ? userInfo.avatar :'../../assets/imgs/avatar.jpeg'"
              class="avatar"
              alt="" />
       </div>
@@ -43,8 +43,10 @@
 import useUserStore from '@/stores/modules/user';
 import login_btn from "../loginBtn/index.vue";
 import { RouterLink } from "vue-router";
+import { ref } from 'vue';
 
 const userStore = useUserStore();
+const userInfo  = ref(userStore.getUserInfo);
 
 
 </script>
