@@ -40,7 +40,11 @@
               </router-link>
             </div>
             <div class="follow-btn">
-              <button>关注</button>
+              <button @click="handlerFollowBtn(1)"
+                      v-if="!isFollowed"
+                      class="active">关注</button>
+              <button v-else
+                      @click="handlerFollowBtn(0)">已关注</button>
             </div>
           </div>
         </div>
@@ -90,12 +94,22 @@ import CommentFotter from '@/components/comment-fotter/index.vue';
 const route = useRoute();
 const noteId = route.params.uuid; // 获取路由参数上的uuid
 const noteDetail = ref({});
+const isFollowed = ref(false); // 是否关注
 
 
 // 获取数据
 const getNoteDetail = async () => {
   const res = await getNoteDetailRequest(noteId);
   noteDetail.value = res.data;
+};
+
+// 点击关注按钮
+const handlerFollowBtn = (data) => {
+  if (data === 1) {
+    isFollowed.value = true;
+  } else {
+    isFollowed.value = false;
+  }
 };
 
 
@@ -204,9 +218,15 @@ onMounted(() => {
 							line-height: 16px;
 							padding: 0 24px;
 							height: 40px;
+							// background-color: $primary-color-red;
+							border-radius: 100px;
+							background: transparent;
+							border: 1px solid rgba(0,0,0,0.08);
+							color: rgba(51,51,51,0.8);
+						}
+						.active{
 							background-color: $primary-color-red;
 							color: #fff;
-							border-radius: 100px;
 						}
 					}
 				}
