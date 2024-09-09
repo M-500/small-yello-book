@@ -3,7 +3,7 @@
     <div class="note-container">
       <div class="left-card">
         <div class="note-cover">
-          <template v-if="noteDetail.contentType === 2">
+          <template v-if="noteDetail.contentType === 1">
             <el-carousel indicator-position="outside">
               <el-carousel-item v-for="item in noteDetail.imgList"
                                 :key="item">
@@ -204,7 +204,7 @@ onMounted(() => {
 							line-height: 16px;
 							padding: 0 24px;
 							height: 40px;
-							background-color: #ff2e4d;
+							background-color: $primary-color-red;
 							color: #fff;
 							border-radius: 100px;
 						}

@@ -167,7 +167,7 @@ const getEmailCode = () => {
 							
 						}
 						::v-deep(.is-focus){
-							box-shadow: 0 0 0 1px #ff2442;
+							box-shadow: 0 0 0 1px $primary-color-red;
 						}
 						.emial{
 							margin-bottom: 16px;
@@ -181,7 +181,7 @@ const getEmailCode = () => {
 								top: 10px;
 								align-content: center;
 								font-size: 16px;
-								color: #ff2442;
+								color: $primary-color-red;
 							}
 						}
 						.code{
@@ -196,14 +196,14 @@ const getEmailCode = () => {
 								top: 0;
 								align-content: center;
 								font-size: 16px;
-								color: #ff2442;
+								color: $primary-color-red;
 							}
 						}
 						.err-msg{
 							margin-top: 9.5px;
 							height: 28px;
 							line-height: 140%;
-							color: #ff2442;
+							color: $primary-color-red;
 							font-size: 14px;
 							font-weight: 400;
 							display: flex;
@@ -220,7 +220,7 @@ const getEmailCode = () => {
 								height: 48px;
 								font-size: 16px;
     						font-weight: 600;
-								background: #ff2442;
+								background: $primary-color-red;
 							}
 						}
 					}

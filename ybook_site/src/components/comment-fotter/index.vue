@@ -21,19 +21,36 @@
       <!-- 右侧点赞收藏 -->
       <div class="interact-container"
            v-show="!inputActive">
-        点赞
+        <div class="box">
+          <svg-icon name="like"
+                    height="32"></svg-icon>
+          <span class="count">0</span>
+        </div>
+        <div class="box">
+          <svg-icon name="collect"
+                    height="32"></svg-icon>
+          <span class="count">收藏</span>
+        </div>
+        <div class="box"
+             @click="inputHandler">
+          <svg-icon name="comment"
+                    height="32"></svg-icon>
+          <span class="count">评论</span>
+        </div>
       </div>
     </div>
     <div class="bottom-box"
          v-if="inputActive">
       <div class="btn-box">
         <div class="left-area">
-          <button>表情</button>
-          <button>图片</button>
-          <button>视频</button>
+          <div class="box">
+            <SvgIcon name="pic"
+                     width="32"></SvgIcon>
+          </div>
         </div>
         <div class="right-area">
-          <button class="send">发送</button>
+          <button class="send"
+                  :class="inputing ? 'active': ''">发送</button>
           <button class="cancel"
                   @click="cancelSub">取消</button>
         </div>
@@ -48,6 +65,7 @@
 import { tr } from 'element-plus/es/locales.mjs';
 import { ref } from 'vue';
 const inputActive = ref(false)
+const inputing = ref(false) // 是否有输入文字
 
 const inputHandler = () => {
   inputActive.value = true
@@ -56,6 +74,8 @@ const inputHandler = () => {
 const cancelSub = () => {
   inputActive.value = false
 }
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -75,7 +95,7 @@ const cancelSub = () => {
 				min-height: 40px;
 				.content-input{
 					cursor: text;  // 文本输入光标
-					caret-color: #ff2442;
+					caret-color: $primary-color-red;
 					margin: 0;
 					width: 100%;
 					min-height: 40px;
@@ -125,11 +145,33 @@ const cancelSub = () => {
 					}
 				}
 			}
+			.interact-container{
+				display: flex;
+				justify-content: flex-end;
+				.box{
+					height: 40px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					border-radius: 100%;
+					padding: 0 8px;
+					// background: rgba(0,0,0,0.08);
+					.count{
+						margin-left: 4px;
+						margin-right: 0;
+						font-weight: 500;
+						font-size: 14px;
+					}
+				}
+			}
+			
 			
 		}
 	.bottom-box{
 		display: flex;
 		width: 100%;
+		margin-bottom: 16px; 
 		justify-content: space-between;
 		.btn-box{
 			display: flex;
@@ -137,6 +179,22 @@ const cancelSub = () => {
 			justify-content: space-between;
 			.left-area{
 				flex: 1;
+				display: flex;
+				justify-content: flex-start;
+				.box{
+					width: 40px;
+					height: 40px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+					border-radius: 100%;
+					// background: rgba(0,0,0,0.08);
+					svg{
+						width: 24px;
+						height: 24px;
+					}
+				}
 			}
 			.right-area{
 				display: flex;
@@ -164,7 +222,7 @@ const cancelSub = () => {
 					background:#ff9aa2;	
 				}
 				.active{
-    			background:#ff2442;	
+    			background:$primary-color-red;	
 				}
 			}
 		}

@@ -124,7 +124,7 @@ import { RouterLink } from "vue-router";
 					font-size: 12px;
 					line-height: 24px;
 					height: 24px;
-					color: #ff2442;
+					color: $primary-color-red;
 					display: inline-block;
 				}
 			}
