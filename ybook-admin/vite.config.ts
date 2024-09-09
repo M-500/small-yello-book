@@ -14,7 +14,6 @@ export default defineConfig(({ mode }) => {
     base: '/admin/', // 设置 base 路径为 /admin/
     plugins: [
       vue(),
-
       // 加上面的代码
       createSvgIconsPlugin({
         // 后续icon都放到 src/assets/icons 这个文件夹下

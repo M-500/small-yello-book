@@ -22,14 +22,34 @@
       <div class="interact-container"
            v-show="!inputActive">
         <div class="box">
-          <svg-icon name="like"
-                    height="32"></svg-icon>
-          <span class="count">0</span>
+          <template v-if="!liked">
+            <svg-icon name="like"
+                      @click="handleLike(1)"
+                      height="32"></svg-icon>
+            <span class="count"
+                  @click="handleLike(1)">点赞</span>
+          </template>
+          <template v-else>
+            <svg-icon name="liked"
+                      @click="handleLike(0)"
+                      height="32"></svg-icon>
+            <span class="count">1</span>
+          </template>
         </div>
         <div class="box">
-          <svg-icon name="collect"
-                    height="32"></svg-icon>
-          <span class="count">收藏</span>
+          <template v-if="!collectd">
+            <svg-icon name="collect"
+                      @click="handleCollect(1)"
+                      height="36"></svg-icon>
+            <span class="count"
+                  @click="handleCollect(1)">收藏</span>
+          </template>
+          <template v-else>
+            <svg-icon name="collected"
+                      @click="handleCollect(0)"
+                      height="36"></svg-icon>
+            <span class="count">1</span>
+          </template>
         </div>
         <div class="box"
              @click="inputHandler">
@@ -66,15 +86,36 @@ import { tr } from 'element-plus/es/locales.mjs';
 import { ref } from 'vue';
 const inputActive = ref(false)
 const inputing = ref(false) // 是否有输入文字
+const liked = ref(false) // 是否点赞
+const collectd = ref(false) // 是否收藏
 
+// 点击评论按钮
 const inputHandler = () => {
   inputActive.value = true
 }
 
+// 取消评论
 const cancelSub = () => {
   inputActive.value = false
 }
 
+// 点击 喜欢 按钮
+const handleLike = (data) => {
+  if (data === 1) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
+}
+
+// 点击 收藏 按钮
+const handleCollect = (data) => {
+  if (data === 1) {
+    collectd.value = true
+  } else {
+    collectd.value = false
+  }
+}
 
 </script>
 
