@@ -64,9 +64,10 @@ import { useRouter } from 'vue-router';
 import { ref } from 'vue';
 import {getCaptchaRequest} from '@/api/user/index';
 import type { emailForm } from '@/api/user/types';
-import { ElMessage } from 'element-plus';
+import { ElMessage,ElNotification } from 'element-plus';
+import useUserStore from '@/stores/modules/user';
 const dialogTableVisible = ref(true)
-
+let userStore = useUserStore()
 const canSend = ref(true);  // 是否可以发送邮件验证码
 
 
@@ -84,8 +85,13 @@ function handleClick () {
   // $router.push('/login')
 }
 
-const loginHdl = () => {
-	console.log('login')
+const loginHdl = async () => {
+	try {
+		await userStore.login(form.value)
+		ElNotification.success('登录成功')
+	}catch (err) {
+		ElNotification.error('登录失败')
+	}
 }
 
 const getEmailCode = (event:any) => {

@@ -1,10 +1,13 @@
 package controller
 
 import (
+	"errors"
+	"fmt"
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
 	"gin-svc/internal/types/resp"
 	"gin-svc/pkg/ginx"
+	"gin-svc/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -51,15 +54,15 @@ func (p *PublicController) EmailLoginCtl(ctx *gin.Context, req types.EmailLoginF
 // @Router /api/v1/na/email/send [post]
 func (p *PublicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (result ginx.JsonResult, err error) {
 	// 校验邮箱格式是否合法
-	//email := utils.IsValidEmail(req.Email)
-	//if !email {
-	//	return ginx.Error(10011, "邮箱格式不合法"), errors.New("邮箱格式不合法")
-	//}
-	//err = p.smtpSvc.LoginEmailSend(ctx, req.Email)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	return ginx.Error(10011, err.Error()), err
-	//}
+	email := utils.IsValidEmail(req.Email)
+	if !email {
+		return ginx.Error(10011, "邮箱格式不合法"), errors.New("邮箱格式不合法")
+	}
+	err = p.smtpSvc.LoginEmailSend(ctx, req.Email)
+	if err != nil {
+		fmt.Println(err)
+		return ginx.Error(10011, err.Error()), err
+	}
 	return ginx.Success(), err
 }
 

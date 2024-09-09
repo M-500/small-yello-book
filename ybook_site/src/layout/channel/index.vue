@@ -26,6 +26,7 @@
       <div class="title">通知</div>
     </router-link>
     <router-link class="item"
+                 v-if="userStore.isLogin()"
                  to="/user/profile/1">
       <div class="icon">
         <img src="../../assets/imgs/avatar.jpeg"
@@ -34,14 +35,18 @@
       </div>
       <div class="title">我</div>
     </router-link>
-    <login_btn />
+    <login_btn v-if="!userStore.isLogin()" />
   </div>
 </template>
 
-<script setup>
-
+<script lang="ts" setup>
+import useUserStore from '@/stores/modules/user';
 import login_btn from "../loginBtn/index.vue";
 import { RouterLink } from "vue-router";
+
+const userStore = useUserStore();
+
+
 </script>
 
 <style lang="scss" scoped>
