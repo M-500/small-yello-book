@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
   // 获取环境变量
   const env = loadEnv(mode, process.cwd())
   return {
+    base: '/ybook/',
     plugins: [
       vue(),
       // 配置自定义插件

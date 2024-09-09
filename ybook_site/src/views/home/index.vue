@@ -40,8 +40,8 @@ onMounted(() => {
     </div>
 
     <div class="note_container">
-      <note_item v-for="item in noteList"
-                 :key="item.id"
+      <note_item v-for="(item,index) in noteList"
+                 :key="index"
                  :item="item" />
     </div>
 

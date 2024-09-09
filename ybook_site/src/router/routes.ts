@@ -1,7 +1,7 @@
 // 对外暴露配置路由（常量路由 ） 存放所有路由的文件
 
 import component from 'element-plus/es/components/tree-select/src/tree-select-option.mjs'
-import path from 'path'
+import 'path'
 import type { RouteRecordRaw } from 'vue-router'
 
 export const constantRoutes: Array<RouteRecordRaw> = [

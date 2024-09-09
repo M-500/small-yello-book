@@ -12,7 +12,7 @@
         <!-- 作者名字 -->
         <div class="user_info">
           <router-link class="nickname"
-                       to="">三冬四夏</router-link>
+                       to="/">三冬四夏</router-link>
           <span class="user_tag">作者</span>
         </div>
         <!-- 副标题 -->

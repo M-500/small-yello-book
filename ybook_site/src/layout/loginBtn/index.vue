@@ -34,9 +34,11 @@
               </el-form-item>
               <el-form-item class="code">
                 <el-input placeholder="请输入验证码"
+                          :disabled="canSend"
                           v-model="form.ver_code"></el-input>
-                <span class="verfi-code"
-                      @click="getEmailCode">获取验证码</span>
+                <button class="verfi-code"
+                        :disabled="!canSend"
+                        @click="getEmailCode">{{ buttonText }}</button>
               </el-form-item>
               <div class="err-msg">
 
@@ -60,11 +62,22 @@
 <script setup lang="ts" name="loginBtn">
 import { useRouter } from 'vue-router';
 import { ref } from 'vue';
+import {getCaptchaRequest} from '@/api/user/index';
+import type { emailForm } from '@/api/user/types';
+import { ElMessage } from 'element-plus';
 const dialogTableVisible = ref(true)
+
+const canSend = ref(true);  // 是否可以发送邮件验证码
+
+
 const form = ref({
-	email: '',
+	email: '1978992154@qq.com',
 	ver_code: ''
 })
+const buttonText = ref('获取验证码');
+let countdown = 120;
+let timer:any = null;
+
 let $router = useRouter()
 function handleClick () {
   dialogTableVisible.value = true
@@ -75,7 +88,32 @@ const loginHdl = () => {
 	console.log('login')
 }
 
-const getEmailCode = () => {
+const getEmailCode = (event:any) => {
+	let data:emailForm = {
+		email: form.value.email,
+		type_code: 1,
+	}
+	event.preventDefault(); // 阻止默认行为
+	if (!canSend.value) return;
+	getCaptchaRequest(data).then(res => {
+		ElMessage.success('验证码发送成功');
+		canSend.value = false;
+		buttonText.value = `${countdown}s后重发`;
+		timer = setInterval(() => {
+		countdown--;
+		buttonText.value = `${countdown}s后重发`;
+
+		if (countdown === 0) {
+			clearInterval(timer);
+			countdown = 120;
+			canSend.value = true;
+			buttonText.value = '获取验证码';
+		}
+    }, 1000);
+	}).catch(err => {
+		// console.log("报错了",err)
+		canSend.value = true
+	})
 	console.log('get email code')
 }
 </script>
@@ -164,7 +202,6 @@ const getEmailCode = () => {
 							border-radius: 999px;
 							padding: 0 22px;
 							background: rgba(0,0,0,0.03);
-							
 						}
 						::v-deep(.is-focus){
 							box-shadow: 0 0 0 1px $primary-color-red;
@@ -174,7 +211,7 @@ const getEmailCode = () => {
 							::v-deep(.el-input__wrapper){
 								padding-left: 60px;
 							}
-							position: relative;
+							// position: relative;
 							.icon{
 								position: absolute;
 								left: 20px;

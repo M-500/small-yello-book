@@ -4,7 +4,8 @@ import { constantRoutes } from './routes'
 // 创建路由器实例
 const router = createRouter({
   // 使用 HTML5 历史模式
-  history: createWebHistory(import.meta.env.BASE_URL),
+  // history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/ybook/'),
   routes: constantRoutes,
   // 滚动行为
   // scrollBehavior(to, from, savedPosition) {
@@ -15,7 +16,7 @@ const router = createRouter({
   //   }
   // }
   scrollBehavior() {
-    return { top: 0,left:0 }
+    return { top: 0, left: 0 }
   }
 })
 

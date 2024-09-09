@@ -112,11 +112,6 @@ func (n *noteRepo) toModel(note domain.DNote) models.NoteModel {
 		Mark:        note.NoteContent,
 		ContentType: note.ContentType,
 		Status:      0,
-		LikeCnt:     0,
-		ViewCnt:     0,
-		ShareCnt:    0,
-		CommentCnt:  0,
-		CollectCnt:  0,
 	}
 }
 
@@ -131,11 +126,6 @@ func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
 		Statement: strconv.Itoa(note.Status),
 		//PublishTime: note.Model.CreatedAt,
 		//Private:     note.,
-		ViewCnt:    note.ViewCnt,
-		LikeCnt:    note.LikeCnt,
-		ShareCnt:   note.ShareCnt,
-		CommentCnt: note.CommentCnt,
-		CollectCnt: note.CollectCnt,
 		Status:     domain.NoteStatus(note.Status),
 		AuthorId:   note.AuthorId,
 		CreateTime: "",

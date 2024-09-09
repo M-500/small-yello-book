@@ -29,7 +29,7 @@
         <div class="auth-container">
           <div class="author-wrapper">
             <div class="info">
-              <router-link>
+              <router-link to="/">
                 <img class="avatar-item"
                      src="@/assets/imgs/avatar.jpeg"
                      alt="">

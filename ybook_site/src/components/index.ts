@@ -1,3 +1,4 @@
+import type { ComponentOptions } from 'vue'
 import SvgIcon from './global/SvgIcon.vue'
 
 const allGlbComponents: { [key: string]: ComponentOptions } = {
