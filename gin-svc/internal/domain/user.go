@@ -12,7 +12,7 @@ type DUser struct {
 	IPAddr        string       `json:"IPAddr"`
 	Avatar        string       `json:"avatar"`
 	Password      string       `json:"password"`
-	Phone         string       `json:"phone"`
+	Email         string       `json:"email"`
 	Signature     string       `json:"signature"`
 	FansCount     int          `json:"fansCount"`
 	FollowerCount int          `json:"followerCount"`

@@ -4,19 +4,19 @@
     <el-card>
       <div class="user-info">
         <div class="avatar-box">
-          <img src="../../assets/imgs/curry.jpeg"
+          <img :src="userInfo.avatar ?userInfo.avatar :'../../assets/imgs/curry.jpeg'"
                alt="">
         </div>
         <div class="info-box">
-          <h4>巧舌如簧的哑巴</h4>
+          <h4>{{ userInfo.nickName ? userInfo.nickName :'分' }}</h4>
           <p class="detail">
-            <span class="tips"><label for="">0</label>关注</span>
-            <span class="tips"><label for="">1</label>粉丝</span>
+            <span class="tips"><label for="">{{ userInfo.followerCount ? userInfo.followerCount : 0 }}</label>关注</span>
+            <span class="tips"><label for="">{{ userInfo.fansCount ? userInfo.fansCount: 0 }}</label>粉丝</span>
             <span class="tips"><label for="">2</label>获赞与收藏</span>
             <span class="tips line"></span>
-            <span class="tips">小红书号： wulinlin</span>
+            <span class="tips">小红书号： {{ userInfo.globalNumber }}</span>
           </p>
-          <p class="note">还没有简介</p>
+          <p class="note">{{ userInfo.signature }}</p>
         </div>
       </div>
 
@@ -51,6 +51,10 @@
 
 <script setup>
 import YbTitle from '@/components/YbTitle/index.vue'
+import useUserStore from '@/stores/moudules/user';
+import { ref } from 'vue';
+let userStore = useUserStore()
+const userInfo = ref(userStore.getUserInfo)
 </script>
 
 <style lang="scss" scoped>
@@ -63,12 +67,14 @@ import YbTitle from '@/components/YbTitle/index.vue'
 		.avatar-box{
 			width: 80px;
     	height: 80px;
-			;
+			
 			img{
-				height: 100%;
+				max-height: 100%;
+				min-width: 100%;
 				vertical-align: middle;
 				display: block;
 				object-fit: cover;
+				// 图片不拉升
 				overflow-clip-margin: content-box;
 				overflow: clip;
 				border-radius: 100%;

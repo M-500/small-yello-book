@@ -1,6 +1,7 @@
 package ginx
 
 import (
+	"gin-svc/pkg/constant"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt/v5"
@@ -90,7 +91,7 @@ func WrapResponse(fn func(*gin.Context) (JsonResult, error)) gin.HandlerFunc {
 
 func WrapJWT[T any](fn func(ctx *gin.Context, claims T) (JsonResult, error)) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		val, ok := ctx.Get("UserId")
+		val, ok := ctx.Get(constant.CtxUserKey)
 		if !ok {
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return

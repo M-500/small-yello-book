@@ -17,6 +17,7 @@ type UserSvc interface {
 	EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error)
 	DeleteUser(ctx context.Context, req types.UserForm) error
 	GetUserInfo(ctx context.Context, id int) (domain.DUser, error)
+	FindByUserUUID(ctx context.Context, uuid string) (domain.DUser, error)
 	UpdateUserInfo(ctx context.Context, req types.UpdateUserForm) error
 }
 
@@ -38,14 +39,15 @@ type userSvcImpl struct {
 	roleRepo repo.RoleRepo
 }
 
-func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error) {
-	user, err := u.userRepo.FindByEmail(ctx, req.Email)
-	//if errors.Is(err, dao.ErrRecordNotFound) {
-	//	return "", errors.New("用户不存在")
-	//}
-	if err != nil && !errors.Is(err, dao.ErrRecordNotFound) {
-		return "", errors.New("系统错误，查询用户失败")
+func (u *userSvcImpl) FindByUserUUID(ctx context.Context, uuid string) (domain.DUser, error) {
+	user, err := u.userRepo.FindByUUID(ctx, uuid)
+	if err != nil {
+		return domain.DUser{}, err
 	}
+	return user, nil
+}
+
+func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error) {
 	// 校验验证码是否正确
 	code, err := u.verRepo.GetVerificationCode(ctx, req.Email)
 	if errors.Is(err, redis.Nil) {
@@ -57,9 +59,17 @@ func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) 
 	if code != req.VerCode {
 		return "", errors.New("验证码验证失败")
 	}
-	if user == nil {
+
+	user, err := u.userRepo.FindByEmail(ctx, req.Email)
+	//if errors.Is(err, dao.ErrRecordNotFound) {
+	//	return "", errors.New("用户不存在")
+	//}
+	if err != nil && !errors.Is(err, dao.ErrRecordNotFound) {
+		return "", errors.New("系统错误，查询用户失败")
+	}
+	if errors.Is(err, dao.ErrRecordNotFound) {
 		// 记录日志
-		user = &models.UserModel{
+		user = models.UserModel{
 			GlobalNumber:  utils.UUID(),
 			Email:         req.Email,
 			NickName:      utils.RandNickName(),
@@ -99,8 +109,8 @@ func (u *userSvcImpl) DeleteUser(ctx context.Context, req types.UserForm) error 
 	return u.userRepo.DeleteUser(ctx, u.reqToModel(&req))
 }
 
-func (u *userSvcImpl) reqToModel(req *types.UserForm) *models.UserModel {
-	return &models.UserModel{
+func (u *userSvcImpl) reqToModel(req *types.UserForm) models.UserModel {
+	return models.UserModel{
 		UserName:  req.UserName,
 		NickName:  req.NickName,
 		Avatar:    req.Avatar,

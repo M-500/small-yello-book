@@ -14,7 +14,7 @@ type NoteRepoInterface interface {
 	FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error)
 	FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
 	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]domain.DNote, error)
-	FindAuthorInfo(ctx context.Context, authorID string) (*domain.Author, error)
+	FindAuthorInfo(ctx context.Context, authorID string) (domain.Author, error)
 	CreateNote(ctx context.Context, note domain.DNote, uid string) error
 	ChangeStatus(ctx context.Context, noteID string, status domain.NoteStatus) error
 	NoteDetail(ctx context.Context, noteID string) (domain.DNote, error)
@@ -57,7 +57,7 @@ func (n *noteRepo) NoteDetail(ctx context.Context, noteID string) (domain.DNote,
 	if err != nil {
 		return res, err
 	}
-	res.AuthorInfo = user
+	res.AuthorInfo = &user
 	return res, nil
 }
 
@@ -65,10 +65,10 @@ func (n *noteRepo) ChangeStatus(ctx context.Context, noteID string, status domai
 	return n.dao.ChangeStatus(ctx, noteID, int(status))
 }
 
-func (n *noteRepo) FindAuthorInfo(ctx context.Context, authorID string) (*domain.Author, error) {
+func (n *noteRepo) FindAuthorInfo(ctx context.Context, authorID string) (domain.Author, error) {
 	user, err := n.userDao.GetByID(ctx, authorID)
 	if err != nil {
-		return &domain.Author{}, err
+		return domain.Author{}, err
 	}
 	return n.toDMAuthor(user), nil
 }
@@ -164,8 +164,8 @@ func (n *noteRepo) toImageNote(data models.ImageModel) domain.ImageNote {
 	}
 }
 
-func (n *noteRepo) toDMAuthor(user *models.UserModel) *domain.Author {
-	return &domain.Author{
+func (n *noteRepo) toDMAuthor(user models.UserModel) domain.Author {
+	return domain.Author{
 		ID:       user.GlobalNumber,
 		NickName: user.NickName,
 		Avatar:   user.Avatar,

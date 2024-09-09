@@ -2,9 +2,9 @@
   <div class="container">
     <div class="box"
          @click="showLogout">
-      <img src="@/assets/imgs/curry.jpeg"
+      <img :src="userInfo.avatar"
            alt="">
-      <span class="user-name">巧舌如簧的哑巴</span>
+      <span class="user-name">{{ userInfo.nickName ? userInfo.nickName :'分' }}</span>
       <el-icon class="icon">
         <ArrowDown />
       </el-icon>
@@ -30,6 +30,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 let userStore = useUserStore()
+const userInfo = ref(userStore.getUserInfo)
 let $router = useRouter()
 const showLogoutVisable = ref(false)
 
@@ -73,6 +74,8 @@ const open = () => {
 			height: 28px;
 			border-radius: 100%;
 			margin-right: 4px;
+			// 图片不拉升
+			object-fit: cover;
 		}
 		.user-name{
 			display: flex;

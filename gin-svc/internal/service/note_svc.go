@@ -53,7 +53,7 @@ func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, l
 		if err != nil {
 			continue
 		}
-		list[i].AuthorInfo = info
+		list[i].AuthorInfo = &info
 	}
 	return list, nil
 }

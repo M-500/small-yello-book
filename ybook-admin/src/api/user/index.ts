@@ -6,7 +6,7 @@ enum UserApi {
   // REGISTER = '/register',
 
   // LOGOUT = '/logout',
-  // GET_USER_INFO = '/user_info',
+  GET_USER_INFO = '/api/v1/users/info',
   // GET_USER_LIST = '/user_list',
   // GET_USER_DETAIL = '/user_detail',
   // GET_USER_COUNT = '/user_count',
@@ -22,4 +22,8 @@ export const getEmailCaptchas = (data: emialForm) => {
 
 export const login = (data: loginForm) => {
   return request.post<any, loginResponse>(UserApi.LOGIN, data)
+}
+
+export const getUserInfo = () => {
+  return request.get(UserApi.GET_USER_INFO)
 }

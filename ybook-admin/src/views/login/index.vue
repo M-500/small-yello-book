@@ -176,6 +176,7 @@ const loginHandler = async()=>{
       type:'success',
       message:'登陆成功！'
     })
+    await userStore.queryUserInfo()
     $router.push('/home')
   }catch (err){
     // console.log("wotama de",err)

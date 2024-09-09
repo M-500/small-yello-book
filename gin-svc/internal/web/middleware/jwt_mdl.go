@@ -3,6 +3,7 @@ package middleware
 import (
 	"gin-svc/internal/conf/cfg"
 	myJwt "gin-svc/internal/web/middleware/jwt"
+	"gin-svc/pkg/constant"
 	"gin-svc/pkg/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -62,8 +63,8 @@ func (j *JWTMiddlewareBuilder) Build() gin.HandlerFunc {
 			return
 		}
 
-		ctx.Set("uid", uc.Uid)
-		ctx.Set("user", uc)
+		ctx.Set(constant.CtxUserId, uc.Uid)
+		ctx.Set(constant.CtxUserKey, uc)
 		ctx.Next()
 	}
 }

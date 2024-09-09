@@ -5,6 +5,7 @@ import (
 	"gin-svc/internal/types"
 	"gin-svc/internal/web/middleware/jwt"
 	"gin-svc/pkg/ginx"
+	"gin-svc/pkg/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,10 +36,23 @@ func (u *UserController) UpdateUserInfo(ctx *gin.Context, req types.UserForm) (r
 	return ginx.Success(), nil
 }
 
-func (u *UserController) GetUserInfo(ctx *gin.Context, claim jwt.UserClaims) (result ginx.JsonResult, err error) {
+func (u *UserController) FindUserInfo(ctx *gin.Context) (result ginx.JsonResult, err error) {
 	//id := claim.Uid
+	userUID := ctx.Param("uuid")
+	if utils.IsBlank(userUID) {
+		return ginx.Error(10011, "参数错误"), nil
+	}
 
 	return ginx.JsonResult{}, nil
+}
+
+func (u *UserController) AdminUserDetail(ctx *gin.Context, claim jwt.UserClaims) (result ginx.JsonResult, err error) {
+	id := claim.Uid
+	uuid, err := u.userSvc.FindByUserUUID(ctx, id)
+	if err != nil {
+		return ginx.Error(10011, "查询失败"), err
+	}
+	return ginx.SuccessJson(uuid), nil
 }
 
 // DeleteUserCtl godoc
@@ -60,5 +74,7 @@ func (u *UserController) DeleteUserCtl(ctx *gin.Context, req types.UserForm) (re
 
 func (u *UserController) RegisterRoute(group *gin.RouterGroup) {
 	group.PUT("/users", ginx.WrapJsonBody[types.UserForm](u.UpdateUserInfo))
+	group.GET("/users/:uuid", ginx.WrapResponse(u.FindUserInfo))
+	group.GET("/users/info", ginx.WrapJWT[jwt.UserClaims](u.AdminUserDetail)) // 查询自身用户信息
 	group.DELETE("/users/:id", ginx.WrapJsonBody[types.UserForm](u.DeleteUserCtl))
 }
