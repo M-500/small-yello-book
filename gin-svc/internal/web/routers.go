@@ -116,7 +116,10 @@ func InitNoteController(app *internal.App) *controller.NoteCtl {
 	userDao := dao.NewUserDao(app.DB)
 	imgDao := dao.NewImageDao(app.DB)
 	noteRepo := repo.NewNoteRepo(noteDao, userDao, imgDao)
-	svc := service.NewNoteSvcImpl(noteRepo, app.Lg)
+	interactiveCache := cache.NewInteractiveCache(app.Cli)
+	interactiveDao := dao.NewInteractiveDao(app.DB)
+	intrRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao)
+	svc := service.NewNoteSvcImpl(noteRepo, app.Lg, intrRepo)
 	return controller.NewNoteCtl(svc, app.Cfg)
 }
 

@@ -14,7 +14,6 @@ type Interactive interface {
 	DecrLike(ctx context.Context, sourceId, bizType string) error // 点赞数-1
 
 	IncrViewLike(ctx context.Context, sourceId, bizType string) error // 浏览数+1
-	DecrViewLike(ctx context.Context, sourceId, bizType string) error // 浏览数-1
 
 	IncrCollection(ctx context.Context, sourceId, bizType string) error // 收藏数+1
 	DecrCollection(ctx context.Context, sourceId, bizType string) error // 收藏数-1
@@ -27,9 +26,9 @@ type Interactive interface {
 	Delete(ctx context.Context, sourceId, bizType string) error       // 删除一条Social记录
 }
 
-func NewSchoolRepo(socialCache cache.InteractiveCache, socialDao dao.InteractiveDao) Interactive {
+func NewInteractiveRepo(intrCache cache.InteractiveCache, socialDao dao.InteractiveDao) Interactive {
 	return &interactive{
-		socialCache: socialCache,
+		socialCache: intrCache,
 		socialDao:   socialDao,
 	}
 }
@@ -70,13 +69,16 @@ func (s *interactive) DecrLike(ctx context.Context, sourceId, bizType string) er
 }
 
 func (s *interactive) IncrViewLike(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (s *interactive) DecrViewLike(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	err := s.socialCache.IncrViewCnt(ctx, sourceId, bizType)
+	if err != nil {
+		return err
+	}
+	go func() {
+		//_ = s.socialCache.IncrLikeCnt(ctx, sourceId, bizType)
+		// 若是采用协程更新缓存，必须使用 context.Background() 开启一个新的上下文，否则gin.Context的生命周期结束，协程大概率会被取消
+		_ = s.socialCache.IncrViewCnt(context.Background(), sourceId, bizType)
+	}()
+	return nil
 }
 
 func (s *interactive) IncrCollection(ctx context.Context, sourceId, bizType string) error {

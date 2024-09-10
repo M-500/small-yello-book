@@ -34,9 +34,17 @@ type NoteService interface {
 	UpdatePermission(ctx context.Context, noteId int, userId int, permission int) error
 }
 
+func NewNoteSvcImpl(repo repo.NoteRepoInterface, lg ylog.Logger, intrRepo repo.Interactive) NoteService {
+	return &noteSvcImpl{
+		repo:            repo,
+		interactiveRepo: intrRepo,
+		lg:              lg}
+}
+
 type noteSvcImpl struct {
-	repo repo.NoteRepoInterface
-	lg   ylog.Logger
+	repo            repo.NoteRepoInterface
+	interactiveRepo repo.Interactive
+	lg              ylog.Logger
 }
 
 func (n *noteSvcImpl) PassNote(ctx context.Context, uuid string) error {
@@ -56,10 +64,6 @@ func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, l
 		list[i].AuthorInfo = &info
 	}
 	return list, nil
-}
-
-func NewNoteSvcImpl(repo repo.NoteRepoInterface, lg ylog.Logger) NoteService {
-	return &noteSvcImpl{repo: repo, lg: lg}
 }
 
 func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid string) error {
@@ -95,6 +99,12 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid st
 }
 
 func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id string) (domain.DNote, error) {
+	// 浏览数+1
+	//err := n.interactiveRepo.IncrViewLike(ctx, id, "note")
+	//if err != nil {
+	//	n.lg.Warn("incr view count failed", ylog.String("noteId", id))
+	//
+	//}
 	return n.repo.NoteDetail(ctx, id)
 }
 
