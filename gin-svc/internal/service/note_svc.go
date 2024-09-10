@@ -61,6 +61,20 @@ func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, l
 		if err != nil {
 			continue
 		}
+		data, err := n.interactiveRepo.GetById(ctx, list[i].ID, "note")
+		if err != nil {
+			continue
+		}
+		//temp := n.toDomain(list[i])
+		list[i].InteractiveInfo = &domain.InteractiveInfo{
+			SourceGID:  data.SourceGID,
+			ViewCnt:    data.ViewCnt,
+			LikeCnt:    data.LikeCnt,
+			ShareCnt:   data.ShareCnt,
+			CommentCnt: data.CommentCnt,
+			CollectCnt: data.CollectCnt,
+			BizType:    data.BizType,
+		}
 		list[i].AuthorInfo = &info
 	}
 	return list, nil
@@ -116,7 +130,22 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 	}
 	res := make([]domain.DNote, 0, len(list))
 	for _, model := range list {
-		res = append(res, n.toDomain(model))
+		// 1. 查询文章的点赞数据
+		data, err := n.interactiveRepo.GetById(ctx, model.UUID, "note")
+		if err != nil {
+			continue
+		}
+		temp := n.toDomain(model)
+		temp.InteractiveInfo = &domain.InteractiveInfo{
+			SourceGID:  data.SourceGID,
+			ViewCnt:    data.ViewCnt,
+			LikeCnt:    data.LikeCnt,
+			ShareCnt:   data.ShareCnt,
+			CommentCnt: data.CommentCnt,
+			CollectCnt: data.CollectCnt,
+			BizType:    data.BizType,
+		}
+		res = append(res, temp)
 	}
 	return res, len(list), nil
 }

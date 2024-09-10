@@ -24,6 +24,8 @@ type Interactive interface {
 	Insert(ctx context.Context, social models.InteractiveModel) error // 插入一条Social记录
 	Update(ctx context.Context, social models.InteractiveModel) error // 更新一条Social记录
 	Delete(ctx context.Context, sourceId, bizType string) error       // 删除一条Social记录
+
+	GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error)
 }
 
 func NewInteractiveRepo(intrCache cache.InteractiveCache, dao dao.InteractiveDao) Interactive {
@@ -38,9 +40,16 @@ type interactive struct {
 	dao   dao.InteractiveDao
 }
 
+func (s *interactive) GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) {
+	data, err := s.dao.GetById(ctx, sourceId, bizType)
+	if err != nil {
+		return models.InteractiveModel{}, err
+	}
+	return data, nil
+}
+
 func (s *interactive) GetById(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) {
-	//TODO implement me
-	panic("implement me")
+	return s.dao.GetById(ctx, sourceId, bizType)
 }
 
 func (s *interactive) IncrLike(ctx context.Context, sourceId, bizType string) error {

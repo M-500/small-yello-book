@@ -22,6 +22,13 @@ type DNote struct {
 }
 
 type InteractiveInfo struct {
+	SourceGID  string `json:"sourceGID"`
+	ViewCnt    int    `json:"viewCnt"`
+	LikeCnt    int    `json:"likeCnt"`
+	ShareCnt   int    `json:"shareCnt"`
+	CommentCnt int    `json:"commentCnt"`
+	CollectCnt int    `json:"collectCnt"`
+	BizType    string `json:"bizType"`
 }
 
 type Author struct {
