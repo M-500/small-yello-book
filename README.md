@@ -10,7 +10,7 @@ https://www.daimaxiaoxuesheng.xyz/project-list/ybook/setup/
 ![img.png](imgs/img.png)
 ![img.png](imgs/img_2.png)
 小黄书web端：
-![img_1.png](imgs/img_1.png)
+![img.png](imgs/img_3.png)
 
 # 1. 项目结构
 

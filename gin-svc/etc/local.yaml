@@ -1,3 +1,26 @@
+
+server:
+  addr: 8122
+  mode: "debug"
+  file_upload_host: "http://127.0.0.1:8122"
+
+logs:
+  is_dev: true
+  file_name: "logs/app.log"
+  err_file_name: "logs/err.log"
+  max_size: 10
+  max_backups: 10
+  max_age: 10
+  compress: false
+
+jwt:
+  secret: "k6CswdUm77WKcbM68UQUuxVsHSpTCwgK"
+  expire: 3600
+  jwt_header_key: "Authorization"
+  jwt_prefix: "Bearer"
+
+
+
 database:
   dsn: "root:root@tcp(127.0.0.1:13306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"
   max_idle_conn: 10  # 最大空闲连接数
@@ -14,18 +37,3 @@ email:
   port: 25
   addr: "18574945291@163.com"
   secret_key: "PNNSCQKYTCCBCIIN"
-
-jwt:
-  secret: "k6CswdUm77WKcbM68UQUuxVsHSpTCwgK"
-  expire: 3600
-  jwt_header_key: "Authorization"
-  jwt_prefix: "Bearer"
-
-logs:
-  is_dev: true
-  file_name: "logs/app.log"
-  err_file_name: "logs/err.log"
-  max_size: 10
-  max_backups: 10
-  max_age: 10
-  compress: false
