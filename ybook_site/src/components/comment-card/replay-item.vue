@@ -1,15 +1,18 @@
 <template>
   <div class="replay-container">
     <div class="list">
-      <CommentSubItem></CommentSubItem>
-      <CommentSubItem></CommentSubItem>
-      <CommentSubItem></CommentSubItem>
+      <CommentSubItem :item="replayItem"></CommentSubItem>
     </div>
   </div>
 </template>
 
 <script setup>
 import CommentSubItem from './comment-sub-item.vue';
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  replayItem: Object,
+});
 </script>
 
 <style lang="scss" scoped>

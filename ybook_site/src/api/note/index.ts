@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import { type NoteFeedQuery } from './types'
-import { da } from 'element-plus/es/locales.mjs'
 
 enum NoteApi {
   // 文章列表

@@ -35,7 +35,7 @@ func (c *CreateNoteForm) ToNoteDomain(cfg cfg.ServerCfg) domain.DNote {
 	}
 	if c.ContentType == 1 {
 		for _, img := range c.ImgList {
-			res.ImgList = append(res.ImgList, domain.ImageNote{
+			res.ImgList = append(res.ImgList, &domain.ImageNote{
 				ImgName:   img.Name,
 				ImgUrl:    img.Url,
 				ID:        utils.UUID(), // 默认生成UUID

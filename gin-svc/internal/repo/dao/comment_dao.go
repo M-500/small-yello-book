@@ -50,7 +50,7 @@ func (g *gormCommentDAO) UpdateComment(ctx context.Context, id int, data models.
 //	@return error
 func (g *gormCommentDAO) CommentListBySourceId(ctx context.Context, sourceId string, page, pageSize int) ([]models.CommentModel, error) {
 	var res []models.CommentModel
-	err := g.db.WithContext(ctx).Where("resource_id = ? and resource_type = null", sourceId).Limit(pageSize).Offset((page - 1) * pageSize).Find(&res).Error
+	err := g.db.WithContext(ctx).Where("resource_id = ? and parent_id = '0'", sourceId).Limit(pageSize).Offset((page - 1) * pageSize).Find(&res).Error
 	return res, err
 }
 
@@ -75,19 +75,20 @@ func (g *gormCommentDAO) CommentListByParentId(ctx context.Context, parentId int
 }
 
 func (g *gormCommentDAO) InsertComment(ctx context.Context, data models.CommentModel) error {
-	return g.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-		// 1. 评论记录+1
-		err := g.db.Model(&models.CommentModel{}).Create(&data).Error
-		if err != nil {
-			return err
-		}
-		// 2. 资源的评论数+1
-		err = g.db.Model(&models.InteractiveModel{}).Where("source_id = ? and biz_type = ?", data.ResourceId, data.ResourceType).
-			Update("comment_count", gorm.Expr("comment_count + ?", 1)).Error
-		if err != nil {
-			return err
-		}
-		return err
-	})
+	//return g.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+	//	// 1. 评论记录+1
+	//	err := g.db.Model(&models.CommentModel{}).Create(&data).Error
+	//	if err != nil {
+	//		return err
+	//	}
+	//	// 2. 资源的评论数+1
+	//	err = g.db.Model(&models.InteractiveModel{}).Where("source_id = ? and biz_type = ?", data.ResourceId, data.ResourceType).
+	//		Update("comment_count", gorm.Expr("comment_count + ?", 1)).Error
+	//	if err != nil {
+	//		return err
+	//	}
+	//	return err
+	//})
+	return g.db.Model(&models.CommentModel{}).Create(&data).Error
 
 }

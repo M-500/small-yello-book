@@ -20,10 +20,11 @@
             ...
           </div>
         </div>
-        <div class="content">我觉得应该是这样的， Chris Evans。底下有腹肌照</div>
+        <div class="content">{{ props.comment.content }}</div>
         <div class="picture">
-          <div class="img-box">
-            <img src="@/assets/imgs/avatar.jpeg"
+          <div class="img-box"
+               v-if="props.comment.mediaUrl">
+            <img :src="props.comment.mediaUrl"
                  alt="">
           </div>
         </div>
@@ -49,6 +50,10 @@
 
 <script setup>
 import { RouterLink } from "vue-router";
+import { defineProps } from 'vue';
+const props = defineProps({
+  comment: Object
+});
 </script>
 
 <style lang="scss" scoped>

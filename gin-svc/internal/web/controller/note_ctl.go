@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"fmt"
 	"gin-svc/internal/conf"
 	"gin-svc/internal/service"
 	"gin-svc/internal/types"
@@ -25,7 +24,6 @@ func NewNoteCtl(svc service.NoteService, cfg *conf.ConfigInstance) *NoteCtl {
 }
 
 func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm, uc jwt.UserClaims) (result ginx.JsonResult, err error) {
-	fmt.Println(uc)
 	err = n.svc.CreateNote(ctx, req.ToNoteDomain(n.cfg.Server), uc.Uid)
 	if err != nil {
 		return ginx.Error(500, err.Error()), err

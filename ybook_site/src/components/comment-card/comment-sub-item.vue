@@ -21,7 +21,7 @@
             ...
           </div>
         </div>
-        <div class="content">兄弟借一步说话</div>
+        <div class="content">{{ item.content }}</div>
         <div class="info">
           <div class="date">
             <span class="date-info">09-01</span>
@@ -40,7 +40,10 @@
 </template>
 
 <script setup>
-import { } from "vue"
+import { defineProps } from 'vue';
+const props = defineProps({
+  item: Object
+});
 </script>
 
 <style lang="scss" scoped>

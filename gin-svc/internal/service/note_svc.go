@@ -71,18 +71,19 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid st
 	if note.ContentType == 1 {
 		// 保存图文笔记
 		for _, img := range note.ImgList {
-			exist := utils.IsFileExist(img.LocalPath)
+			absPath := img.LocalPath[1:]
+			exist := utils.IsFileExist(absPath)
 			if !exist {
 				n.lg.Warn("image not exist", ylog.String("path", img.LocalPath))
 				continue
 			}
-			md5, err := utils.FileMd5(img.LocalPath)
+			md5, err := utils.FileMd5(absPath)
 			if err != nil {
 				continue
 			}
+			img.Size, _ = utils.GetFileSize(absPath)
 			img.HashStr = md5
-			//img., _ := utils.GetFileSize(img.LocalPath)
-			img.ImgWidth, img.ImgHeight, _ = utils.GetImageSize(img.LocalPath)
+			img.ImgWidth, img.ImgHeight, _ = utils.GetImageSize(absPath)
 		}
 		// 1. 保存文章
 		err := n.repo.CreateNote(ctx, note, uuid)

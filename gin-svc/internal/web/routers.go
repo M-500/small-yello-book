@@ -73,6 +73,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 
 		// 评论相关
 		privateGroup.POST("/comments", ginx.WrapJsonBodyAndClaims[types.AddCommentForm, jwt.UserClaims](commentCtl.AddCommentCtl))
+		privateGroup.GET("/comments/:resource_id", ginx.WrapResponse(commentCtl.CommentListCtl))
 	}
 
 	return engine
@@ -124,8 +125,8 @@ func InitNoteController(app *internal.App) *controller.NoteCtl {
 }
 
 func SetupCommentController(app *internal.App) *controller.CommentCtl {
-	//commentDao := dao.NewCommentDao(app.DB)
-	//commentRepo := repo.NewCommentRepo(commentDao)
-	//commentSvc := service.NewCommentSvc(commentRepo)
-	return controller.NewCommentCtl()
+	commentDao := dao.NewCommentDAO(app.DB)
+	commentRepo := repo.NewCommentRepo(commentDao)
+	commentSvc := service.NewCommentSvc(commentRepo)
+	return controller.NewCommentCtl(commentSvc)
 }

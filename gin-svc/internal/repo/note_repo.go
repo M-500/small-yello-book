@@ -40,12 +40,12 @@ func (n *noteRepo) NoteDetail(ctx context.Context, noteID string) (domain.DNote,
 	}
 	res := n.toDMNote(note)
 	// 获取图片列表 / 视频信息
-	res.ImgList = make([]domain.ImageNote, 0)
+	res.ImgList = make([]*domain.ImageNote, 0)
 	imgList, err := n.imgDao.FindListByNoteId(ctx, noteID)
 	if err != nil {
 		return res, err
 	}
-	imgs := make([]domain.ImageNote, 0, len(imgList))
+	imgs := make([]*domain.ImageNote, 0, len(imgList))
 	for _, data := range imgList {
 		//tmp := n.toImageNote(data)
 		//tmp.Url = "http://127.0.0.1:8122" + tmp.LocalPath
@@ -145,22 +145,24 @@ func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 			NoteId:  data.ID,
 			Model:   gorm.Model{},
 			Width:   i2.ImgWidth,
+			Height:  i2.ImgHeight,
 			OldPath: i2.LocalPath,
 			Hash:    i2.HashStr,
-			Size:    i2.ImgHeight,
+			Size:    int(i2.Size),
 		})
 	}
 	return imgList
 }
 
-func (n *noteRepo) toImageNote(data models.ImageModel) domain.ImageNote {
-	return domain.ImageNote{
+func (n *noteRepo) toImageNote(data models.ImageModel) *domain.ImageNote {
+	return &domain.ImageNote{
 		ID:        data.UUID,
 		NoteId:    data.NoteId,
 		ImgWidth:  data.Width,
 		LocalPath: "http://127.0.0.1:8122" + data.OldPath,
 		HashStr:   data.Hash,
-		ImgHeight: data.Size,
+		ImgHeight: data.Height,
+		Size:      int64(data.Size),
 	}
 }
 

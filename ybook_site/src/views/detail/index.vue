@@ -65,9 +65,9 @@
             <div class="comment-container">
               <div class="total">共360条评论</div>
               <div class="list-container">
-                <comment-card></comment-card>
-                <comment-card></comment-card>
-                <comment-card></comment-card>
+                <comment-card v-for="(item,index) in commentList"
+                              :key="index"
+                              :commentItem="item"></comment-card>
               </div>
             </div>
           </div>
@@ -85,6 +85,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import { getNoteDetailRequest } from '@/api/note';
+import { getCommentListRequest } from '@/api/comment';
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 
@@ -94,6 +95,7 @@ import CommentFotter from '@/components/comment-fotter/index.vue';
 const route = useRoute();
 const noteId = route.params.uuid; // 获取路由参数上的uuid
 const noteDetail = ref({});
+const commentList = ref([]);
 const isFollowed = ref(false); // 是否关注
 
 
@@ -102,6 +104,12 @@ const getNoteDetail = async () => {
   const res = await getNoteDetailRequest(noteId);
   noteDetail.value = res.data;
 };
+// 获取评论数据
+const getCommentList = async () => {
+  const res = await getCommentListRequest(noteId);
+  commentList.value = res.data;
+};
+
 
 // 点击关注按钮
 const handlerFollowBtn = (data) => {
@@ -115,6 +123,7 @@ const handlerFollowBtn = (data) => {
 
 onMounted(() => {
   getNoteDetail();
+  getCommentList();
 });
 </script>
 

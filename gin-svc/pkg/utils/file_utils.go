@@ -4,6 +4,9 @@ import (
 	"crypto/md5"
 	"fmt"
 	"image"
+	_ "image/gif"
+	_ "image/jpeg"
+	_ "image/png"
 	"io"
 	"os"
 )
@@ -41,10 +44,15 @@ func GetImageSize(filePath string) (int, int, error) {
 		return 0, 0, err
 	}
 	defer file.Close()
-
-	cfg, _, err := image.DecodeConfig(file)
+	// 解码图片
+	img, _, err := image.Decode(file)
 	if err != nil {
 		return 0, 0, err
 	}
-	return cfg.Width, cfg.Height, nil
+	// 获取图片的宽度和高度
+	bounds := img.Bounds()
+	width := bounds.Dx()  // 图片宽度
+	height := bounds.Dy() // 图片高度
+
+	return width, height, nil
 }

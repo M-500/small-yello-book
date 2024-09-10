@@ -15,7 +15,7 @@ type DNote struct {
 	AuthorId        string           `json:"authorId"`
 	CreateTime      string           `json:"createTime"`
 	UpdateTime      string           `json:"updateTime"`
-	ImgList         []ImageNote      `json:"imgList"`         // 图片信息
+	ImgList         []*ImageNote     `json:"imgList"`         // 图片信息
 	VideoInfo       *VideoInfo       `json:"videoInfo"`       // 视频信息
 	AuthorInfo      *Author          `json:"author"`          // 作者信息
 	InteractiveInfo *InteractiveInfo `json:"interactiveInfo"` // 交互信息
@@ -37,6 +37,7 @@ type ImageNote struct {
 	ImgUrl     string `json:"imgUrl"`
 	ImgWidth   int    `json:"imgWidth"`
 	ImgHeight  int    `json:"imgHeight"`
+	Size       int64  `json:"size"`
 	CreateTime string `json:"createTime"`
 	UpdateTime string `json:"updateTime"`
 	LocalPath  string `json:"localPath"`
