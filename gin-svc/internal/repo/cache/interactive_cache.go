@@ -38,33 +38,45 @@ type interactiveCache struct {
 }
 
 func (s *interactiveCache) IncrLikeCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, LikeKey, 1).Err()
 }
 
 func (s *interactiveCache) DecrLikeCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, LikeKey, -1).Err()
 }
 
 func (s *interactiveCache) IncrCommentCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, CommentKey, 1).Err()
 }
 
 func (s *interactiveCache) DecrCommentCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, CommentKey, -1).Err()
 }
 
 func (s *interactiveCache) IncrCollectCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, CollectKey, 1).Err()
 }
 
 func (s *interactiveCache) DecrCollectCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, CollectKey, -1).Err()
 }
 
 func (s *interactiveCache) AddViewCnt(ctx context.Context, sourceId, bizType string) error {

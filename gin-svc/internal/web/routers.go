@@ -42,6 +42,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	u := InitUserController(app)
 	f := InitFileController(app)
 	n := InitNoteController(app)
+	intrCtl := SetupInteracticeController(app)
 	//social:=
 	//roleCtl := InitRoleController(app)
 	commentCtl := SetupCommentController(app)
@@ -66,8 +67,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		privateGroup.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl)) // 获取推荐文章列表  后续要改成feed流模式
 
 		// 点赞收藏相关
-		//group.POST("/like", ginx.WrapJsonBody[types.LikeForm](s.LikeCtl))
-		//group.POST("/comment", ginx.WrapJsonBody[types.CommentForm](s.CommentCtl))
+		privateGroup.POST("/like", ginx.WrapJsonBodyAndClaims[types.InteractiveForm, jwt.UserClaims](intrCtl.LikeCtl))
 		//group.POST("/collect", ginx.WrapJsonBody[types.CollectForm](s.CollectCtl))
 		//group.POST("/follow", ginx.WrapJsonBody[types.FollowForm](s.FollowCtl))
 
@@ -131,4 +131,16 @@ func SetupCommentController(app *internal.App) *controller.CommentCtl {
 	commentRepo := repo.NewCommentRepo(commentDao)
 	commentSvc := service.NewCommentSvc(commentRepo, userRepo)
 	return controller.NewCommentCtl(commentSvc)
+}
+
+func SetupInteracticeController(app *internal.App) *controller.InteractiveCtl {
+	userDao := dao.NewUserDao(app.DB)
+	userRepo := repo.NewUserRepoInterface(userDao)
+	interactiveCache := cache.NewInteractiveCache(app.Cli)
+	interactiveDao := dao.NewInteractiveDao(app.DB)
+	interactiveRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao)
+	notifyDao := dao.NewNotificationDao(app.DB)
+	notifyRepo := repo.NewNotifyRepo(notifyDao)
+	interactiveSvc := service.NewInteractiveSvc(interactiveRepo, notifyRepo, userRepo)
+	return controller.NewInteractiveController(interactiveSvc)
 }

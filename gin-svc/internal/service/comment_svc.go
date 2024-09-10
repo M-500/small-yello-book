@@ -29,29 +29,6 @@ func (c *commSvc) CommentList(ctx context.Context, resourceId string) ([]*domain
 	if err != nil {
 		return nil, err
 	}
-	//for i := 0; i < len(listLay1); i++ {
-	//	item := listLay1[i]
-	//	user, err := c.userRepo.FindByUUID(ctx, item.UserUUId)
-	//	if err != nil {
-	//		// TODO: 记录日志咯
-	//		continue
-	//	}
-	//	item.UserAvatar = user.Avatar
-	//	item.UserNickName = user.NickName
-	//	res, err := c.commRepo.CommentListByParentId(ctx, int(item.ID), 3)
-	//	if err != nil {
-	//		continue
-	//	}
-	//	for _, u := range res {
-	//		userTmp, err := c.userRepo.FindByUUID(ctx, u.UserUUId)
-	//		if err != nil {
-	//			continue
-	//		}
-	//		u.UserAvatar = userTmp.Avatar
-	//		u.UserNickName = userTmp.NickName
-	//	}
-	//	item.Sub = res
-	//}
 	for _, item := range listLay1 {
 		user, err := c.userRepo.FindByUUID(ctx, item.UserUUId)
 		if err != nil {

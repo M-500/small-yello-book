@@ -38,9 +38,24 @@
           </div>
           <div class="interaction">
             <div class="like">
-
+              <template v-if="!liked">
+                <svg-icon name="like"
+                          @click="handleLike(1)"
+                          height="16"></svg-icon>
+                <span class="count">1</span>
+              </template>
+              <template v-else>
+                <svg-icon name="liked"
+                          @click="handleLike(0)"
+                          height="16"></svg-icon>
+                <span class="count">1</span>
+              </template>
             </div>
-            <div class="replay"></div>
+            <div class="replay">
+              <svg-icon name="comment"
+                        height="16"></svg-icon>
+              <span class="count">1</span>
+            </div>
           </div>
         </div>
       </div>
@@ -51,6 +66,18 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { defineProps } from 'vue';
+import { ref } from 'vue';
+const liked = ref(false) // 是否点赞
+
+// 点击 喜欢 按钮
+const handleLike = (data) => {
+  if (data === 1) {
+    liked.value = true
+  } else {
+    liked.value = false
+  }
+}
+
 const props = defineProps({
   comment: Object
 });
@@ -168,12 +195,35 @@ const props = defineProps({
 				.interaction{
 					display: flex;
 					margin-left: -2px;
+					color:rgba(51,51,51,0.6);
 					.like{
+						display: flex;
+						align-items: center;
 						box-sizing: border-box;
 						-webkit-user-select: auto;
 						user-select: auto;
 						scrollbar-width: none;
 						-webkit-tap-highlight-color: transparent;
+						span{
+							margin-left: 4px;
+							font-size: 12px;
+							font-weight: 500;
+						}
+					}
+					.replay{
+						margin-left: 16px;
+						display: flex;
+						align-items: center;
+						box-sizing: border-box;
+						-webkit-user-select: auto;
+						user-select: auto;
+						scrollbar-width: none;
+						-webkit-tap-highlight-color: transparent;
+						span{
+							margin-left: 4px;
+							font-size: 12px;
+							font-weight: 500;
+						}
 					}
 				}
 			}

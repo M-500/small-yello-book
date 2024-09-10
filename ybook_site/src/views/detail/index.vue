@@ -4,7 +4,8 @@
       <div class="left-card">
         <div class="note-cover">
           <template v-if="noteDetail.contentType === 1">
-            <el-carousel indicator-position="outside">
+            <el-carousel indicator-position="outside"
+                         :autoplay="false">
               <el-carousel-item v-for="item in noteDetail.imgList"
                                 :key="item">
                 <img class="note-img"
