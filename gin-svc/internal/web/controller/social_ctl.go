@@ -37,10 +37,3 @@ func (s *SocialCtl) CollectCtl(ctx *gin.Context, req types.CollectForm) (result 
 func (s *SocialCtl) FollowCtl(ctx *gin.Context, req types.FollowForm) (result ginx.JsonResult, err error) {
 	return ginx.Success(), nil
 }
-
-func (s *SocialCtl) RegisterRoute(group *gin.RouterGroup) {
-	group.POST("/like", ginx.WrapJsonBody[types.LikeForm](s.LikeCtl))
-	group.POST("/comment", ginx.WrapJsonBody[types.CommentForm](s.CommentCtl))
-	group.POST("/collect", ginx.WrapJsonBody[types.CollectForm](s.CollectCtl))
-	group.POST("/follow", ginx.WrapJsonBody[types.FollowForm](s.FollowCtl))
-}

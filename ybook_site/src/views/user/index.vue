@@ -4,7 +4,7 @@
       <div class="user">
         <div class="avatar">
           <div class="avatar_wrap">
-            <img src="../../assets/imgs/avatar.jpeg"
+            <img :src="userDetail.avatar"
                  alt="">
           </div>
         </div>
@@ -13,15 +13,15 @@
             <div class="info">
               <div class="basic_info">
                 <div class="nickname">
-                  <div class="user_name">巧舌如簧的哑巴</div>
+                  <div class="user_name">{{ userDetail.nickName }}</div>
                 </div>
                 <div class="user_content">
-                  <span class="yellow_id">小黄书号：12312312</span>
+                  <span class="yellow_id">小黄书号：{{ userDetail.globalNumber }}</span>
                   <span class="user_ip">IP归属地：上海</span>
                 </div>
 
               </div>
-              <div class="user_desc">长得丑玩得花</div>
+              <div class="user_desc">{{ userDetail.signature }}</div>
               <div class="user_tag">
                 <div class="tag_item">
                   <SvgIcon icon="icon-tag"
@@ -66,6 +66,23 @@
 
 <script setup>
 import tab_item from "@/components/TabItem/index.vue";
+import { useRoute } from 'vue-router';
+import { getUserInfoByUUID } from '@/api/user';
+import { ref } from "vue";
+
+const route = useRoute();
+const userId = route.params.uuid; // 获取路由参数上的uuid
+const userDetail = ref({});
+// getUserInfoByUUID(userId).then(res => {
+//   console.log(res);
+// });
+
+const getUserInfo = async () => {
+  const res = await getUserInfoByUUID(userId);
+  userDetail.value = res.data;
+};
+
+getUserInfo();
 </script>
 
 <style lang="scss" scoped>

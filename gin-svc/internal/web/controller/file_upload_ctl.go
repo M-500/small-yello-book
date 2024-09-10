@@ -66,7 +66,3 @@ func (f *FileController) ReadFileCtl(ctx *gin.Context) (result ginx.JsonResult, 
 
 	return ginx.JsonResult{Data: gin.H{"content": string(content)}}, nil
 }
-func (f *FileController) RegisterRoute(group *gin.RouterGroup) {
-	group.POST("/file/upload", ginx.WrapResponse(f.UploadImgCtl))
-	group.GET("/file", ginx.WrapResponse(f.ReadFileCtl))
-}

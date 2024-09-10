@@ -65,9 +65,3 @@ func (p *PublicController) EmailSendCtl(ctx *gin.Context, req types.EmailForm) (
 	}
 	return ginx.Success(), err
 }
-
-func (p *PublicController) RegisterRoute(group *gin.RouterGroup) {
-	group.POST("/login", ginx.WrapJsonBody[types.EmailLoginForm](p.EmailLoginCtl))
-	group.POST("/email/send", ginx.WrapJsonBody[types.EmailForm](p.EmailSendCtl))
-	//group.OPTIONS("/email/send", ginx.WrapJsonBody[types.EmailForm](p.EmailSendCtl))
-}

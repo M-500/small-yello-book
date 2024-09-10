@@ -12,8 +12,10 @@ enum UserApi {
   LogoutAPI = '/logout',
   // 获取验证码
   GetCaptchaAPI = '/api/v1/na/email/send',
-  // 获取用户信息
-  GET_USER_INFO = '/api/v1/users/info'
+  // 获取用户自己信息
+  GET_USER_INFO = '/api/v1/users/info',
+  // 查询其他用户的基本信息
+  GET_USER_INFO_BY_UUID = '/api/v1/users/:uuid'
 }
 
 // 对外暴露请求函数
@@ -31,4 +33,8 @@ export const getCaptchaRequest = (data: emailForm) => {
 // 获取用户信息
 export const getUserInfo = () => {
   return request.get(UserApi.GET_USER_INFO)
+}
+
+export const getUserInfoByUUID = (uuid: string) => {
+  return request.get(UserApi.GET_USER_INFO_BY_UUID.replace(':uuid', uuid))
 }

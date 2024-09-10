@@ -1,5 +1,5 @@
 // 对axios进行二次封装：统一处理请求异常，统一处理请求loading，统一处理请求结果
-
+import useUserStore from '@/stores/modules/user'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
@@ -32,12 +32,13 @@ request.interceptors.response.use(
     // 请求失败后的处理：一般处理http的网络错误
     let message: string = ''
     const status = error.response.status // HTTP状态码
-
+    const userStore = useUserStore()
     switch (status) {
       case 400:
         message = '请求错误'
         break
       case 401:
+        userStore.userLogout()
         message = '登录失效，请登录'
         break
       case 403:

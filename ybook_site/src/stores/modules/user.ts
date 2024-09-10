@@ -39,6 +39,7 @@ const useUserStore = defineStore({
     },
     userLogout() {
       this.clearToke()
+      this.userInfo = {}
     },
     setToken(token: string) {
       this.token = token
