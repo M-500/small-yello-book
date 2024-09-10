@@ -31,7 +31,7 @@ type gormInteractiveDao struct {
 
 func (g *gormInteractiveDao) GetById(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) {
 	var social models.InteractiveModel
-	err := g.db.WithContext(ctx).Where("source_gid = ? and biz_type = ?", sourceId, bizType).First(&social).Error
+	err := g.db.WithContext(ctx).Where("source_gid = ? ", sourceId).First(&social).Error
 	if err != nil {
 		return social, err
 	}
