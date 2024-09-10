@@ -100,11 +100,11 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid st
 
 func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id string) (domain.DNote, error) {
 	// 浏览数+1
-	//err := n.interactiveRepo.IncrViewLike(ctx, id, "note")
-	//if err != nil {
-	//	n.lg.Warn("incr view count failed", ylog.String("noteId", id))
-	//
-	//}
+	err := n.interactiveRepo.IncrReadCnt(ctx, id, "note")
+	if err != nil {
+		n.lg.Warn("incr view count failed", ylog.String("noteId", id))
+
+	}
 	return n.repo.NoteDetail(ctx, id)
 }
 

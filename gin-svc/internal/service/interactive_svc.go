@@ -37,7 +37,7 @@ func (i *interactiveSvc) DecrLikeCnt(ctx context.Context, uid string, bizType st
 }
 
 func (i *interactiveSvc) IncrViewCnt(ctx context.Context, uid string, bizType string) error {
-	return i.repo.IncrViewLike(ctx, uid, bizType)
+	return i.repo.IncrReadCnt(ctx, uid, bizType)
 }
 
 func (i *interactiveSvc) DecrViewCnt(ctx context.Context, uid string, bizType string) error {

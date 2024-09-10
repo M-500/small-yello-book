@@ -11,8 +11,7 @@ type InteractiveDao interface {
 	GetById(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) // 通过ID获取资源的Social详情
 	IncrLike(ctx context.Context, sourceId, bizType string) error                           // 点赞数+1
 	DecrLike(ctx context.Context, sourceId, bizType string) error                           // 点赞数-1
-	IncrViewLike(ctx context.Context, sourceId, bizType string) error                       // 浏览数+1
-	DecrViewLike(ctx context.Context, sourceId, bizType string) error                       // 浏览数-1
+	IncrViewCnt(ctx context.Context, sourceId, bizType string) error                        // 浏览数+1
 	IncrCollection(ctx context.Context, sourceId, bizType string) error                     // 收藏数+1
 	DecrCollection(ctx context.Context, sourceId, bizType string) error                     // 收藏数-1
 	IncrComment(ctx context.Context, sourceId, bizType string) error                        // 评论数+1
@@ -65,16 +64,16 @@ func (g *gormInteractiveDao) DecrLike(ctx context.Context, sourceId, bizType str
 	}).Error
 }
 
-func (g *gormInteractiveDao) IncrViewLike(ctx context.Context, sourceId, bizType string) error {
+func (g *gormInteractiveDao) IncrViewCnt(ctx context.Context, sourceId, bizType string) error {
 	return g.db.WithContext(ctx).Clauses(clause.OnConflict{
 		Columns: []clause.Column{{Name: "source_gid"}},
 		DoUpdates: clause.Assignments(map[string]interface{}{
-			"like_cnt": gorm.Expr("view_cnt + 1"),
+			"view_cnt": gorm.Expr("view_cnt + 1"),
 		}),
 	}).Create(&models.InteractiveModel{
 		SourceGID:  sourceId,
-		ViewCnt:    0,
-		LikeCnt:    1,
+		ViewCnt:    1,
+		LikeCnt:    0,
 		ShareCnt:   0,
 		CommentCnt: 0,
 		CollectCnt: 0,

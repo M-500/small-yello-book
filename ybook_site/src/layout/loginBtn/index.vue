@@ -118,7 +118,7 @@ const getEmailCode = (event:any) => {
 		}
     }, 1000);
 	}).catch(err => {
-		// console.log("报错了",err)
+		ElMessage.error(err.response.data.msg);
 		canSend.value = true
 	})
 	console.log('get email code')

@@ -2,15 +2,21 @@ package cache
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"github.com/redis/go-redis/v9"
 )
 
+var (
+	//go:embed lua/add_cnt.lua
+	luaIncrCnt string
+)
+
 const (
-	LikeKey    = "interactive:%s:like:%s"
-	CommentKey = "interactive:%s:comment:%s"
-	CollectKey = "interactive:%s:collect:%s"
-	ViewKey    = "interactive:%s:view:%s"
+	LikeKey    = "like_cnt"
+	CommentKey = "comment_cnt"
+	CollectKey = "collect_cnt"
+	ViewKey    = "read_cnt"
 )
 
 type InteractiveCache interface {
@@ -20,8 +26,7 @@ type InteractiveCache interface {
 	DecrCommentCnt(ctx context.Context, sourceId, bizType string) error
 	IncrCollectCnt(ctx context.Context, sourceId, bizType string) error
 	DecrCollectCnt(ctx context.Context, sourceId, bizType string) error
-	IncrViewCnt(ctx context.Context, sourceId, bizType string) error
-	DecrViewCnt(ctx context.Context, sourceId, bizType string) error
+	AddViewCnt(ctx context.Context, sourceId, bizType string) error
 }
 
 func NewInteractiveCache(cli redis.Cmdable) InteractiveCache {
@@ -62,9 +67,11 @@ func (s *interactiveCache) DecrCollectCnt(ctx context.Context, sourceId, bizType
 	panic("implement me")
 }
 
-func (s *interactiveCache) IncrViewCnt(ctx context.Context, sourceId, bizType string) error {
-	//TODO implement me
-	panic("implement me")
+func (s *interactiveCache) AddViewCnt(ctx context.Context, sourceId, bizType string) error {
+	key := s.key(sourceId, bizType)
+	// 不是特别需要处理 res
+	//res, err := i.client.Eval(ctx, luaIncrCnt, []string{key}, fieldReadCnt, 1).Int()
+	return s.cli.Eval(ctx, luaIncrCnt, []string{key}, ViewKey, 1).Err()
 }
 
 func (s *interactiveCache) DecrViewCnt(ctx context.Context, sourceId, bizType string) error {
@@ -72,15 +79,6 @@ func (s *interactiveCache) DecrViewCnt(ctx context.Context, sourceId, bizType st
 	panic("implement me")
 }
 
-func (s *interactiveCache) likeKey(sourceId, bizType string) string {
-	return fmt.Sprintf(LikeKey, bizType, sourceId)
-}
-func (s *interactiveCache) commentKey(sourceId, bizType string) string {
-	return fmt.Sprintf(CommentKey, bizType, sourceId)
-}
-func (s *interactiveCache) collectKey(sourceId, bizType string) string {
-	return fmt.Sprintf(CollectKey, bizType, sourceId)
-}
-func (s *interactiveCache) viewKey(sourceId, bizType string) string {
-	return fmt.Sprintf(ViewKey, bizType, sourceId)
+func (s *interactiveCache) key(sourceId, bizType string) string {
+	return fmt.Sprintf("interactive:%s:%s", bizType, sourceId)
 }

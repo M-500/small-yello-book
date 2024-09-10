@@ -16,5 +16,6 @@ func InitTables(db *gorm.DB) error {
 		&ImageModel{},
 
 		&CommentModel{},
+		&InteractiveModel{},
 	)
 }
