@@ -27,7 +27,7 @@ type userDaoImpl struct {
 
 func (u *userDaoImpl) GetByID(ctx context.Context, id string) (models.UserModel, error) {
 	var user models.UserModel
-	err := u.db.WithContext(ctx).Where("global_number = ?", id).First(&user).Error
+	err := u.db.WithContext(ctx).Model(&models.UserModel{}).Where("global_number = ?", id).First(&user).Error
 	if err != nil {
 		return models.UserModel{}, err
 	}

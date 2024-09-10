@@ -64,6 +64,7 @@ func (c *commentRepo) toModel(data domain.DComment) models.CommentModel {
 func (c *commentRepo) toDomain(item models.CommentModel) *domain.DComment {
 	return &domain.DComment{
 		ID:           item.ID,
+		UserUUId:     item.UserUUId,
 		ParentId:     item.ParentId,
 		ResourceId:   item.ResourceId,
 		ResourceType: item.ResourceType,

@@ -126,7 +126,9 @@ func InitNoteController(app *internal.App) *controller.NoteCtl {
 
 func SetupCommentController(app *internal.App) *controller.CommentCtl {
 	commentDao := dao.NewCommentDAO(app.DB)
+	userDao := dao.NewUserDao(app.DB)
+	userRepo := repo.NewUserRepoInterface(userDao)
 	commentRepo := repo.NewCommentRepo(commentDao)
-	commentSvc := service.NewCommentSvc(commentRepo)
+	commentSvc := service.NewCommentSvc(commentRepo, userRepo)
 	return controller.NewCommentCtl(commentSvc)
 }

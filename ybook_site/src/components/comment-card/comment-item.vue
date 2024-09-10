@@ -4,7 +4,7 @@
       <div class="avatar">
         <router-link to="/home"
                      class="item">
-          <img src="@/assets/imgs/avatar.jpeg"
+          <img :src="props.comment.userAvatar"
                alt="">
         </router-link>
       </div>
@@ -12,8 +12,8 @@
         <div class="author-wrap">
           <div class="author">
             <router-link to="/home">
-              王木木咯
-              <span>作者</span>
+              {{ props.comment.userNickName }}
+              <span v-show="props.comment.isAuthor">作者</span>
             </router-link>
           </div>
           <div class="comment-menu">
