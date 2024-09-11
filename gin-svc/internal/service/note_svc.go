@@ -57,12 +57,23 @@ func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, l
 		return nil, err
 	}
 	for i := range list {
-		info, err := n.repo.FindAuthorInfo(ctx, list[i].AuthorId)
-		if err != nil {
+		// 查询文章对应的作者信息
+		info, err1 := n.repo.FindAuthorInfo(ctx, list[i].AuthorId)
+		if err1 != nil {
+			n.lg.Warn("find author info failed",
+				ylog.String("err", err.Error()),
+				ylog.String("authorId", list[i].AuthorId),
+			)
 			continue
 		}
-		data, err := n.interactiveRepo.GetById(ctx, list[i].ID, "note")
-		if err != nil {
+		list[i].AuthorInfo = &info
+
+		// 查询文章对应的交互信息(点赞数，评论数等)
+		data, err2 := n.interactiveRepo.GetById(ctx, list[i].ID, "note")
+		if err2 != nil {
+			n.lg.Warn("get interactive data failed", ylog.String("noteId", list[i].ID))
+			// 没有交互信息很正常，所以不需要返回错误，直接跳过
+			list[i].InteractiveInfo = &domain.InteractiveInfo{} // 给一个空的交互信息
 			continue
 		}
 		//temp := n.toDomain(list[i])
@@ -75,7 +86,6 @@ func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, l
 			CollectCnt: data.CollectCnt,
 			BizType:    data.BizType,
 		}
-		list[i].AuthorInfo = &info
 	}
 	return list, nil
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import tab_item from "@/components/TabItem/index.vue";
-import note_item from "@/components/NoteItem/index.vue";
+import NoteItem from "@/components/note-item/index.vue";
 import { getNoteListRequest } from "@/api/note";
 import type { NoteFeedQuery } from "@/api/note/types";
 import { onMounted } from "vue";
@@ -40,7 +40,7 @@ onMounted(() => {
     </div>
 
     <div class="note_container">
-      <note_item v-for="(item,index) in noteList"
+      <note-item v-for="(item,index) in noteList"
                  :key="index"
                  :item="item" />
     </div>

@@ -75,7 +75,7 @@
         </div>
         <div class="fotter">
           <div class="bar-container">
-            <comment-fotter></comment-fotter>
+            <comment-fotter :detail="noteDetail"></comment-fotter>
           </div>
         </div>
       </div>

@@ -81,17 +81,48 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { tr } from 'element-plus/es/locales.mjs';
 import { ref } from 'vue';
+import { likeRequest } from '@/api/interactive';
+import { type IntrLikeForm } from '@/api/interactive/types';
+import { defineProps } from 'vue';
 const inputActive = ref(false)
 const inputing = ref(false) // 是否有输入文字
 const liked = ref(false) // 是否点赞
 const collectd = ref(false) // 是否收藏
 
+const props = defineProps({
+	detail: {
+		type: Object,
+		default: () => {}
+	}
+})
+
+const likeForm = ref({
+	resource_id: "",
+	action: 'like',
+	owner_id: "",
+	resource_type: "note"
+})
+
+const requestLike = async () => {
+	try {
+		likeForm.value.resource_id = props.detail.uuid
+		likeForm.value.owner_id = props.detail.authorId
+		const res = await likeRequest(likeForm.value)
+		if (res.code === 200) {
+			liked.value = !liked.value
+		}
+	} catch (error) {
+		console.log(error)
+	}
+}
+
 // 点击评论按钮
 const inputHandler = () => {
   inputActive.value = true
+	
 }
 
 // 取消评论
@@ -100,9 +131,10 @@ const cancelSub = () => {
 }
 
 // 点击 喜欢 按钮
-const handleLike = (data) => {
+const handleLike = (data:number) => {
   if (data === 1) {
     liked.value = true
+		requestLike()
   } else {
     liked.value = false
   }

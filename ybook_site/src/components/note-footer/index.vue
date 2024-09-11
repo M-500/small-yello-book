@@ -12,13 +12,15 @@
              alt="">
         <span>{{ props.item.author.nickName   }}</span>
       </a>
-      <span class="like_wrapper">
+      <span class="like_wrapper"
+            @click="handleLike(1)">
         <span class="like-lottie"></span>
         <SvgIcon name="heart"
                  width="16"
                  height="16"
-                 class="like_icon" />
-        <span class="count">{{ props.item.likeCnt }}</span>
+                 class="like" />
+        <span class="count"
+              v-if="props.item.interactiveInfo.likeCnt > 0">{{ props.item.interactiveInfo.likeCnt }}</span>
       </span>
     </div>
   </div>
@@ -26,6 +28,10 @@
 
 <script lang="ts" setup>
 import { defineProps } from 'vue';
+import { ref } from 'vue';
+import { likeRequest } from '@/api/interactive';
+import { type IntrLikeForm } from '@/api/interactive/types';
+const liked = ref(false) // 是否点赞
 const props:any = defineProps({
   item: {
     type: Object,
@@ -33,6 +39,34 @@ const props:any = defineProps({
     default: () => ({} as any),
   },
 });
+const likeForm = ref({
+	resource_id: "",
+	action: 'like',
+	owner_id: "",
+	resource_type: "note"
+})
+const requestLike = async () => {
+	try {
+		likeForm.value.resource_id = props.item.uuid
+		likeForm.value.owner_id = props.item.authorId
+		const res = await likeRequest(likeForm.value)
+		if (res.code === 200) {
+			liked.value = !liked.value
+		}
+	} catch (error) {
+		console.log(error)
+	}
+}
+
+// 点击 喜欢 按钮
+const handleLike = (data:number) => {
+  if (data === 1) {
+    liked.value = true
+		requestLike()
+  } else {
+    liked.value = false
+  }
+}
 </script>
 
 <style lang="scss" scoped>

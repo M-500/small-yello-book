@@ -67,7 +67,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		privateGroup.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl)) // 获取推荐文章列表  后续要改成feed流模式
 
 		// 点赞收藏相关
-		privateGroup.POST("/like", ginx.WrapJsonBodyAndClaims[types.InteractiveForm, jwt.UserClaims](intrCtl.LikeCtl))
+		privateGroup.POST("/interactive/like", ginx.WrapJsonBodyAndClaims[types.InteractiveForm, jwt.UserClaims](intrCtl.LikeCtl))
 		//group.POST("/collect", ginx.WrapJsonBody[types.CollectForm](s.CollectCtl))
 		//group.POST("/follow", ginx.WrapJsonBody[types.FollowForm](s.FollowCtl))
 

@@ -12,13 +12,13 @@
         <img :src="props.item.cover"
              alt="">
       </a> -->
-      <NoteFooter :item="props.item" />
+      <note-footer :item="props.item" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import NoteFooter from "@/components/NoteFooter/index.vue"
+import NoteFooter from "@/components/note-footer/index.vue"
 import { RouterLink } from "vue-router";
 import { defineProps } from "vue";
 
