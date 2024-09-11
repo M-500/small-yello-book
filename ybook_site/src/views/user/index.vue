@@ -60,14 +60,38 @@
                 :class="{active: selectTab === tab.name}"
                 @click="selectTab = tab.name" />
     </div>
+    <div class="feeds-tab-container">
+      <note-item v-for="(item,index) in userNoteList"
+                 :key="index"
+                 :item="item" />
+    </div>
   </div>
 </template>
 
-<script setup>
+<script  setup>
+import NoteItem from "@/components/note-item/index.vue";
 import tab_item from "@/components/TabItem/index.vue";
 import { useRoute } from 'vue-router';
 import { getUserInfoByUUID } from '@/api/user';
 import { ref } from "vue";
+import { getUserNoteListRequest } from '@/api/note/index'
+import { onMounted } from 'vue'
+// import { queryNoteListForm } from '@/api/note/types'
+
+const userNoteList = ref([])
+
+// 获取用户对应的笔记列表
+const getNoteListData = async () => {
+  const params = {
+    state: -1,
+    page: 1,
+    size: 10
+  }
+  getUserNoteListRequest(params).then((res) => {
+    console.log("叼你个嗨", res.data.list)
+    userNoteList.value = res.data.list
+  });
+}
 
 const selectTab = ref('note');
 const tabs = ref([
@@ -78,16 +102,18 @@ const tabs = ref([
 const route = useRoute();
 const userId = route.params.uuid; // 获取路由参数上的uuid
 const userDetail = ref({});
-// getUserInfoByUUID(userId).then(res => {
-//   console.log(res);
-// });
 
+// 获取用户信息
 const getUserInfo = async () => {
   const res = await getUserInfoByUUID(userId);
   userDetail.value = res.data;
 };
 
-getUserInfo();
+onMounted(() => {
+  getUserInfo();
+  getNoteListData();
+});
+
 </script>
 
 <style lang="scss" scoped>
@@ -106,10 +132,10 @@ getUserInfo();
     margin: 0 120px;
     .avatar{
       display: flex;
-      align-content: center;
+      align-content: center;  // 居中对齐
       .avatar_wrap{
-        width: calc(25vw - 30px);
-        height: calc(17.5vw - 21px);
+        width: calc(25vw - 30px); // 25vw代表屏幕宽度的25%
+        height: calc(17.5vw - 21px); //
         display: flex;
         justify-content: center;
         align-items: center;
@@ -210,6 +236,12 @@ getUserInfo();
   .tab_list{
     display: flex;
     justify-content: center;
+  }
+  .feeds-tab-container{
+    display: flex; // flex布局
+    flex-wrap: wrap; // 自动换行
+    justify-content: flex-start; // 两端对齐
+    gap: 20px;  // 间距
   }
 }
 </style>

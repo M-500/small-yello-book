@@ -3,3 +3,10 @@ export interface NoteFeedQuery {
   size: number
   tagId: number
 }
+
+
+export interface queryNoteListForm {
+  page: number
+  size: number
+  state: number
+}

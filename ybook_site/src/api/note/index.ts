@@ -1,9 +1,11 @@
 import request from '@/utils/request'
-import { type NoteFeedQuery } from './types'
+import { type NoteFeedQuery, type queryNoteListForm } from './types'
 
 enum NoteApi {
-  // 文章列表
+  // Feed流文章列表
   NoteListAPI = '/api/v1/feed/notes',
+  // 获取文章列表
+  NOTE_LIST = '/api/v1/notes',
   NoteDetialApi = '/api/v1/notes/detail/:uuid'
 }
 
@@ -14,4 +16,8 @@ export const getNoteListRequest = (data: NoteFeedQuery) => {
 
 export const getNoteDetailRequest = (uuid: string) => {
   return request.get(NoteApi.NoteDetialApi.replace(':uuid', uuid))
+}
+
+export const getUserNoteListRequest = (data: queryNoteListForm) => {
+  return request.get(NoteApi.NOTE_LIST, { params: data })
 }

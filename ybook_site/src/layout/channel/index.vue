@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import useUserStore from '@/stores/modules/user';
 import login_btn from "../loginBtn/index.vue";
 import { RouterLink } from "vue-router";
@@ -38,11 +38,11 @@ import publishIcon from '@/assets/icons/publish.svg';
 import msgIcon from '@/assets/icons/msg.svg';
 
 const userStore = useUserStore();
-const userInfo  = ref(userStore.getUserInfo);
+const userInfo = ref(userStore.getUserInfo);
 const tabs = ref([
-	{ name: 'home', label:'发现',icon:homeIcon,to:'/home',count:0},
-	{ name: 'publish', label:'发布',icon:publishIcon,to:'/publish',count:0},
-	{ name: 'notices', label:'通知',icon:msgIcon,to:'/notices',count:4},
+  { name: 'home', label: '发现', icon: homeIcon, to: '/home', count: 0 },
+  { name: 'publish', label: '发布', icon: publishIcon, to: '/publish', count: 0 },
+  { name: 'notices', label: '通知', icon: msgIcon, to: '/notices', count: 4 },
 ]);
 const selectTab = ref('home');
 

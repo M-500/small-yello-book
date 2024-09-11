@@ -110,10 +110,11 @@ const requestLike = async () => {
 	try {
 		likeForm.value.resource_id = props.detail.uuid
 		likeForm.value.owner_id = props.detail.authorId
-		const res = await likeRequest(likeForm.value)
-		if (res.code === 200) {
+		likeRequest(likeForm.value).then((res) => {
 			liked.value = !liked.value
-		}
+		}).catch((err) => {
+			console.log(err)
+		})
 	} catch (error) {
 		console.log(error)
 	}
@@ -141,7 +142,7 @@ const handleLike = (data:number) => {
 }
 
 // 点击 收藏 按钮
-const handleCollect = (data) => {
+const handleCollect = (data:number) => {
   if (data === 1) {
     collectd.value = true
   } else {

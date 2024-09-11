@@ -49,10 +49,11 @@ const requestLike = async () => {
 	try {
 		likeForm.value.resource_id = props.item.uuid
 		likeForm.value.owner_id = props.item.authorId
-		const res = await likeRequest(likeForm.value)
-		if (res.code === 200) {
+		likeRequest(likeForm.value).then((res) => {
 			liked.value = !liked.value
-		}
+		}).catch((error) => {
+			console.log(error)
+		})
 	} catch (error) {
 		console.log(error)
 	}
