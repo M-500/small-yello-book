@@ -1,29 +1,18 @@
 <template>
   <div class="channel_container">
-    <router-link class="item active"
-                 to="/home">
-      <div class="icon">
-        <img src="../../assets/icons/home.svg"
-             alt="" />
-      </div>
-      <div class="title">发现</div>
-    </router-link>
     <router-link class="item"
-                 to="/publish">
+                 v-for="(tab,index) in tabs"
+                 :key="index"
+                 :class="{active: selectTab === tab.name}"
+                 @click="selectTab = tab.name"
+                 :to="tab.to">
       <div class="icon">
-        <img src="../../assets/icons/publish.svg"
+        <img :src="tab.icon"
              alt="" />
+        <div class="count"
+             v-if="tab.count > 0 ">{{ tab.count }}</div>
       </div>
-      <div class="title">发布</div>
-    </router-link>
-    <router-link class="item"
-                 to="/notices">
-      <div class="icon">
-        <img src="../../assets/icons/msg.svg"
-             alt="" />
-        <div class="count">4</div>
-      </div>
-      <div class="title">通知</div>
+      <div class="title">{{ tab.label }}</div>
     </router-link>
     <router-link class="item"
                  v-if="userStore.isLogin()"
@@ -44,9 +33,24 @@ import useUserStore from '@/stores/modules/user';
 import login_btn from "../loginBtn/index.vue";
 import { RouterLink } from "vue-router";
 import { ref } from 'vue';
+import homeIcon from '@/assets/icons/home.svg';
+import publishIcon from '@/assets/icons/publish.svg';
+import msgIcon from '@/assets/icons/msg.svg';
 
 const userStore = useUserStore();
 const userInfo  = ref(userStore.getUserInfo);
+const tabs = ref([
+	{ name: 'home', label:'发现',icon:homeIcon,to:'/home',count:0},
+	{ name: 'publish', label:'发布',icon:publishIcon,to:'/publish',count:0},
+	{ name: 'notices', label:'通知',icon:msgIcon,to:'/notices',count:4},
+]);
+const selectTab = ref('home');
+
+// function getImageUrl(icon) {
+// 	return require(`${icon}`);
+// }
+
+
 
 
 </script>
