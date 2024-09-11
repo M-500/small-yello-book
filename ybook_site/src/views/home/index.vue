@@ -7,6 +7,13 @@ import { onMounted } from "vue";
 import { ref } from "vue";
 
 const noteList = ref([]);
+const selectTab = ref('美妆');
+const tabs = ref([
+  { name: '美妆', label:'meizhuang'},
+  { name: '健身', label:'jianshen'},
+  { name: '游泳', label:'youyong'},
+  { name: '育儿', label:'yuer'},
+]);
 
 
 const getFeedNoteList = async () => {
@@ -29,14 +36,11 @@ onMounted(() => {
 <template>
   <div class="container">
     <div class="channel_container">
-      <tab_item name="美妆"
-                :active="true" />
-      <tab_item name="健身"
-                :active="false" />
-      <tab_item name="游泳"
-                :active="false" />
-      <tab_item name="育儿"
-                :active="false" />
+      <tab_item v-for="(tab,index) in tabs"
+                :key="index"
+                :active="selectTab === tab.name"
+                :name="tab.name"
+                @click="selectTab = tab.name" />
     </div>
 
     <div class="note_container">
