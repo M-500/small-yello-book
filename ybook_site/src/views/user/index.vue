@@ -54,12 +54,11 @@
     </div>
 
     <div class="tab_list">
-      <tab_item name="笔记"
-                :active="true" />
-      <tab_item name="收藏"
-                :active="false" />
-      <tab_item name="点赞"
-                :active="false" />
+      <tab_item :name="tab.label"
+                v-for="(tab,index) in tabs"
+                :key="index"
+                :class="{active: selectTab === tab.name}"
+                @click="selectTab = tab.name" />
     </div>
   </div>
 </template>
@@ -70,6 +69,12 @@ import { useRoute } from 'vue-router';
 import { getUserInfoByUUID } from '@/api/user';
 import { ref } from "vue";
 
+const selectTab = ref('note');
+const tabs = ref([
+  { name: 'note', label: '笔记' },
+  { name: 'collect', label: '收藏' },
+  { name: 'like', label: '点赞' },
+]);
 const route = useRoute();
 const userId = route.params.uuid; // 获取路由参数上的uuid
 const userDetail = ref({});

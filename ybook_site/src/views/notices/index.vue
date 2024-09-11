@@ -3,12 +3,11 @@
     <div class="notifaction_page">
       <div class="ybook_tab_wrap">
         <div class="tab_list">
-          <tab_item name="评论和@"
-                    :active="true" />
-          <tab_item name="赞和关注"
-                    :active="false" />
-          <tab_item name="新增关注"
-                    :active="false" />
+          <tab_item :name="tab.label"
+                    v-for="(tab,index) in tabs"
+                    :key="index"
+                    :class="{active: selectTab === tab.name}"
+                    @click="selectTab = tab.name" />
         </div>
       </div>
 
@@ -31,6 +30,14 @@
 <script setup>
 import tab_item from "@/components/TabItem/index.vue";
 import CommentCard from "@/components/CommentCard/index.vue";
+import { ref } from "vue";
+
+const selectTab = ref('comment');
+const tabs = ref([
+  { name: 'comment', label: '评论和@' },
+  { name: 'like', label: '赞和关注' },
+  { name: 'follow', label: '新增关注' },
+]); 
 </script>
 
 <style lang="scss" scoped>
