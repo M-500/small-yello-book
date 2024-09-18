@@ -18,7 +18,7 @@ pipeline {
             steps {
                 // 使用 Dockerfile 构建 Docker 镜像并打标签
                 script {
-                    sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}"
+                    sh "docker build  --file=/gin-svc/Dockerfile --platform=linux/amd64 -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG} . "
                 }
             }
         }
