@@ -1,9 +1,25 @@
 pipeline {
     agent any
+    environment {
+
+        // 配置 Harbor 仓库信息
+        HARBOR_URL = 'http://124.223.67.129:8081'
+        HARBOR_PROJECT = 'ybook'
+        IMAGE_NAME = 'gin-single-app'
+        // Docker 镜像的标签
+        TAG = "1.0.1"
+        // Docker 用户名和密码（可以通过 Jenkins 凭据管理）
+        DOCKER_USER = credentials('wulinlin')
+        DOCKER_PASS = credentials('Wll987055897')
+        // 远程服务器 SSH 配置
+    }
     stages {
-        stage('测试一下'){
+        stage('构建镜像') {
             steps {
-                echo 'Hello World'
+                // 使用 Dockerfile 构建 Docker 镜像并打标签
+                script {
+                    sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}"
+                }
             }
         }
     }
