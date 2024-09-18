@@ -36,7 +36,7 @@ pipeline{
                 sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${HARBOR_URL}"
 
                 // 推送镜像到 Harbor 仓库
-                sh "docker push ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
+                sh "docker push ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
 
                 // 退出 Docker 登录
                 sh "docker logout ${HARBOR_URL}"
