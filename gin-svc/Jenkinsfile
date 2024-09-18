@@ -1,15 +1,31 @@
 pipeline{
     agent any
+
+    environment {
+        // 配置 Git 仓库地址
+        GIT_REPO = 'https://github.com/M-500/small-yello-book.git'
+        // 配置 Harbor 仓库信息
+        HARBOR_URL = 'http://124.223.67.129:8081'
+        HARBOR_PROJECT = 'ybook'
+        IMAGE_NAME = 'gin-single-app'
+        // Docker 镜像的标签
+        TAG = "${version}"
+        // Docker 用户名和密码（可以通过 Jenkins 凭据管理）
+        DOCKER_USER = credentials('wulinlin')
+        DOCKER_PASS = credentials('Wll987055897')
+        // 远程服务器 SSH 配置
+    }
     stages{
         stage("拉取代码"){
             steps {
                 echo '拉取成功'
                 sh "ls -al"
+                sh "cd gin-svc"
             }
         }
         stage("执行构建"){
             steps {
-                echo '构建完成'
+                sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}"
             }
         }
         stage("发送image镜像到测试服务器"){
