@@ -1,4 +1,4 @@
-FROM golang:1.22 AS builder
+FROM golang:1.22 as builder
 
 # 配置工作目录
 ENV APP_HOME /go/src/github.com/ybook/gin-svc

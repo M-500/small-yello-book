@@ -25,7 +25,7 @@ pipeline{
         stage("执行构建"){
             steps {
                 echo '开始构建'
-                sh 'cd gin-svc && docker build .  --file=./Dockerfile  --platform=linux/amd64 -t ybook:v1.0.1'
+                sh 'cd gin-svc && docker build .  -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}'
                 echo "构建成功"
             }
         }
