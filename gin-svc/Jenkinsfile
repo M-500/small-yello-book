@@ -20,11 +20,11 @@ pipeline{
             steps {
                 echo '拉取成功'
                 sh "ls -al"
-                sh "cd gin-svc"
             }
         }
         stage("执行构建"){
             steps {
+                sh "cd gin-svc"
                 sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
             }
         }
