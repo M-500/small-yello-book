@@ -25,7 +25,7 @@ pipeline{
         }
         stage("执行构建"){
             steps {
-                sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}"
+                sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
             }
         }
         stage("发送image镜像到测试服务器"){
