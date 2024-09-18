@@ -26,6 +26,7 @@ pipeline{
             steps {
                 echo '开始构建'
                 sh 'cd gin-svc && docker build .  -t ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}'
+                sh 'docker tag ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG} ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}'
                 echo "构建成功"
             }
         }
