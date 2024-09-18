@@ -17,12 +17,12 @@ pipeline {
     }
 
     stages {
-        stage('拉取代码') {
-            steps {
-                // 拉取 Git 仓库
-                git url: "${env.GIT_REPO}", branch: 'main'
-            }
-        }
+//         stage('拉取代码') {
+//             steps {
+//                 // 拉取 Git 仓库
+//                 git url: "${env.GIT_REPO}", branch: 'main'
+//             }
+//         }
 
         stage('构建镜像') {
             steps {
