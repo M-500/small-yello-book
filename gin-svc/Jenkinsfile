@@ -4,6 +4,7 @@ pipeline{
         stage("拉取代码"){
             steps {
                 echo '拉取成功'
+                sh "ls -al"
             }
         }
         stage("执行构建"){
