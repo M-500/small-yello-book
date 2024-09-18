@@ -9,7 +9,7 @@ pipeline{
         HARBOR_PROJECT = 'ybook'
         IMAGE_NAME = 'gin-single-app'
         // Docker 镜像的标签
-        TAG = "123"
+        TAG = "v1.0.1"
         // Docker 用户名和密码（可以通过 Jenkins 凭据管理）
 //         DOCKER_USER = credentials('wulinlin')
 //         DOCKER_PASS = credentials('Wll987055897')
