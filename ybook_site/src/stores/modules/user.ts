@@ -38,14 +38,14 @@ const useUserStore = defineStore({
       }
     },
     userLogout() {
-      this.clearToke()
+      this.clearToken()
       this.userInfo = {}
     },
     setToken(token: string) {
       this.token = token
       localStorage.setItem('x-token', token)
     },
-    clearToke() {
+    clearToken() {
       localStorage.clear()
       this.token = ''
     },

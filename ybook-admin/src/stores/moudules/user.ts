@@ -6,12 +6,6 @@ import { defineStore } from 'pinia'
 
 // 创建用户小仓库
 const useUserStore = defineStore('User', {
-  // state: () => {
-  // 	return {
-  // 		token: '',
-  // 		userInfo: {}
-  // 	}
-  // }
 
   state: () => ({
     token: localStorage.getItem('TOKEN'),
@@ -50,7 +44,8 @@ const useUserStore = defineStore('User', {
       }
     },
     userLogout() {
-      this.clearToke()
+      this.clearToken()
+      this.userInfo = {}
     },
     setToken(token: string) {
       this.token = token
@@ -60,7 +55,7 @@ const useUserStore = defineStore('User', {
       this.userInfo = userInfo
       localStorage.setItem('USER_INFO', JSON.stringify(userInfo))
     },
-    clearToke() {
+    clearToken() {
       localStorage.clear()
       this.token = ''
     }
