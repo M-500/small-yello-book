@@ -11,8 +11,8 @@ pipeline{
         // Docker 镜像的标签
         TAG = "v1.0.1"
         // Docker 用户名和密码（可以通过 Jenkins 凭据管理）
-//         DOCKER_USER = credentials('wulinlin')
-//         DOCKER_PASS = credentials('Wll987055897')
+        DOCKER_USER = 'wulinlin'
+        DOCKER_PASS = 'Wll987055897'
         // 远程服务器 SSH 配置
     }
     stages{
@@ -31,7 +31,14 @@ pipeline{
         }
         stage("发送image镜像到测试服务器"){
             steps {
-                echo '发送完成'
+                // 登录到 Harbor
+                sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS} ${HARBOR_URL}"
+
+                // 推送镜像到 Harbor 仓库
+                sh "docker push ${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"
+
+                // 退出 Docker 登录
+                sh "docker logout ${HARBOR_URL}"
             }
         }
     }
