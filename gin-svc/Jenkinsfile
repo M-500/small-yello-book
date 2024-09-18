@@ -24,7 +24,9 @@ pipeline{
         }
         stage("执行构建"){
             steps {
+                echo '开始构建'
                 sh 'cd gin-svc && docker build . --file=./Dockerfile --platform=linux/amd64 -t demo1'
+                echo "构建成功"
             }
         }
         stage("发送image镜像到测试服务器"){
