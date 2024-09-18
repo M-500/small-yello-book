@@ -19,7 +19,7 @@ COPY . ./
 # 编译成可执行文件 文件名为server 编译的是main.go 使用详细输出（-v）
 RUN CGO_ENABLED=0 go build -v -o ybook-server main.go && chmod +x ybook-server
 
-FROM alpine
+FROM alpine:3.14
 
 COPY --from=builder /go/src/github.com/ybook/gin-svc/ybook-server /app/ybook-server
 COPY --from=builder /go/src/github.com/ybook/gin-svc/etc/prod.yaml /app/etc/prod.yaml
