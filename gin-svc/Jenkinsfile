@@ -5,7 +5,7 @@ pipeline{
         // 配置 Git 仓库地址
         GIT_REPO = 'https://github.com/M-500/small-yello-book.git'
         // 配置 Harbor 仓库信息
-        HARBOR_URL = 'http://124.223.67.129:8081'
+        HARBOR_URL = '124.223.67.129:8081'
         HARBOR_PROJECT = 'ybook'
         IMAGE_NAME = 'gin-single-app'
         // Docker 镜像的标签
