@@ -42,76 +42,25 @@ pipeline{
                 sh "docker logout ${HARBOR_URL}"
             }
         }
+        stage("部署到测试服务器"){
+            steps {
+                sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps "'
+//                 container_id=$(docker ps -q --filter "name=promptbio_backend_test")
+//                 # check old container is running then kill it
+//                 if [ ! -z "$container_id" ]; then
+//                     docker stop $container_id
+//                     docker rm $container_id
+//                 else
+//                     echo "Container with name 'promptbio_backend_test' does not exist."
+//                 fi
+
+            }
+        }
     }
     post{
         always{
             echo 'always say goodbay'
+            sh "docker rmi ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG} || true"
         }
     }
 }
-
-// pipeline {
-//     agent any
-//
-//     environment {
-//         // 配置 Git 仓库地址
-//         GIT_REPO = 'https://github.com/M-500/small-yello-book.git'
-//         // 配置 Harbor 仓库信息
-//         HARBOR_URL = 'http://124.223.67.129:8081'
-//         HARBOR_PROJECT = 'ybook'
-//         IMAGE_NAME = 'gin-single-app'
-//         // Docker 镜像的标签
-//         TAG = "${version}"
-//         // Docker 用户名和密码（可以通过 Jenkins 凭据管理）
-//         DOCKER_USER = credentials('wulinlin')
-//         DOCKER_PASS = credentials('Wll987055897')
-//         // 远程服务器 SSH 配置
-//     }
-//
-//     stages {
-// //         stage('拉取代码') {
-// //             steps {
-// //                 // 拉取 Git 仓库
-// //                 git url: "${env.GIT_REPO}", branch: 'main'
-// //             }
-// //         }
-//
-//         stage('构建镜像') {
-//             steps {
-//                 // 使用 Dockerfile 构建 Docker 镜像并打标签
-//                 script {
-//                     sh "docker build .  --file=./Dockerfile --platform=linux/amd64 -t ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}"
-//                 }
-//             }
-//         }
-//
-//         stage('推送镜像到harbor仓库') {
-//             steps {
-//                     // 登录到 Harbor
-//                     sh "docker login -u ${env.DOCKER_USER} -p ${env.DOCKER_PASS} ${env.HARBOR_URL}"
-//
-//                     // 推送镜像到 Harbor 仓库
-//                     sh "docker push ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG}"
-//
-//                     // 退出 Docker 登录
-//                     sh "docker logout ${env.HARBOR_URL}"
-//                 }
-//             }
-//         }
-//
-//
-//     }
-//
-//     post {
-//         always {
-//             // 清理本地 Docker 镜像，避免磁盘空间耗尽
-//             sh "docker rmi ${env.HARBOR_URL}/${env.HARBOR_PROJECT}/${env.IMAGE_NAME}:${env.TAG} || true"
-//         }
-//         failure {
-//             echo 'Pipeline failed'
-//         }
-//         success {
-//             echo 'Pipeline completed successfully'
-//         }
-//     }
-// }

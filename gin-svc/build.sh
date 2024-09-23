@@ -1,6 +1,6 @@
 
 # 打包镜像
-docker build .  --file=./Dockerfile  --platform=linux/amd64 -t ybook:v1.0.1
+docker build .  --file=./Dockerfile  -t ybook:v1.0.1
 
 ## 登陆harbor仓库
 #docker login http://124.223.67.129:8081 -u wulinlin
