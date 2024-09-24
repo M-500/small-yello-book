@@ -64,7 +64,7 @@ func (u *userDaoImpl) Upsert(ctx context.Context, user models.UserModel, rid []i
 			"school":     user.School,
 			"level":      user.Level,
 		}),
-	}).Create(user).Error
+	}).Create(&user).Error
 }
 
 func (u *userDaoImpl) FindByUserName(ctx context.Context, userName string) (models.UserModel, error) {
