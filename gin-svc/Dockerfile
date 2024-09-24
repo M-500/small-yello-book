@@ -17,7 +17,7 @@ RUN go mod download
 COPY . ./
 
 # 编译成可执行文件 文件名为server 编译的是main.go 使用详细输出（-v）
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -ldflags="-s -w"  && chmod +x ybook-server
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build   && chmod +x ybook-server
 
 FROM alpine:3.14
 
