@@ -9,32 +9,11 @@
         <el-tabs v-model="activeName"
                  class="demo-tabs"
                  @tab-click="handleClick">
-          <el-tab-pane label="全部笔记"
-                       name="first">
-            <div class="note-container-box">
-              <note-manager-card v-for="(item,index) in noteList"
-                                 :key="index"
-                                 :item="item"></note-manager-card>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="已发布"
-                       name="second">
-            <div class="note-container-box">
-              <note-manager-card v-for="(item,index) in noteList"
-                                 :key="index"
-                                 :item="item"></note-manager-card>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="审核中"
-                       name="third">
-            <div class="note-container-box">
-              <note-manager-card v-for="(item,index) in noteList"
-                                 :key="index"
-                                 :item="item"></note-manager-card>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="未通过"
-                       name="fourth">
+          <el-tab-pane :label="tab.label"
+                       v-for="(tab,index) in tabs"
+                       :key="index"
+                       :class="{active: selectTab === tab.name}"
+                       @click="selectTab = tab.name">
             <div class="note-container-box">
               <note-manager-card v-for="(item,index) in noteList"
                                  :key="index"
@@ -60,6 +39,13 @@ import type { TabsPaneContext } from 'element-plus'
 
 const activeName = ref('first')
 const noteList = ref([])
+const selectTab = ref('all');
+const tabs = ref([
+  { name: 'all', label: '全部笔记',state: -1 },
+  { name: 'published', label: '已发布',state: 0 },
+  { name: 'checking', label: '审核中',state: 1 },
+  { name: 'refuse', label: '未通过',state: 2 },
+]); 
 
 const handleClick = (tab:TabsPaneContext, event: Event) => {
   console.log("我尼玛",tab, event)
@@ -67,9 +53,9 @@ const handleClick = (tab:TabsPaneContext, event: Event) => {
 }
 
 // 获取笔记列表
-const getNoteListData = async () => {
+const getNoteListData = async (state:number) => {
   const params: queryNoteListForm = {
-    state: -1,
+    state: state,
     page: 1,
     size: 10
   }
@@ -78,7 +64,7 @@ const getNoteListData = async () => {
 }
 
 onMounted(() => {
-  getNoteListData()
+  getNoteListData(-1)
 })
 
 </script>

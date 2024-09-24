@@ -11,6 +11,7 @@
                 style="width: 100%">
         <el-table-column prop="date"
                          label="封面"
+                         align="center"
                          width="180">
           <template #default="{row}">
             <img :src="row.cover"
@@ -18,7 +19,7 @@
                  alt="" />
           </template>
         </el-table-column>
-        <el-table-column prop="name"
+        <el-table-column prop="author.nickName"
                          label="作者"
                          width="180" />
         <el-table-column prop="noteTitle"
@@ -138,7 +139,7 @@ getNoteListData()
       border-radius: 8px;
       height: 100px;
       // 自适应宽度
-      width: 100%;
+      // width: 100%;
     }
   }
 }
