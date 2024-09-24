@@ -1,17 +1,25 @@
 
 server:
-  addr: 8000
+  addr: 8023
   mode: "debug"
-  file_upload_host: "http://jenkins.daimaxiaoxuesheng.xyz:9000"
+  file_upload_host: "http://127.0.0.1:8023"
 
 logs:
-  is_dev: false
+  is_dev: true
   file_name: "logs/app.log"
   err_file_name: "logs/err.log"
   max_size: 10
   max_backups: 10
   max_age: 10
-  compress: true
+  compress: false
+
+jwt:
+  secret: "k6CswdUm77WKcbM68UQUuxVsHSpTCwgK"
+  expire: 360000000
+  jwt_header_key: "Authorization"
+  jwt_prefix: "Bearer"
+
+
 
 database:
   dsn: "root:root@tcp(127.0.0.1:13306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"

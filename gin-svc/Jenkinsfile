@@ -45,7 +45,7 @@ pipeline{
         stage("部署到测试服务器"){
             steps {
                 sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps "'
-//                 container_id=$(docker ps -q --filter "name=promptbio_backend_test")
+                container_id= sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps -q --filter "name = ybook_test" "' //$(docker ps -q --filter "name=promptbio_backend_test")
 //                 # check old container is running then kill it
 //                 if [ ! -z "$container_id" ]; then
 //                     docker stop $container_id
