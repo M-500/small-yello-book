@@ -1,0 +1,1 @@
+import{r as t}from"./user-2AIJstJP.js";const a=e=>t.post("/api/v1/interactive/like",e),r=e=>t.get("/api/v1/feed/notes",{params:e}),i=e=>t.get("/api/v1/notes/detail/:uuid".replace(":uuid",e)),o=e=>t.get("/api/v1/notes",{params:e});export{o as a,i as b,r as g,a as l};
