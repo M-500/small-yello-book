@@ -46,11 +46,7 @@ pipeline{
             steps {
                 sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps "'
                 container_id= sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps -q --filter "name = ybook_test" "' //$(docker ps -q --filter "name=promptbio_backend_test")
-                if [ ! -z "$container_id" ]; then
-                    'ssh -o Port=6000 linlin@124.223.67.129 "docker stop $container_id  && docker rm $container_id"'
-                else
-                    echo "Container with name 'promptbio_backend_test' does not exist."
-                fi
+                sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker rm -f ${container_id}"'
             }
         }
         stage("拉取新镜像"){
