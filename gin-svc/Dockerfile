@@ -26,7 +26,7 @@ COPY --from=builder /go/src/github.com/ybook/gin-svc/etc/prod.yaml /app/etc/prod
 
 WORKDIR /app
 
-EXPOSE 8122
+EXPOSE 8023
 
 
 CMD ["./ybook-server"]

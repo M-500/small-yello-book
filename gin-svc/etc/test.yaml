@@ -1,0 +1,39 @@
+
+server:
+  addr: 8023
+  mode: "debug"
+  file_upload_host: "http://192.168.1.106:8023"
+
+logs:
+  is_dev: true
+  file_name: "logs/app.log"
+  err_file_name: "logs/err.log"
+  max_size: 10
+  max_backups: 10
+  max_age: 10
+  compress: false
+
+jwt:
+  secret: "k6CswdUm77WKcbM68UQUuxVsHSpTCwgK"
+  expire: 360000000
+  jwt_header_key: "Authorization"
+  jwt_prefix: "Bearer"
+
+
+
+database:
+  dsn: "root:root@tcp(127.0.0.1:13306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"
+  max_idle_conn: 10  # 最大空闲连接数
+  max_open_conn: 10  # 最大连接数
+
+redis:
+  addr: "127.0.0.1"
+  port: 16379
+  db: 1
+  password: ""
+
+email:
+  host: "smtp.163.com"
+  port: 25
+  addr: "18574945291@163.com"
+  secret_key: "PNNSCQKYTCCBCIIN"

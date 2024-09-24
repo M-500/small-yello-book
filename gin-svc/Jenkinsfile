@@ -45,7 +45,7 @@ pipeline{
 //         stage("停止旧容器"){
 //             steps {
 //                 sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps "'
-//                 sh 'ssh -o Port=6000 linlin@124.223.67.129 "container_id = docker ps -q --filter "name = ybook_test" "' //$(docker ps -q --filter "name=promptbio_backend_test")
+//                 sh 'ssh -o Port=6000 linlin@124.223.67.129 "container_id = docker ps -q --filter "name = ybook_sever_test" "' //$(docker ps -q --filter "name=promptbio_backend_test")
 //                 sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker rm -f ${container_id}"'
 //             }
 //         }
@@ -55,18 +55,11 @@ pipeline{
                  sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker pull ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG} "'
              }
          }
-//          stage("启动新容器"){
-//               steps {
-//                   sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps "'
-//                   container_id= sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker ps -q --filter "name = ybook_test" "' //$(docker ps -q --filter "name=promptbio_backend_test")
-//   //                 # check old container is running then kill it
-//                   if [ ! -z "$container_id" ]; then
-//                       'ssh -o Port=6000 linlin@124.223.67.129 "docker stop $container_id  && docker rm $container_id"'
-//                   else
-//                       echo "Container with name 'promptbio_backend_test' does not exist."
-//                   fi
-//               }
-//           }
+         stage("启动新容器"){
+              steps {
+                  sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker run -d -p 8023:8023 --name ybook_sever_test ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"'
+              }
+          }
     }
     post{
         always{
