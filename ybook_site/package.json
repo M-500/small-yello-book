@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite --open",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:dev": "NODE_ENV=development vue-cli-service build",
+    "build:prod": "NODE_ENV=production vue-cli-service build",
+    "build:test": "NODE_ENV=test vue-cli-service build",
     "preview": "vite preview",
     "test:unit": "vitest",
     "build-only": "vite build",
