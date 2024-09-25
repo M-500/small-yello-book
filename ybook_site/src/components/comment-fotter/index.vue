@@ -95,6 +95,7 @@ import type { IntrLikeForm } from '@/api/interactive/types';
 import type { CommentForm } from '@/api/comment/types';
 import { addCommentRequest } from '@/api/comment';
 import { defineProps } from 'vue';
+import { defineEmits } from 'vue';
 import { watch } from 'vue';
 const inputActive = ref(false)
 const inputing = ref(false) // 是否有输入文字
@@ -102,7 +103,7 @@ const liked = ref(false) // 是否点赞
 const collectd = ref(false) // 是否收藏
 const commentContent = ref('') // 评论内容
 const editableP = ref(null);  // 获取p标签的引用
-const replayContent = ref(null)
+const replayContent = ref()
 const parentId = ref(0)
 const props = defineProps({
 	detail: {
@@ -113,7 +114,7 @@ const props = defineProps({
 		type:Object
 	}
 })
-
+const emit = defineEmits(['refreshCommentList']);
 // 监听commentContent的变化
 watch(commentContent, (newVal) => {
 	if (newVal) {
@@ -203,6 +204,7 @@ const publishComment = async( resource_id:string,parent_id:number,media_url:stri
 			is_pinned: false
 		}
 		let res = await addCommentRequest(commentForm)
+		emit('refreshCommentList',true)
 		console.log('评论回复内容为',res)
 	} catch (error) {
 		console.log(error)

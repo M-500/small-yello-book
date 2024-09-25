@@ -77,6 +77,7 @@
         <div class="fotter">
           <div class="bar-container">
             <comment-fotter :triggerAction="triggerAction"
+                            @refreshCommentList="getCommentList"
                             :detail="noteDetail"></comment-fotter>
           </div>
         </div>
