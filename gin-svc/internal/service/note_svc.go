@@ -140,6 +140,7 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 	}
 	res := make([]domain.DNote, 0, len(list))
 	for _, model := range list {
+		temp := n.toDomain(model)
 		// 查询文章对应的作者信息
 		info, err1 := n.repo.FindAuthorInfo(ctx, model.AuthorId)
 		if err1 != nil {
@@ -152,9 +153,9 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 		// 1. 查询文章的点赞数据
 		data, err := n.interactiveRepo.GetById(ctx, model.UUID, "note")
 		if err != nil {
+			res = append(res, temp)
 			continue
 		}
-		temp := n.toDomain(model)
 		temp.AuthorInfo = &info
 		temp.InteractiveInfo = &domain.InteractiveInfo{
 			SourceGID:  data.SourceGID,

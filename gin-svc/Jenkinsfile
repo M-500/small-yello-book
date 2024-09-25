@@ -57,7 +57,7 @@ pipeline{
          }
          stage("启动新容器"){
               steps {
-                  sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker run -d -p 8023:8023 --name ybook_sever_test ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"'
+                  sh 'ssh -o Port=6000 linlin@124.223.67.129 "docker run -p 8011:8023 -v /home/linlin/Workspace/ybook/etc:/app/etc/  --name ybook_sever_test ${HARBOR_URL}/${HARBOR_PROJECT}/${IMAGE_NAME}:${TAG}"'
               }
           }
     }
