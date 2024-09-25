@@ -57,6 +57,47 @@ func (n *NoteCtl) NoteListCtl(ctx *gin.Context, req types.QueryNoteForm) (result
 	return ginx.SuccessPageList(notes, total), nil
 }
 
+func (n *NoteCtl) NoteListByUserPublished(ctx *gin.Context, req types.QueryNoteForm) (result ginx.JsonResult, err error) {
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.Size <= 0 {
+		req.Size = 10
+	}
+	userId := ctx.Param("uuid")
+	if utils.IsBlank(userId) {
+		return ginx.Error(400, "用户ID为空"), errors.New("用户ID为空")
+	}
+	publish, i, err := n.svc.ListNoteByUserPublish(ctx, userId, req.Size, req.Page)
+	return ginx.SuccessPageList(publish, i), nil
+}
+func (n *NoteCtl) NoteListByUserCollected(ctx *gin.Context, req types.QueryNoteForm) (result ginx.JsonResult, err error) {
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.Size <= 0 {
+		req.Size = 10
+	}
+	userId := ctx.Param("uuid")
+	if utils.IsBlank(userId) {
+		return ginx.Error(400, "用户ID为空"), errors.New("用户ID为空")
+	}
+	return ginx.SuccessPageList(nil, 0), nil
+}
+func (n *NoteCtl) NoteListByUserLiked(ctx *gin.Context, req types.QueryNoteForm) (result ginx.JsonResult, err error) {
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+	if req.Size <= 0 {
+		req.Size = 10
+	}
+	userId := ctx.Param("uuid")
+	if utils.IsBlank(userId) {
+		return ginx.Error(400, "用户ID为空"), errors.New("用户ID为空")
+	}
+	return ginx.SuccessPageList(nil, 0), nil
+}
+
 // NoteDetail
 //
 //	@Description: 获取文章详情

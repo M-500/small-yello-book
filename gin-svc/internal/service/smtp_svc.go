@@ -68,6 +68,7 @@ func (s *smtp163Service) LoginEmailSend(ctx context.Context, to string) error {
 	//	// 应该要写入kafka中，以便后续处理
 	//	err = s.SendEmail([]string{to}, "登陆验证码", verificationCode)
 	//}()
-	err = s.SendEmail([]string{to}, "登陆验证码", verificationCode)
+	// TODO: 生产环境再开启
+	//err = s.SendEmail([]string{to}, "登陆验证码", verificationCode)
 	return err
 }

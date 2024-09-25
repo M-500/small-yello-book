@@ -10,7 +10,6 @@ import (
 	"gin-svc/internal/types"
 	"gin-svc/internal/web/middleware/jwt"
 	"gin-svc/pkg/utils"
-	"github.com/redis/go-redis/v9"
 )
 
 type UserSvc interface {
@@ -49,16 +48,17 @@ func (u *userSvcImpl) FindByUserUUID(ctx context.Context, uuid string) (domain.D
 
 func (u *userSvcImpl) EmailLogin(ctx context.Context, req types.EmailLoginForm) (string, error) {
 	// 校验验证码是否正确
-	code, err := u.verRepo.GetVerificationCode(ctx, req.Email)
-	if errors.Is(err, redis.Nil) {
-		return "", errors.New("验证码错误")
-	}
-	if err != nil {
-		return "", errors.New("系统错误，查询验证码失败")
-	}
-	if code != req.VerCode {
-		return "", errors.New("验证码验证失败")
-	}
+	// 后续再开启
+	//code, err := u.verRepo.GetVerificationCode(ctx, req.Email)
+	//if errors.Is(err, redis.Nil) {
+	//	return "", errors.New("验证码错误")
+	//}
+	//if err != nil {
+	//	return "", errors.New("系统错误，查询验证码失败")
+	//}
+	//if code != req.VerCode {
+	//	return "", errors.New("验证码验证失败")
+	//}
 
 	user, err := u.userRepo.FindByEmail(ctx, req.Email)
 	//if errors.Is(err, dao.ErrRecordNotFound) {

@@ -9,6 +9,9 @@ import (
 type NoteDaoInterface interface {
 	FindByUUID(ctx context.Context, id string) (models.NoteModel, error)
 	ListByKey(ctx context.Context, keyword string, page, size int) ([]models.NoteModel, error)
+	ListPageByUserPublish(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error)
+	ListPageByUserCollected(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error)
+	ListPageByUserLiked(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error)
 	ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, int64, error)
 	Insert(ctx context.Context, note models.NoteModel) error
 	SaveNoteWithTx(ctx context.Context, note models.NoteModel, imgList []models.ImageModel) error
@@ -26,6 +29,32 @@ func NewNoteDao(db *gorm.DB) NoteDaoInterface {
 
 type noteDaoImpl struct {
 	db *gorm.DB
+}
+
+func (n *noteDaoImpl) ListPageByUserPublish(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
+	var res []models.NoteModel
+	var total int64
+	err := n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("author_id = ?", userId).Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	err = n.db.WithContext(ctx).Model(&models.NoteModel{}).Where("author_id = ?", userId).Limit(size).Offset((page - 1) * size).Find(&res).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return res, total, nil
+}
+
+func (n *noteDaoImpl) ListPageByUserCollected(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
+	var res []models.NoteModel
+	var total int64
+	return res, total, nil
+}
+
+func (n *noteDaoImpl) ListPageByUserLiked(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
+	var res []models.NoteModel
+	var total int64
+	return res, total, nil
 }
 
 func (n *noteDaoImpl) ChangeStatus(ctx context.Context, id string, i int) error {

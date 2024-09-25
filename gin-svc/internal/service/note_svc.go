@@ -19,6 +19,8 @@ type NoteService interface {
 
 	// 获取所有文章列表
 	ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)
+	// 获取用户发布的文章列表
+	ListNoteByUserPublish(ctx context.Context, userId string, offset int, limit int) ([]domain.DNote, int, error)
 
 	FeedListNote(ctx context.Context, TagId int, offset int, limit int) ([]domain.DNote, error)
 
@@ -45,6 +47,44 @@ type noteSvcImpl struct {
 	repo            repo.NoteRepoInterface
 	interactiveRepo repo.Interactive
 	lg              ylog.Logger
+}
+
+func (n *noteSvcImpl) ListNoteByUserPublish(ctx context.Context, userId string, offset int, limit int) ([]domain.DNote, int, error) {
+	info, err1 := n.repo.FindAuthorInfo(ctx, userId)
+	if err1 != nil {
+		n.lg.Warn("find author info failed",
+			ylog.String("err", err1.Error()),
+			ylog.String("authorId", userId),
+		)
+		return nil, 0, err1
+	}
+	query, i, err := n.repo.FindNoteListByUser(ctx, userId, limit, offset)
+	if err != nil {
+		return nil, 0, err
+	}
+	res := make([]domain.DNote, 0, len(query))
+	for _, model := range query {
+		temp := n.toDomain(model)
+		temp.AuthorInfo = &info // 组装用户信息
+		// 获取点赞收藏评论数
+		// 1. 查询文章的点赞数据
+		data, err := n.interactiveRepo.GetById(ctx, model.UUID, "note")
+		if err != nil {
+			res = append(res, temp)
+			continue
+		}
+		temp.InteractiveInfo = &domain.InteractiveInfo{
+			SourceGID:  data.SourceGID,
+			ViewCnt:    data.ViewCnt,
+			LikeCnt:    data.LikeCnt,
+			ShareCnt:   data.ShareCnt,
+			CommentCnt: data.CommentCnt,
+			CollectCnt: data.CollectCnt,
+			BizType:    data.BizType,
+		}
+		res = append(res, temp)
+	}
+	return res, int(i), nil
 }
 
 func (n *noteSvcImpl) PassNote(ctx context.Context, uuid string) error {

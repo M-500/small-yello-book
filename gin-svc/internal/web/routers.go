@@ -62,9 +62,12 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		//privateGroup.PUT("/roles", ginx.WrapJsonBody[types.UpdateRoleReq](r.UpdateRoleCtl))   //	更新角色
 		privateGroup.POST("/notes", ginx.WrapJsonBodyAndClaims[types.CreateNoteForm, jwt.UserClaims](n.CreateNoteCtl)) // 发布文章
 		privateGroup.PUT("/notes/:uuid/pass", ginx.WrapResponse(n.PassNoteCtl))
-		privateGroup.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))              // 获取文章列表
-		privateGroup.GET("/notes/detail/:uuid", ginx.WrapResponse(n.NoteDetail))                        // 获取文章详情信息
-		privateGroup.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl)) // 获取推荐文章列表  后续要改成feed流模式
+		privateGroup.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))                            // 获取文章列表
+		privateGroup.GET("notes/:uuid/published", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserPublished)) // 获取某个用户已经发表的文章信息
+		privateGroup.GET("notes/:uuid/collected", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserCollected)) // 获取某个用户已经收藏的文章
+		privateGroup.GET("notes/:uuid/liked", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserLiked))         // 获取某个用户已经点赞过的文章
+		privateGroup.GET("/notes/detail/:uuid", ginx.WrapResponse(n.NoteDetail))                                      // 获取文章详情信息
+		privateGroup.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl))               // 获取推荐文章列表  后续要改成feed流模式
 
 		// 点赞收藏相关
 		privateGroup.POST("/interactive/like", ginx.WrapJsonBodyAndClaims[types.InteractiveForm, jwt.UserClaims](intrCtl.LikeCtl))

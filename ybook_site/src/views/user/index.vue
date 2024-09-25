@@ -234,6 +234,7 @@ onMounted(() => {
   .tab_list{
     display: flex;
     justify-content: center;
+    padding: 16px 0;
   }
   .feeds-tab-container{
     display: flex; // flex布局

@@ -12,6 +12,7 @@ import (
 
 type NoteRepoInterface interface {
 	FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error)
+	FindNoteListByUser(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error)
 	FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, int64, error)
 	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]domain.DNote, error)
 	FindAuthorInfo(ctx context.Context, authorID string) (domain.Author, error)
@@ -31,6 +32,10 @@ type noteRepo struct {
 	dao     dao.NoteDaoInterface
 	imgDao  dao.ImageDao
 	userDao dao.UserDao
+}
+
+func (n *noteRepo) FindNoteListByUser(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
+	return n.dao.ListPageByUserPublish(ctx, userId, page, size)
 }
 
 func (n *noteRepo) NoteDetail(ctx context.Context, noteID string) (domain.DNote, error) {
