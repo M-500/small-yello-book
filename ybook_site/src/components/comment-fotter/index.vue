@@ -1,11 +1,17 @@
 <template>
   <div class="comment-fotter-container">
-
+    <div class="replay-content"
+         v-if="replayContent">
+      <div class="replay">回复：{{ replayContent.userNickName }}</div>
+      <div class="content">{{ replayContent.content }}</div>
+    </div>
     <div class="input-box">
       <!-- 左侧说点什么 -->
       <div class="content-edit">
         <p class="content-input"
            @click="inputHandler"
+           ref="editableP"
+           @input="handleInput"
            :contenteditable="inputActive"></p>
         <div class="not-active"
              @click="inputHandler"
@@ -70,6 +76,7 @@
         </div>
         <div class="right-area">
           <button class="send"
+                  @click="addComment"
                   :class="inputing ? 'active': ''">发送</button>
           <button class="cancel"
                   @click="cancelSub">取消</button>
@@ -82,22 +89,60 @@
 </template>
 
 <script lang="ts" setup>
-import { tr } from 'element-plus/es/locales.mjs';
 import { ref } from 'vue';
 import { likeRequest } from '@/api/interactive';
-import { type IntrLikeForm } from '@/api/interactive/types';
+import type { IntrLikeForm } from '@/api/interactive/types';
+import type { CommentForm } from '@/api/comment/types';
+import { addCommentRequest } from '@/api/comment';
 import { defineProps } from 'vue';
+import { watch } from 'vue';
 const inputActive = ref(false)
 const inputing = ref(false) // 是否有输入文字
 const liked = ref(false) // 是否点赞
 const collectd = ref(false) // 是否收藏
-
+const commentContent = ref('') // 评论内容
+const editableP = ref(null);  // 获取p标签的引用
+const replayContent = ref(null)
+const parentId = ref(0)
 const props = defineProps({
 	detail: {
 		type: Object,
 		default: () => {}
+	},
+	triggerAction: {
+		type:Object
 	}
 })
+
+// 监听commentContent的变化
+watch(commentContent, (newVal) => {
+	if (newVal) {
+		inputing.value = true
+	} else {
+		inputing.value = false
+	}
+})
+// 监听triggerAction的变化
+watch(() => props.triggerAction, (newVal) => {
+  if (newVal) {
+    console.log("来活啦！",newVal)
+		inputActive.value = true
+		replayContent.value = newVal
+		parentId.value = newVal.id
+  }
+});
+
+
+const handleInput = () => {
+		// 获取p标签内的内容
+		if (editableP.value) {
+			commentContent.value = editableP.value.innerText;
+			console.log(commentContent.value)
+		}
+	};
+
+
+
 
 const likeForm = ref({
 	resource_id: "",
@@ -123,7 +168,6 @@ const requestLike = async () => {
 // 点击评论按钮
 const inputHandler = () => {
   inputActive.value = true
-	
 }
 
 // 取消评论
@@ -141,6 +185,29 @@ const handleLike = (data:number) => {
   }
 }
 
+const addComment = () => {
+	publishComment(props.detail.uuid,parentId.value, '')
+	inputActive.value = false
+	commentContent.value = ''
+	inputing.value = false
+	editableP.value.innerText = ''
+}
+
+const publishComment = async( resource_id:string,parent_id:number,media_url:string) => {
+	try {
+		const commentForm: CommentForm = {
+			content: commentContent.value,
+			resource_id: resource_id,
+			parent_id: parent_id,
+			media_url: media_url,
+			is_pinned: false
+		}
+		let res = await addCommentRequest(commentForm)
+		console.log('评论回复内容为',res)
+	} catch (error) {
+		console.log(error)
+	}
+}
 // 点击 收藏 按钮
 const handleCollect = (data:number) => {
   if (data === 1) {
@@ -156,6 +223,24 @@ const handleCollect = (data:number) => {
 .comment-fotter-container{
 	position: relative;
 	height: unset; 
+	.replay-content{
+		margin-bottom: 12px;
+    padding: 0 16px;
+    line-height: 16px;
+		.replay{
+			color: rgba(51,51,51,0.6);
+			font-size: 14px;
+		}
+		.content{
+			color:rgba(51,51,51,0.8);
+			font-size: 14px;
+			width: 100%;
+			margin-top: 4px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
 	.input-box{
 			display: flex;  // flex 布局
 			align-items: center;  // 垂直居中

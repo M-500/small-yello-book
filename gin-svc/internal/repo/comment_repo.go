@@ -46,6 +46,9 @@ func (c *commentRepo) CommentListByParentId(ctx context.Context, parentId int, d
 }
 
 func (c *commentRepo) CreateComment(ctx context.Context, data domain.DComment) error {
+	// TODO: 异步增加评论数
+
+	// 插入评论记录
 	return c.dao.InsertComment(ctx, c.toModel(data))
 }
 

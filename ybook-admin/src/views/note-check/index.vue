@@ -146,7 +146,7 @@ getNoteListData()
     overflow: auto;
     .cover{
       border-radius: 8px;
-      height: 100px;
+      height: 40px;
       // 自适应宽度
       // width: 100%;
     }

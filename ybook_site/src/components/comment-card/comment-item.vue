@@ -51,7 +51,8 @@
                 <span class="count">1</span>
               </template>
             </div>
-            <div class="replay">
+            <div class="replay"
+                 @click="replayHandler">
               <svg-icon name="comment"
                         height="16"></svg-icon>
               <span class="count">1</span>
@@ -67,7 +68,11 @@
 import { RouterLink } from "vue-router";
 import { defineProps } from 'vue';
 import { ref } from 'vue';
+import { defineEmits } from 'vue';
 const liked = ref(false) // 是否点赞
+const props = defineProps({
+  comment: Object
+});
 
 // 点击 喜欢 按钮
 const handleLike = (data) => {
@@ -77,10 +82,12 @@ const handleLike = (data) => {
     liked.value = false
   }
 }
+// 定义子组件发出的事件
+const emit = defineEmits(['updateValue']);
 
-const props = defineProps({
-  comment: Object
-});
+const replayHandler = () => {
+  emit('updateValue', props.comment);
+}
 </script>
 
 <style lang="scss" scoped>

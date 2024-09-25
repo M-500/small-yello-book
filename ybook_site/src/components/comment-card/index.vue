@@ -1,7 +1,8 @@
 <template>
   <div class="parent-comment">
-    <comment-item :comment="commentItem"></comment-item>
-    <replay-item v-for="(item,index) in commentItem.sub"
+    <comment-item :comment="commentData"
+                  @updateValue="handlerData"></comment-item>
+    <replay-item v-for="(item,index) in commentData.sub"
                  :key="index"
                  :replayItem="item"></replay-item>
   </div>
@@ -10,12 +11,20 @@
 <script setup>
 import CommentItem from './comment-item.vue';
 import ReplayItem from './replay-item.vue';
+import { defineEmits } from 'vue';
 import { defineProps } from 'vue';
 
 const props = defineProps({
-  commentItem: Object,
+  commentData: Object,
 });
-console.log("来了吗", props);
+const emit = defineEmits(['replayHdl']);
+
+// 继续传递给父组件
+const handlerData = (data) => {
+  emit('replayHdl', data);
+}
+
+
 </script>
 
 <style lang="scss" scoped>

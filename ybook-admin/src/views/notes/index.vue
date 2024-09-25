@@ -37,7 +37,7 @@ import { onMounted, ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
 
 
-const activeName = ref('first')
+const activeName = ref('all')
 const noteList = ref([])
 const selectTab = ref('all');
 const tabs = ref([
@@ -66,7 +66,6 @@ const getNoteListData = async (state:number) => {
 onMounted(() => {
   getNoteListData(-1)
 })
-
 </script>
 
 <style lang="scss" scoped>

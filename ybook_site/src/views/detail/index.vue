@@ -68,14 +68,16 @@
               <div class="list-container">
                 <comment-card v-for="(item,index) in commentList"
                               :key="index"
-                              :commentItem="item"></comment-card>
+                              @replayHdl="replayHandler"
+                              :commentData="item"></comment-card>
               </div>
             </div>
           </div>
         </div>
         <div class="fotter">
           <div class="bar-container">
-            <comment-fotter :detail="noteDetail"></comment-fotter>
+            <comment-fotter :triggerAction="triggerAction"
+                            :detail="noteDetail"></comment-fotter>
           </div>
         </div>
       </div>
@@ -92,14 +94,21 @@ import { onMounted, ref } from 'vue';
 
 import CommentCard from '@/components/comment-card/index.vue';
 import CommentFotter from '@/components/comment-fotter/index.vue';
+import { tr } from 'element-plus/es/locales.mjs';
 // 获取路由参数
 const route = useRoute();
 const noteId = route.params.uuid; // 获取路由参数上的uuid
 const noteDetail = ref({});
 const commentList = ref([]);
 const isFollowed = ref(false); // 是否关注
+// 定义触发器，用来通知子组件 B
+const triggerAction = ref(null);
 
-
+// 接受子组件回复的通知
+const replayHandler = (data) => {
+  // 通知子组件发起回复
+  triggerAction.value = data
+};
 // 获取数据
 const getNoteDetail = async () => {
   const res = await getNoteDetailRequest(noteId);

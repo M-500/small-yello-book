@@ -1,6 +1,7 @@
 package ginx
 
 import (
+	"fmt"
 	"gin-svc/pkg/constant"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -35,7 +36,7 @@ func WrapJsonBodyAndClaims[Req any, Claims jwt.Claims](
 	return func(ctx *gin.Context) {
 		var req Req
 		if err := ctx.Bind(&req); err != nil {
-
+			fmt.Println("输入错误", err)
 			return
 		}
 

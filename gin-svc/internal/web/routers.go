@@ -72,8 +72,8 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		//group.POST("/follow", ginx.WrapJsonBody[types.FollowForm](s.FollowCtl))
 
 		// 评论相关
-		privateGroup.POST("/comments", ginx.WrapJsonBodyAndClaims[types.AddCommentForm, jwt.UserClaims](commentCtl.AddCommentCtl))
-		privateGroup.GET("/comments/:resource_id", ginx.WrapResponse(commentCtl.CommentListCtl))
+		privateGroup.POST("/comments", ginx.WrapJsonBodyAndClaims[types.AddCommentForm, jwt.UserClaims](commentCtl.AddCommentCtl)) // 发布评论
+		privateGroup.GET("/comments/:resource_id", ginx.WrapResponse(commentCtl.CommentListCtl))                                   // 获取评论列表
 	}
 
 	return engine
