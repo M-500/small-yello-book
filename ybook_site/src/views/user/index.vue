@@ -74,34 +74,32 @@ import tab_item from "@/components/TabItem/index.vue";
 import { useRoute } from 'vue-router';
 import { getUserInfoByUUID } from '@/api/user';
 import { ref } from "vue";
-import { getUserNoteListRequest } from '@/api/note/index'
+import { getUserNoteByUserRequest, getUserNoteByUserCollectedRequest, getUserNoteByUserLikedRequest } from '@/api/note/index'
 import { onMounted } from 'vue'
 // import { queryNoteListForm } from '@/api/note/types'
-
 const userNoteList = ref([])
-
-// 获取用户对应的笔记列表
-const getNoteListData = async () => {
-  const params = {
-    state: -1,
-    page: 1,
-    size: 10
-  }
-  getUserNoteListRequest(params).then((res) => {
-    console.log("叼你个嗨", res.data.list)
-    userNoteList.value = res.data.list
-  });
-}
-
+const route = useRoute();
+const userId = route.params.uuid; // 获取路由参数上的uuid
+const userDetail = ref({});
 const selectTab = ref('note');
 const tabs = ref([
   { name: 'note', label: '笔记' },
   { name: 'collect', label: '收藏' },
   { name: 'like', label: '点赞' },
 ]);
-const route = useRoute();
-const userId = route.params.uuid; // 获取路由参数上的uuid
-const userDetail = ref({});
+// 获取用户对应的笔记列表
+const getNoteListData = async () => {
+  const params = {
+    state: 1,
+    page: 1,
+    size: 10
+  }
+  getUserNoteByUserRequest(userId, params).then((res) => {
+    userNoteList.value = res.data.list
+  });
+}
+
+
 
 // 获取用户信息
 const getUserInfo = async () => {

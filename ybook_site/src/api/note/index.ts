@@ -6,7 +6,10 @@ enum NoteApi {
   NoteListAPI = '/api/v1/feed/notes',
   // 获取文章列表
   NOTE_LIST = '/api/v1/notes',
-  NoteDetialApi = '/api/v1/notes/detail/:uuid'
+  NoteDetialApi = '/api/v1/notes/detail/:uuid',
+  NoteByUserApi = '/api/v1/notes/:uuid/published',
+  NoteByUserCollectedApi = '/api/v1/notes/:uuid/collected',
+  NoteByUserLikedApi = '/api/v1/notes/:uuid/liked'
 }
 
 export const getNoteListRequest = (data: NoteFeedQuery) => {
@@ -20,4 +23,16 @@ export const getNoteDetailRequest = (uuid: string) => {
 
 export const getUserNoteListRequest = (data: queryNoteListForm) => {
   return request.get(NoteApi.NOTE_LIST, { params: data })
+}
+
+export const getUserNoteByUserRequest = (uuid: string, data: queryNoteListForm) => {
+  return request.get(NoteApi.NoteByUserApi.replace(':uuid', uuid), { params: data })
+}
+
+export const getUserNoteByUserCollectedRequest = (uuid: string, data: queryNoteListForm) => {
+  return request.get(NoteApi.NoteByUserCollectedApi.replace(':uuid', uuid), { params: data })
+}
+
+export const getUserNoteByUserLikedRequest = (uuid: string, data: queryNoteListForm) => {
+  return request.get(NoteApi.NoteByUserLikedApi.replace(':uuid', uuid), { params: data })
 }

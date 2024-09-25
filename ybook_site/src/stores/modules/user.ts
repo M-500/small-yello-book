@@ -16,6 +16,9 @@ const useUserStore = defineStore({
     },
     getUserInfo(): object | null {
       return this.userInfo
+    },
+    getUserId(): string {
+      return this.userInfo.globalNumber
     }
   },
   actions: {

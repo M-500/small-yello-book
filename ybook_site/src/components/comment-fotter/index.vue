@@ -174,6 +174,10 @@ const inputHandler = () => {
 // 取消评论
 const cancelSub = () => {
   inputActive.value = false
+	replayContent.value = null
+	if (editableP.value) {
+		editableP.value.innerText = ''
+	}
 }
 
 // 点击 喜欢 按钮
@@ -194,6 +198,7 @@ const addComment = () => {
 	if (editableP.value) {
 		editableP.value.innerText = ''
 	}
+	replayContent.value = null
 }
 
 const publishComment = async( resource_id:string,parent_id:number,media_url:string) => {
