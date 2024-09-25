@@ -71,5 +71,23 @@ const userStore = useUserStore();
 		
 	}
 }
+
+@media (max-width: 768px){
+	.layout_container{
+		.layout_slide{
+			display: none;
+		}
+		.layout_header{
+			width: 100%;
+			left: 0;
+		}
+		.layout_main{
+			width: 100%;
+			left: 0;
+			padding: 16px 12px 0; // 这里是为了让内容不要贴边 24 32
+			overflow: auto; // 这里是为了防止撑开整个页面，出现滚动条
+		}
+	}
+}
 </style>
  

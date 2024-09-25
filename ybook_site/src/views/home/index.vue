@@ -74,4 +74,14 @@ onMounted(() => {
 
 		}
 }
+@media (max-width: 768px){
+  .container{
+    .note_container{
+      display: flex; // flex布局
+      flex-wrap: wrap; // 自动换行
+      justify-content: flex-start; // 两端对齐
+      gap: 12px;  // 间距
+    }
+  }
+}
 </style>

@@ -102,7 +102,7 @@ const inputing = ref(false) // 是否有输入文字
 const liked = ref(false) // 是否点赞
 const collectd = ref(false) // 是否收藏
 const commentContent = ref('') // 评论内容
-const editableP = ref(null);  // 获取p标签的引用
+const editableP = ref<HTMLElement | null>(null);  // 获取p标签的引用
 const replayContent = ref()
 const parentId = ref(0)
 const props = defineProps({
@@ -136,8 +136,8 @@ watch(() => props.triggerAction, (newVal) => {
 
 const handleInput = () => {
 		// 获取p标签内的内容
-		if (editableP.value) {
-			commentContent.value = editableP.value.innerText;
+		if (editableP.value ) {
+			commentContent.value = editableP.value?.innerText || '';
 			console.log(commentContent.value)
 		}
 	};
@@ -191,7 +191,9 @@ const addComment = () => {
 	inputActive.value = false
 	commentContent.value = ''
 	inputing.value = false
-	editableP.value.innerText = ''
+	if (editableP.value) {
+		editableP.value.innerText = ''
+	}
 }
 
 const publishComment = async( resource_id:string,parent_id:number,media_url:string) => {

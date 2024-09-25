@@ -58,4 +58,14 @@ const props:any = defineProps({
 		}
 	}
 }
+@media (max-width: 768px){
+	.note-item{
+		width: 197px;
+		.container{
+			.cover{
+				width: 100%;
+			}
+		}
+	}
+}
 </style>
