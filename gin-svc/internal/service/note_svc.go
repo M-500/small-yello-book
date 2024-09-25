@@ -134,7 +134,7 @@ func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id string) (domain.DNot
 }
 
 func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error) {
-	list, err := n.repo.FindNoteList(ctx, status, offset, limit)
+	list, total, err := n.repo.FindNoteList(ctx, status, offset, limit)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -144,10 +144,11 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 		// 查询文章对应的作者信息
 		info, err1 := n.repo.FindAuthorInfo(ctx, model.AuthorId)
 		if err1 != nil {
-			n.lg.Warn("find author info failed",
-				ylog.String("err", err.Error()),
-				ylog.String("authorId", model.AuthorId),
-			)
+			//n.lg.Warn("find author info failed",
+			//	ylog.String("err", err.Error()),
+			//	ylog.String("authorId", model.AuthorId),
+			//)
+			res = append(res, temp)
 			continue
 		}
 		// 1. 查询文章的点赞数据
@@ -168,7 +169,7 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 		}
 		res = append(res, temp)
 	}
-	return res, len(list), nil
+	return res, int(total), nil
 }
 
 func (n *noteSvcImpl) toDomain(note models.NoteModel) domain.DNote {

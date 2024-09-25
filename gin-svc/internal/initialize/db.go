@@ -11,7 +11,7 @@ import (
 
 func SetUpDB(cfg *cfg.DatabaseCfg) *gorm.DB {
 	config := &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Warn),
+		Logger: logger.Default.LogMode(logger.Info),
 	}
 	//config.NamingStrategy = schema.NamingStrategy{
 	//	TablePrefix:   "bbs_",

@@ -9,7 +9,7 @@ import (
 type NoteDaoInterface interface {
 	FindByUUID(ctx context.Context, id string) (models.NoteModel, error)
 	ListByKey(ctx context.Context, keyword string, page, size int) ([]models.NoteModel, error)
-	ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
+	ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, int64, error)
 	Insert(ctx context.Context, note models.NoteModel) error
 	SaveNoteWithTx(ctx context.Context, note models.NoteModel, imgList []models.ImageModel) error
 	Update(ctx context.Context, note *models.NoteModel) error
@@ -77,20 +77,23 @@ func (n *noteDaoImpl) ListByKey(ctx context.Context, keyword string, page, size 
 	return notes, nil
 }
 
-func (n *noteDaoImpl) ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, error) {
+func (n *noteDaoImpl) ListByStatus(ctx context.Context, status int, page, size int) ([]models.NoteModel, int64, error) {
 	var notes []models.NoteModel
+	var total int64
 	query := n.db.WithContext(ctx).Model(&models.NoteModel{})
 	if status == -1 {
+		query.Count(&total)
 		query.Limit(size).Offset((page - 1) * size).
 			Find(&notes)
 	} else {
+		query.Count(&total)
 		query.Where("status = ?", status).Limit(size).Offset((page - 1) * size).
 			Find(&notes)
 	}
 	if err := query.Error; err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	return notes, nil
+	return notes, total, nil
 }
 
 func (n *noteDaoImpl) Insert(ctx context.Context, note models.NoteModel) error {

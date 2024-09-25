@@ -49,7 +49,7 @@
                          label="发布日期" />
         <el-table-column fixed="right"
                          label="操作"
-                         min-width="30">
+                         min-width="60">
           <template #default="{row}">
             <el-button type="primary"
                        v-if="row.status === 0"
@@ -69,17 +69,15 @@
         </el-table-column>
       </el-table>
     </div>
-    <!-- <div class="fotter">
+    <div class="fotter">
       <el-pagination v-model:current-page="currentPage"
                      v-model:page-size="pageSize"
                      :size="size"
-                     :disabled="disabled"
-                     :background="background"
                      layout="prev, pager, next, jumper"
-                     :total="1000"
+                     :total="total"
                      @size-change="handleSizeChange"
                      @current-change="handleCurrentChange" />
-    </div> -->
+    </div>
   </el-card>
 </template>
 
@@ -88,7 +86,10 @@ import YbTitle from '@/components/YbTitle/index.vue'
 import { getNoteList,passNote } from '@/api/note'
 import type { queryNoteListForm } from '@/api/note/type'
 import { ref } from 'vue'
-
+const total = ref(0)
+const currentPage = ref(1)
+const pageSize = ref(10)
+const size = 'small'
 const passHandler = (noteId:string) => {
   passNoteReq(noteId)
 }
@@ -106,13 +107,21 @@ const passNoteReq = async (noteId:string) => {
 const getNoteListData = async () => {
   const params: queryNoteListForm = {
     state: -1,
-    page: 1,
-    size: 10
+    page: currentPage.value,
+    size: pageSize.value
   }
   const res = await getNoteList(params)
   tableData.value = res.data.list
+  total.value = res.data.total
+}
+const handleSizeChange = (val: number) => {
+  console.log(val)
 }
 
+const handleCurrentChange = (val: number) => {
+  currentPage.value = val
+  getNoteListData()
+}
 getNoteListData()
 </script>
 
@@ -132,7 +141,7 @@ getNoteListData()
 
   .check-box{
     padding-top: 12px;
-    height: calc(100% - 150px);
+    height: calc(100% - 98px);
     width: 100%;
     overflow: auto;
     .cover{
@@ -141,6 +150,12 @@ getNoteListData()
       // 自适应宽度
       // width: 100%;
     }
+  }
+  .fotter{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    height: 50px;
   }
 }
 </style>

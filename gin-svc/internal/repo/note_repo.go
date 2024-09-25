@@ -12,7 +12,7 @@ import (
 
 type NoteRepoInterface interface {
 	FindNoteListById(ctx context.Context, status int, page, size int, userId int) ([]models.NoteModel, error)
-	FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, error)
+	FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, int64, error)
 	FeedNoteList(ctx context.Context, tagID int, page, size int) ([]domain.DNote, error)
 	FindAuthorInfo(ctx context.Context, authorID string) (domain.Author, error)
 	CreateNote(ctx context.Context, note domain.DNote, uid string) error
@@ -90,7 +90,7 @@ func (n *noteRepo) FindNoteListById(ctx context.Context, status int, page, size 
 	panic("implement me")
 }
 
-func (n *noteRepo) FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, error) {
+func (n *noteRepo) FindNoteList(ctx context.Context, status int, page, size int) ([]models.NoteModel, int64, error) {
 	return n.dao.ListByStatus(ctx, status, page, size)
 }
 
