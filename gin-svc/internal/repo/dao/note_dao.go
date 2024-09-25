@@ -48,12 +48,32 @@ func (n *noteDaoImpl) ListPageByUserPublish(ctx context.Context, userId string, 
 func (n *noteDaoImpl) ListPageByUserCollected(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
 	var res []models.NoteModel
 	var total int64
+	err := n.db.WithContext(ctx).Preload("comment").
+		Model(&models.NoteModel{}).Where("user_uuid = ?", userId).Find(&res).Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	err = n.db.WithContext(ctx).Preload("comment").
+		Model(&models.NoteModel{}).Where("user_uuid = ?", userId).Find(&res).Limit(size).Offset((page - 1) * size).Error
+	if err != nil {
+		return nil, 0, err
+	}
 	return res, total, nil
 }
 
 func (n *noteDaoImpl) ListPageByUserLiked(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
 	var res []models.NoteModel
 	var total int64
+	err := n.db.WithContext(ctx).Preload("comment").
+		Model(&models.NoteModel{}).Where("user_uuid = ?", userId).Find(&res).Count(&total).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	err = n.db.WithContext(ctx).Preload("comment").
+		Model(&models.NoteModel{}).Where("user_uuid = ?", userId).Find(&res).Limit(size).Offset((page - 1) * size).Error
+	if err != nil {
+		return nil, 0, err
+	}
 	return res, total, nil
 }
 
