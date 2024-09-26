@@ -1,7 +1,8 @@
 <template>
   <div class="outer-link-container">
     <div class="note-container">
-      <div class="left-card">
+      <div class="left-card"
+           :style="{width: '660px'}">
         <div class="note-cover">
           <template v-if="noteDetail.contentType === 1">
             <el-carousel indicator-position="outside"
@@ -153,25 +154,27 @@ onMounted(() => {
 	padding: 0 100px 20px;
 	.note-container {
 		display: flex;
-		width: 100%;
+		// width: 100%;
 		height: 100%;
 		border-radius: 16px;
 		overflow: hidden;
 		border:1px solid rgba(0,0,0,0.08);
 		box-shadow: 0 0 10px rgba(0,0,0,0.1);
 		.left-card {
-			width: 65%;
+			// width: 65%;
 			height: 100%;
 			border-right: 1px solid rgba(0,0,0,0.1);;
 			.note-cover {
-				width: 100%;
+				// width: 100%;
+				width: auto;
 				height: 100%;
 				.outside{
 					height: 100%;
 					.note-img {
 						max-width: 100%;
     				max-height: 100%;
-						width: 100%;
+						// width: 100%;
+						width: auto;
 						height: 100%;
 						object-fit: contain;
     				overflow: clip;
@@ -181,7 +184,8 @@ onMounted(() => {
 			}
 		}
 		.right-card {
-			width: 35%;
+			// width: 35%;
+			width: 440px;
 			height: 100%;
 			display: flex;
 			flex-direction: column;
@@ -342,5 +346,35 @@ onMounted(() => {
 ::v-deep(.el-carousel__container img){
 	// height: 100%;
 	object-fit: contain;
+}
+@media (max-width: 768px){
+  .outer-link-container{
+		padding: 0 ;
+		width: 100%;
+    .note-container{
+			width: 100%; // 宽度100%
+      display: flex; // flex布局
+      flex-direction: column; // 纵向布局
+			padding: 0;
+			// 去掉边框样式
+			border: none;
+			box-shadow: none;
+			.left-card{
+				width: 100%; // 宽度100%
+				// height: 300px; // 高度300px
+				.note-cover{
+					width: 100%; // 宽度100%
+					height: 100%; // 高度100%
+					.note-img{
+						width: 100%; // 宽度100%
+						height: 100%; // 高度100%
+					}
+				}
+			}
+			.right-card{
+				width: 100%; // 宽度100%
+			}
+    }
+  }
 }
 </style>
