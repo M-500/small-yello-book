@@ -17,7 +17,7 @@
              @click="inputHandler"
              v-if="!inputActive">
           <div class="inner">
-            <img :src="props.detail.author.avatar"
+            <img :src="userInfo.avatar ? userInfo.avatar :'../../assets/imgs/avatar.jpeg'"
                  class="avatar-item"
                  alt="">
             <span>说点什么...</span>
@@ -92,6 +92,7 @@
 import { ref } from 'vue';
 import { likeRequest } from '@/api/interactive';
 import type { IntrLikeForm } from '@/api/interactive/types';
+import useUserStore from '@/stores/modules/user'
 import type { CommentForm } from '@/api/comment/types';
 import { addCommentRequest } from '@/api/comment';
 import { defineProps } from 'vue';
@@ -115,6 +116,8 @@ const props = defineProps({
 	}
 })
 const emit = defineEmits(['refreshCommentList']);
+const userStore = useUserStore();
+const userInfo = ref(userStore.getUserInfo);
 // 监听commentContent的变化
 watch(commentContent, (newVal) => {
 	if (newVal) {

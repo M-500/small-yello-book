@@ -3,8 +3,13 @@
     <div class="layout_slide">
       <Logo />
       <div class="sider_main">
-        <Channel />
-        <card v-if="!userStore.getToken" />
+        <div class="top">
+          <Channel />
+          <card v-if="!userStore.getToken" />
+        </div>
+        <div class="buttom">
+          <more />
+        </div>
       </div>
     </div>
 
@@ -20,6 +25,7 @@
 
 <script lang="ts" setup>
 import Logo from "./logo/index.vue";
+import more from "./more/index.vue";
 import Channel from "./channel/index.vue";
 import card from "./card/index.vue";
 import search from "../components/search/index.vue";
@@ -42,6 +48,15 @@ const userStore = useUserStore();
 			height: calc(100% - $layout-header-height);
 			padding-top: 16px;
 			margin-left: 16px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			.top{
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+			}
+
 		}
 	}
 	.layout_header{

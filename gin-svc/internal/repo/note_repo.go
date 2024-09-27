@@ -157,7 +157,7 @@ func (n *noteRepo) toImageModel(data domain.DNote) []models.ImageModel {
 			Height:  i2.ImgHeight,
 			OldPath: i2.LocalPath,
 			Hash:    i2.HashStr,
-			Size:    int(i2.Size),
+			Size:    i2.Size,
 		})
 	}
 	return imgList

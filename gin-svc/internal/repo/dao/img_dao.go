@@ -20,7 +20,7 @@ func NewImageDao(db *gorm.DB) ImageDao {
 
 func (i *imgDao) FindListByNoteId(ctx context.Context, noteId string) ([]models.ImageModel, error) {
 	var res []models.ImageModel
-	err := i.db.WithContext(ctx).Where("note_id = ?", noteId).Find(&res).Error
+	err := i.db.WithContext(ctx).Model(&models.ImageModel{}).Where("note_id = ?", noteId).Find(&res).Error
 	if err != nil {
 		return nil, err
 	}
