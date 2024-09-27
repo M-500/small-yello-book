@@ -15,6 +15,8 @@ type DNote struct {
 	Private         bool             `json:"private"`
 	Status          NoteStatus       `json:"status"`
 	AuthorId        string           `json:"authorId"`
+	IsLiked         bool             `json:"isLiked"`     // 用户是否已经点赞
+	IsCollected     bool             `json:"isCollected"` // 用户是否已经收藏
 	CreateTime      string           `json:"createTime"`
 	UpdateTime      string           `json:"updateTime"`
 	ImgList         []*ImageNote     `json:"imgList"`         // 图片信息

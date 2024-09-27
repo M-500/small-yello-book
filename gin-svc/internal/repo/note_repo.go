@@ -2,6 +2,8 @@ package repo
 
 import (
 	"context"
+	"errors"
+	"gin-svc/internal/conf/cfg"
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/dao"
@@ -21,10 +23,11 @@ type NoteRepoInterface interface {
 	NoteDetail(ctx context.Context, noteID string) (domain.DNote, error)
 }
 
-func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao, imgDao dao.ImageDao) NoteRepoInterface {
+func NewNoteRepo(dao dao.NoteDaoInterface, userDao dao.UserDao, imgDao dao.ImageDao, cfg cfg.ServerCfg) NoteRepoInterface {
 	return &noteRepo{
 		dao:     dao,
 		imgDao:  imgDao,
+		cfg:     cfg,
 		userDao: userDao}
 }
 
@@ -32,35 +35,42 @@ type noteRepo struct {
 	dao     dao.NoteDaoInterface
 	imgDao  dao.ImageDao
 	userDao dao.UserDao
+	cfg     cfg.ServerCfg
 }
 
 func (n *noteRepo) FindNoteListByUser(ctx context.Context, userId string, page, size int) ([]models.NoteModel, int64, error) {
 	return n.dao.ListPageByUserPublish(ctx, userId, page, size)
 }
 
+// NoteDetail 通过笔记ID获取笔记详情
 func (n *noteRepo) NoteDetail(ctx context.Context, noteID string) (domain.DNote, error) {
+	// 获取文章基本信息
 	note, err := n.dao.FindByUUID(ctx, noteID)
 	if err != nil {
-		return domain.DNote{}, err
+		if errors.Is(err, dao.ErrRecordNotFound) {
+			return domain.DNote{}, errors.New("文章ID不存在")
+		}
+		return domain.DNote{}, errors.New("通过ID查询文章详情失败")
 	}
 	res := n.toDMNote(note)
+
 	// 获取图片列表 / 视频信息
-	res.ImgList = make([]*domain.ImageNote, 0)
 	imgList, err := n.imgDao.FindListByNoteId(ctx, noteID)
 	if err != nil {
 		return res, err
 	}
-	imgs := make([]*domain.ImageNote, 0, len(imgList))
+	res.ImgList = make([]*domain.ImageNote, 0)
 	for _, data := range imgList {
-		//tmp := n.toImageNote(data)
-		//tmp.Url = "http://127.0.0.1:8122" + tmp.LocalPath
-		imgs = append(imgs, n.toImageNote(data))
+		res.ImgList = append(res.ImgList, n.toImageNote(data))
 	}
-	res.ImgList = imgs
-	// 获取用户信息
+
+	// 获取作者信息
 	user, err := n.FindAuthorInfo(ctx, note.AuthorId)
 	if err != nil {
-		return res, err
+		if errors.Is(err, dao.ErrRecordNotFound) {
+			return domain.DNote{}, errors.New("作者不存在")
+		}
+		return domain.DNote{}, errors.New("查询作者信息失败")
 	}
 	res.AuthorInfo = &user
 	return res, nil
@@ -137,8 +147,8 @@ func (n *noteRepo) toDMNote(note models.NoteModel) domain.DNote {
 		//Private:     note.,
 		Status:     domain.NoteStatus(note.Status),
 		AuthorId:   note.AuthorId,
-		CreateTime: "",
-		UpdateTime: "",
+		CreateTime: note.CreatedAt.Format("2006-01-02 15:04:05"),
+		UpdateTime: note.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}
 	if utils.IsBlank(dNote.ID) {
 		dNote.ID = utils.UUID()
@@ -168,10 +178,10 @@ func (n *noteRepo) toImageNote(data models.ImageModel) *domain.ImageNote {
 		ID:        data.UUID,
 		NoteId:    data.NoteId,
 		ImgWidth:  data.Width,
-		LocalPath: "http://127.0.0.1:8122" + data.OldPath,
+		LocalPath: n.cfg.FileUploadHost + data.OldPath,
 		HashStr:   data.Hash,
 		ImgHeight: data.Height,
-		Size:      int64(data.Size),
+		Size:      data.Size,
 	}
 }
 

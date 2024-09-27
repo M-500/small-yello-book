@@ -66,7 +66,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		privateGroup.GET("notes/:uuid/published", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserPublished)) // 获取某个用户已经发表的文章信息
 		privateGroup.GET("notes/:uuid/collected", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserCollected)) // 获取某个用户已经收藏的文章
 		privateGroup.GET("notes/:uuid/liked", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserLiked))         // 获取某个用户已经点赞过的文章
-		privateGroup.GET("/notes/detail/:uuid", ginx.WrapResponse(n.NoteDetail))                                      // 获取文章详情信息
+		privateGroup.GET("/notes/detail/:uuid", ginx.WrapResponse(n.NoteDetail))                                      // 获取文章详情信息(包含评论)
 		privateGroup.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl))               // 获取推荐文章列表  后续要改成feed流模式
 
 		// 点赞收藏相关
@@ -119,7 +119,7 @@ func InitNoteController(app *internal.App) *controller.NoteCtl {
 	noteDao := dao.NewNoteDao(app.DB)
 	userDao := dao.NewUserDao(app.DB)
 	imgDao := dao.NewImageDao(app.DB)
-	noteRepo := repo.NewNoteRepo(noteDao, userDao, imgDao)
+	noteRepo := repo.NewNoteRepo(noteDao, userDao, imgDao, app.Cfg.Server)
 	interactiveCache := cache.NewInteractiveCache(app.Cli)
 	interactiveDao := dao.NewInteractiveDao(app.DB)
 	intrRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao)

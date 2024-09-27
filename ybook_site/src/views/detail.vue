@@ -104,6 +104,9 @@ const noteDetail = reactive({
   author: {
     nickName: '王木木',
   },
+  interactiveInfo: {
+    viewCnt: 0,
+  },
 });
 const commentList = ref([]);
 const isFollowed = ref(false); // 是否关注

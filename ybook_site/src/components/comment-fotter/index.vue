@@ -33,13 +33,14 @@
                       @click="handleLike(1)"
                       height="32"></svg-icon>
             <span class="count"
-                  @click="handleLike(1)">点赞</span>
+                  @click="handleLike(1)">{{props.detail.interactiveInfo.likeCnt > 0 ? props.detail.interactiveInfo.likeCnt: '点赞' }}</span>
+
           </template>
           <template v-else>
             <svg-icon name="liked"
                       @click="handleLike(0)"
                       height="32"></svg-icon>
-            <span class="count">1</span>
+            <span class="count">{{ props.detail.interactiveInfo.likeCnt }}</span>
           </template>
         </div>
         <div class="box">
@@ -115,6 +116,7 @@ const props = defineProps({
 		type:Object
 	}
 })
+const likeCnt = ref(props.detail.interactiveInfo.likeCnt)
 const emit = defineEmits(['refreshCommentList']);
 const userStore = useUserStore();
 const userInfo = ref(userStore.getUserInfo);
@@ -129,7 +131,6 @@ watch(commentContent, (newVal) => {
 // 监听triggerAction的变化
 watch(() => props.triggerAction, (newVal) => {
   if (newVal) {
-    console.log("来活啦！",newVal)
 		inputActive.value = true
 		replayContent.value = newVal
 		parentId.value = newVal.id
@@ -161,7 +162,9 @@ const requestLike = async () => {
 		likeForm.value.owner_id = props.detail.authorId
 		likeRequest(likeForm.value).then((res) => {
 			liked.value = !liked.value
+			likeCnt.value += 1
 		}).catch((err) => {
+			liked.value = false
 			console.log(err)
 		})
 	} catch (error) {
@@ -186,7 +189,6 @@ const cancelSub = () => {
 // 点击 喜欢 按钮
 const handleLike = (data:number) => {
   if (data === 1) {
-    liked.value = true
 		requestLike()
   } else {
     liked.value = false

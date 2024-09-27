@@ -11,29 +11,15 @@ import (
 )
 
 type NoteService interface {
-	// 创建笔记
-	CreateNote(ctx context.Context, note domain.DNote, uuid string) error
-
-	// 获取笔记详情
-	GetNoteDetail(ctx context.Context, noteId string) (domain.DNote, error)
-
-	// 获取所有文章列表
-	ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)
-	// 获取用户发布的文章列表
-	ListNoteByUserPublish(ctx context.Context, userId string, offset int, limit int) ([]domain.DNote, int, error)
-
+	CreateNote(ctx context.Context, note domain.DNote, uuid string) error                                         // 创建笔记
+	GetNoteDetail(ctx context.Context, userId, noteId string) (domain.DNote, error)                               // 登陆用户获取笔记详情
+	ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error)                 // 获取所有文章列表
+	ListNoteByUserPublish(ctx context.Context, userId string, offset int, limit int) ([]domain.DNote, int, error) // 获取用户发布的文章列表
 	FeedListNote(ctx context.Context, TagId int, offset int, limit int) ([]domain.DNote, error)
-
-	// 更新笔记
-	UpdateNote(ctx context.Context, note domain.DNote) error
-
+	UpdateNote(ctx context.Context, note domain.DNote) error // 更新笔记
 	PassNote(ctx context.Context, uuid string) error
-
-	// 删除笔记
-	DeleteNote(ctx context.Context, id int) error
-
-	// 更新笔记权限
-	UpdatePermission(ctx context.Context, noteId int, userId int, permission int) error
+	DeleteNote(ctx context.Context, id int) error                                       // 删除笔记
+	UpdatePermission(ctx context.Context, noteId int, userId int, permission int) error // 更新笔记权限
 }
 
 func NewNoteSvcImpl(repo repo.NoteRepoInterface, lg ylog.Logger, intrRepo repo.Interactive) NoteService {
@@ -167,14 +153,32 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid st
 	return nil
 }
 
-func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, id string) (domain.DNote, error) {
-	// 浏览数+1
-	err := n.interactiveRepo.IncrReadCnt(ctx, id, "note")
+func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, userId, noteID string) (domain.DNote, error) {
+	// 获取文章的基本信息
+	detail, err := n.repo.NoteDetail(ctx, noteID)
 	if err != nil {
-		n.lg.Warn("incr view count failed", ylog.String("noteId", id))
-
+		return domain.DNote{}, err
 	}
-	return n.repo.NoteDetail(ctx, id)
+	// 获取文章交互信息数据
+	interactiveInfo, err := n.interactiveRepo.GetById(ctx, noteID, "note")
+	if err != nil {
+		n.lg.Warn("get interactive data failed", ylog.String("noteId", noteID))
+	}
+	detail.InteractiveInfo = &interactiveInfo
+
+	// 文章阅读量 + 1
+	_ = n.interactiveRepo.IncrReadCnt(ctx, noteID, "note")
+
+	if utils.IsBlank(userId) {
+		// 游客访问
+		return detail, nil
+	}
+
+	// 判断用户是否点赞收藏
+
+	// 将该文章添加到用户的浏览记录中
+
+	return domain.DNote{}, err
 }
 
 func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error) {
@@ -202,15 +206,7 @@ func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limi
 			continue
 		}
 		temp.AuthorInfo = &info
-		temp.InteractiveInfo = &domain.InteractiveInfo{
-			SourceGID:  data.SourceGID,
-			ViewCnt:    data.ViewCnt,
-			LikeCnt:    data.LikeCnt,
-			ShareCnt:   data.ShareCnt,
-			CommentCnt: data.CommentCnt,
-			CollectCnt: data.CollectCnt,
-			BizType:    data.BizType,
-		}
+		temp.InteractiveInfo = &data
 		res = append(res, temp)
 	}
 	return res, int(total), nil

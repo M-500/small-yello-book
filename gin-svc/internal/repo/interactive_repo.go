@@ -2,16 +2,16 @@ package repo
 
 import (
 	"context"
+	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/cache"
 	"gin-svc/internal/repo/dao"
 )
 
 type Interactive interface {
-	GetById(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) // 通过ID获取资源的Social详情
-
-	IncrLike(ctx context.Context, sourceId, bizType string) error // 点赞数+1
-	DecrLike(ctx context.Context, sourceId, bizType string) error // 点赞数-1
+	GetById(ctx context.Context, sourceId, bizType string) (domain.InteractiveInfo, error) // 通过ID获取资源的交互详情
+	IncrLike(ctx context.Context, sourceId, bizType string) error                          // 点赞数+1
+	DecrLike(ctx context.Context, sourceId, bizType string) error                          // 点赞数-1
 
 	IncrReadCnt(ctx context.Context, sourceId, bizType string) error // 浏览数+1
 
@@ -21,11 +21,11 @@ type Interactive interface {
 	IncrComment(ctx context.Context, sourceId, bizType string) error // 评论数+1
 	DecrComment(ctx context.Context, sourceId, bizType string) error // 评论数-1
 
-	Insert(ctx context.Context, social models.InteractiveModel) error // 插入一条Social记录
-	Update(ctx context.Context, social models.InteractiveModel) error // 更新一条Social记录
-	Delete(ctx context.Context, sourceId, bizType string) error       // 删除一条Social记录
+	Insert(ctx context.Context, social domain.InteractiveInfo) error // 插入一条Social记录
+	Update(ctx context.Context, social domain.InteractiveInfo) error // 更新一条Social记录
+	Delete(ctx context.Context, sourceId, bizType string) error      // 删除一条Social记录
 
-	GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error)
+	GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (domain.InteractiveInfo, error)
 }
 
 func NewInteractiveRepo(intrCache cache.InteractiveCache, dao dao.InteractiveDao) Interactive {
@@ -40,16 +40,29 @@ type interactive struct {
 	dao   dao.InteractiveDao
 }
 
-func (s *interactive) GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) {
-	data, err := s.dao.GetById(ctx, sourceId, bizType)
-	if err != nil {
-		return models.InteractiveModel{}, err
+func (s *interactive) toDomainInteractive(data models.InteractiveModel) domain.InteractiveInfo {
+	return domain.InteractiveInfo{
+		SourceGID:  data.SourceGID,
+		ViewCnt:    data.ViewCnt,
+		LikeCnt:    data.LikeCnt,
+		ShareCnt:   data.ShareCnt,
+		CommentCnt: data.CommentCnt,
+		CollectCnt: data.CollectCnt,
+		BizType:    data.BizType,
 	}
-	return data, nil
 }
 
-func (s *interactive) GetById(ctx context.Context, sourceId, bizType string) (models.InteractiveModel, error) {
-	return s.dao.GetById(ctx, sourceId, bizType)
+func (s *interactive) GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (domain.InteractiveInfo, error) {
+	data, err := s.dao.GetById(ctx, sourceId, bizType)
+	if err != nil {
+		return domain.InteractiveInfo{}, err
+	}
+	return s.toDomainInteractive(data), nil
+}
+
+func (s *interactive) GetById(ctx context.Context, sourceId, bizType string) (domain.InteractiveInfo, error) {
+	data, err := s.dao.GetById(ctx, sourceId, bizType)
+	return s.toDomainInteractive(data), err
 }
 
 func (s *interactive) IncrLike(ctx context.Context, sourceId, bizType string) error {
@@ -111,12 +124,12 @@ func (s *interactive) DecrComment(ctx context.Context, sourceId, bizType string)
 	panic("implement me")
 }
 
-func (s *interactive) Insert(ctx context.Context, social models.InteractiveModel) error {
+func (s *interactive) Insert(ctx context.Context, social domain.InteractiveInfo) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (s *interactive) Update(ctx context.Context, social models.InteractiveModel) error {
+func (s *interactive) Update(ctx context.Context, social domain.InteractiveInfo) error {
 	//TODO implement me
 	panic("implement me")
 }
