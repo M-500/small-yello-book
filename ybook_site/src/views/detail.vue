@@ -33,12 +33,12 @@
             <div class="info">
               <router-link to="/">
                 <img class="avatar-item"
-                     src="@/assets/imgs/avatar.jpeg"
+                     :src="noteDetail.author.avatar"
                      alt="">
               </router-link>
               <router-link class="name">
-                <!-- <span class="username">{{ noteDetail.value.author.nickName }}</span> -->
-                <span class="username">王木木</span>
+                <span class="username">{{ noteDetail.author.nickName }}</span>
+                <!-- <span class="username">王木木</span> -->
               </router-link>
             </div>
             <div class="follow-btn">
@@ -92,7 +92,7 @@ import { RouterLink } from 'vue-router';
 import { getNoteDetailRequest } from '@/api/note';
 import { getCommentListRequest } from '@/api/comment';
 import { useRoute } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onMounted, reactive, ref, toRefs } from 'vue';
 
 import CommentCard from '@/components/comment-card/index.vue';
 import CommentFotter from '@/components/comment-fotter/index.vue';
@@ -100,7 +100,11 @@ import { tr } from 'element-plus/es/locales.mjs';
 // 获取路由参数
 const route = useRoute();
 const noteId = route.params.uuid; // 获取路由参数上的uuid
-const noteDetail = ref({});
+const noteDetail = reactive({
+  author: {
+    nickName: '王木木',
+  },
+});
 const commentList = ref([]);
 const isFollowed = ref(false); // 是否关注
 // 定义触发器，用来通知子组件 B
@@ -114,7 +118,9 @@ const replayHandler = (data) => {
 // 获取数据
 const getNoteDetail = async () => {
   const res = await getNoteDetailRequest(noteId);
-  noteDetail.value = res.data;
+  Object.assign(noteDetail, res.data);
+  // noteDetail.value = res.data;
+  // noteDetail.value.author = toRefs(noteDetail.value.author);
 };
 // 获取评论数据
 const getCommentList = async () => {
@@ -361,6 +367,7 @@ onMounted(() => {
 			box-shadow: none;
 			.left-card{
 				width: 100%; // 宽度100%
+				height: 430px;
 				// height: 300px; // 高度300px
 				.note-cover{
 					width: 100%; // 宽度100%

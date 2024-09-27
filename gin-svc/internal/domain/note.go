@@ -6,6 +6,8 @@ type DNote struct {
 	NoteContent     string           `json:"noteContent"`
 	ContentType     int              `json:"contentType"` // 文章类型，图文/视频
 	Cover           string           `json:"cover"`       // 封面
+	CoverWidth      int              `json:"coverWidth"`  // 封面宽度
+	CoverHeight     int              `json:"coverHeight"` // 封面高度
 	Address         string           `json:"address"`     // 地址
 	Statement       string           `json:"statement"`
 	IPLocation      string           `json:"IPLocation"` // IP归属地

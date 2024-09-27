@@ -17,7 +17,7 @@
              @click="inputHandler"
              v-if="!inputActive">
           <div class="inner">
-            <img src="@/assets/imgs/avatar.jpeg"
+            <img :src="props.detail.author.avatar"
                  class="avatar-item"
                  alt="">
             <span>说点什么...</span>

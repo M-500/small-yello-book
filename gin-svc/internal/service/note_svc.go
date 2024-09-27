@@ -131,7 +131,6 @@ func (n *noteSvcImpl) FeedListNote(ctx context.Context, TagId int, offset int, l
 }
 
 func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid string) error {
-
 	if note.ContentType == 1 {
 		// 保存图文笔记
 		for _, img := range note.ImgList {
@@ -148,6 +147,11 @@ func (n *noteSvcImpl) CreateNote(ctx context.Context, note domain.DNote, uuid st
 			img.Size, _ = utils.GetFileSize(absPath)
 			img.HashStr = md5
 			img.ImgWidth, img.ImgHeight, _ = utils.GetImageSize(absPath)
+			// 记录最宽的图片宽度
+			if note.CoverWidth < img.ImgWidth {
+				note.CoverWidth = img.ImgWidth
+				note.CoverHeight = img.ImgHeight
+			}
 		}
 		// 1. 保存文章
 		err := n.repo.CreateNote(ctx, note, uuid)

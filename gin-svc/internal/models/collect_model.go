@@ -9,3 +9,7 @@ type CollectModel struct {
 	SourceUUID string `json:"sourceUUID" gorm:"column:source_uuid;type:varchar(36);unique;comment:资源UUID"` // 资源UUID
 	BizType    string `json:"bizType" gorm:"column:biz_type;type:varchar(36);comment:业务类型"`                // 业务类型
 }
+
+func (CollectModel) TableName() string {
+	return "collect_log"
+}

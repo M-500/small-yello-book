@@ -54,7 +54,7 @@
             <el-button type="primary"
                        v-if="row.status === 0"
                        size="small"
-                       @click="passHandler(row.uuid)">
+                       @click="passHandler(row)">
               通过
             </el-button>
             <el-button type="danger"
@@ -90,8 +90,9 @@ const total = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(10)
 const size = 'small'
-const passHandler = (noteId:string) => {
-  passNoteReq(noteId)
+const passHandler = (note:any) => {
+  passNoteReq(note.uuid)
+  note.status = 1
 }
 const refuseHandler = () => {
   console.log('click')

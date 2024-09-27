@@ -8,6 +8,8 @@ type NoteModel struct {
 	ContentType int    `json:"content_type" gorm:"column:content_type;type:int;not null;default: 1;comment:内容类型,1图文,视频"` // 内容类型
 	Title       string `json:"title" gorm:"column:title;type:varchar(255);comment:笔记主标题"`                                // 笔记主标题
 	Cover       string `json:"cover" gorm:"column:cover;type:varchar(255);comment:封面图片URL"`                              // 封面图片
+	CoverWidth  int    `json:"cover_width" gorm:"column:cover_width;type:int;comment:封面宽度"`                              // 封面宽度
+	CoverHeight int    `json:"cover_height" gorm:"column:cover_height;type:int;comment:封面高度"`                            // 封面高度
 	Mark        string `json:"mark" gorm:"column:mark;type:text;comment:笔记描述"`                                           // 笔记描述,内容
 	Status      int    `json:"status" gorm:"column:status;type:int;comment:状态,0 草稿/审核中，1 已发布，2 未通过，3 已删除"`               // 笔记状态
 	AuthorId    string `json:"author_id" gorm:"column:author_id;type:varchar(36);comment:作者UUID"`

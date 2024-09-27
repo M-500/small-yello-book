@@ -56,6 +56,8 @@ func (i *interactiveSvc) IncrLikeCnt(ctx context.Context, data domain.DNotify) e
 	if err != nil {
 		// TODO: 记录日志
 	}
+	// 3. 新增一条点赞记录
+
 	// 将资源对应的点赞值+1
 	return i.repo.IncrLike(ctx, data.ResourceId, data.ResourceType)
 }
