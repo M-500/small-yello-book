@@ -28,7 +28,7 @@
       <div class="interact-container"
            v-show="!inputActive">
         <div class="box">
-          <template v-if="!liked">
+          <template v-if="!props.detail.isLiked">
             <svg-icon name="like"
                       @click="handleLike(1)"
                       height="32"></svg-icon>

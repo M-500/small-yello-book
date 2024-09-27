@@ -2,6 +2,7 @@
   <div class="container">
     <router-link class="item"
                  :class="active ? 'active' : ''"
+                 @click="clickHdl"
                  :to="nextPath">
       <div class="icon">
         <img :src="imgUrl"
@@ -16,6 +17,11 @@
 </template>
 
 <script setup>
+import { defineEmits } from 'vue';
+const emit = defineEmits(['clickBtn']);
+const clickHdl = (data) => {
+  emit('clickBtn', data);
+}
 defineProps({
   barType: {
     type: String,

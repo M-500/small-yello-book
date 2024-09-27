@@ -105,25 +105,26 @@ func (n *NoteCtl) NoteListByUserLiked(ctx *gin.Context, req types.QueryNoteForm)
 //	@param ctx
 //	@return result
 //	@return err
-func (n *NoteCtl) NoteDetail(ctx *gin.Context) (result ginx.JsonResult, err error) {
+func (n *NoteCtl) NoteDetail(ctx *gin.Context, claim jwt.UserClaims) (result ginx.JsonResult, err error) {
 	uuid := ctx.Param("uuid")
 	if utils.IsBlank(uuid) {
 		return ginx.Error(400, "文章ID为空"), errors.New("文章ID为空")
 	}
-	val, ok := ctx.Get("user")
-	uc, ok2 := val.(jwt.UserClaims)
-	if !ok || !ok2 {
-		// 游客访问 或者用户解析失败
-		note, err1 := n.svc.GetNoteDetail(ctx, "", uuid)
-		if err1 != nil {
-			return ginx.Error(500, err.Error()), err1
-		}
-		return ginx.SuccessJson(note), nil
-	}
-	// 登陆用户访问
-	note, err := n.svc.GetNoteDetail(ctx, uc.Uid, uuid)
+	note, err := n.svc.GetNoteDetail(ctx, claim.Uid, uuid)
 	if err != nil {
 		return ginx.Error(500, err.Error()), err
+	}
+	return ginx.SuccessJson(note), nil
+}
+
+func (n *NoteCtl) NaNoteDetail(ctx *gin.Context) (result ginx.JsonResult, err error) {
+	uuid := ctx.Param("uuid")
+	if utils.IsBlank(uuid) {
+		return ginx.Error(400, "文章ID为空"), errors.New("文章ID为空")
+	}
+	note, err1 := n.svc.GetNoteDetail(ctx, "", uuid)
+	if err1 != nil {
+		return ginx.Error(500, err.Error()), err1
 	}
 	return ginx.SuccessJson(note), nil
 }

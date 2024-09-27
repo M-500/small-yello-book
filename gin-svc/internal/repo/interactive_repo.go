@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"errors"
 	"gin-svc/internal/domain"
 	"gin-svc/internal/models"
 	"gin-svc/internal/repo/cache"
@@ -10,10 +11,10 @@ import (
 
 type Interactive interface {
 	GetById(ctx context.Context, sourceId, bizType string) (domain.InteractiveInfo, error) // 通过ID获取资源的交互详情
-	IncrLike(ctx context.Context, sourceId, bizType string) error                          // 点赞数+1
+	IncrLike(ctx context.Context, userId, sourceId, bizType string) error                  // 点赞数+1
 	DecrLike(ctx context.Context, sourceId, bizType string) error                          // 点赞数-1
-
-	IncrReadCnt(ctx context.Context, sourceId, bizType string) error // 浏览数+1
+	IsLikedByUser(ctx context.Context, userId, sourceId, bizType string) (bool, error)     // 用户是否已经点赞
+	IncrReadCnt(ctx context.Context, sourceId, bizType string) error                       // 浏览数+1
 
 	IncrCollection(ctx context.Context, sourceId, bizType string) error // 收藏数+1
 	DecrCollection(ctx context.Context, sourceId, bizType string) error // 收藏数-1
@@ -28,16 +29,22 @@ type Interactive interface {
 	GetIntrBySourceId(ctx context.Context, sourceId, bizType string) (domain.InteractiveInfo, error)
 }
 
-func NewInteractiveRepo(intrCache cache.InteractiveCache, dao dao.InteractiveDao) Interactive {
+func NewInteractiveRepo(intrCache cache.InteractiveCache, dao dao.InteractiveDao, likeDao dao.LikeLogDAO) Interactive {
 	return &interactive{
-		cache: intrCache,
-		dao:   dao,
+		cache:   intrCache,
+		dao:     dao,
+		likeDao: likeDao,
 	}
 }
 
 type interactive struct {
-	cache cache.InteractiveCache
-	dao   dao.InteractiveDao
+	cache   cache.InteractiveCache
+	dao     dao.InteractiveDao
+	likeDao dao.LikeLogDAO
+}
+
+func (s *interactive) IsLikedByUser(ctx context.Context, userId, sourceId, bizType string) (bool, error) {
+	return s.likeDao.Exists(ctx, userId, sourceId, bizType)
 }
 
 func (s *interactive) toDomainInteractive(data models.InteractiveModel) domain.InteractiveInfo {
@@ -65,8 +72,18 @@ func (s *interactive) GetById(ctx context.Context, sourceId, bizType string) (do
 	return s.toDomainInteractive(data), err
 }
 
-func (s *interactive) IncrLike(ctx context.Context, sourceId, bizType string) error {
-	err := s.dao.IncrLike(ctx, sourceId, bizType)
+func (s *interactive) IncrLike(ctx context.Context, userId, sourceId, bizType string) error {
+	// 给用户新增一条点赞记录
+	likeLg := models.LikeModel{
+		UserId:     userId,
+		SourceUUID: sourceId,
+		BizType:    bizType,
+	}
+	err := s.likeDao.Insert(ctx, likeLg)
+	if err != nil {
+		return errors.New("点赞失败")
+	}
+	err = s.dao.IncrLike(ctx, sourceId, bizType)
 	if err != nil {
 		return err
 	}

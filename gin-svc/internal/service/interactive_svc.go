@@ -59,7 +59,7 @@ func (i *interactiveSvc) IncrLikeCnt(ctx context.Context, data domain.DNotify) e
 	// 3. 新增一条点赞记录
 
 	// 将资源对应的点赞值+1
-	return i.repo.IncrLike(ctx, data.ResourceId, data.ResourceType)
+	return i.repo.IncrLike(ctx, data.UpstreamUUID, data.ResourceId, data.ResourceType)
 }
 
 func (i *interactiveSvc) DecrLikeCnt(ctx context.Context, data domain.DNotify) error {

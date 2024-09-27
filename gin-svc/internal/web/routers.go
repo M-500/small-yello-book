@@ -24,7 +24,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	builder := middleware.NewJwtMiddlewareBuilder(jwtHdl, app.Cfg.Jwt).
 		IgnorePath("/api/v1/file/upload").
 		IgnorePath("/api/v1/feed/notes").
-		IgnorePath("/api/v1/notes/detail/:uuid").
+		IgnorePath("/api/v1/na/notes/detail/:uuid").
 		Build()
 	engine.Use(middleware.CorsMdl())
 	engine.Static("/static", "./static")
@@ -66,7 +66,8 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		privateGroup.GET("notes/:uuid/published", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserPublished)) // 获取某个用户已经发表的文章信息
 		privateGroup.GET("notes/:uuid/collected", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserCollected)) // 获取某个用户已经收藏的文章
 		privateGroup.GET("notes/:uuid/liked", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserLiked))         // 获取某个用户已经点赞过的文章
-		privateGroup.GET("/notes/detail/:uuid", ginx.WrapResponse(n.NoteDetail))                                      // 获取文章详情信息(包含评论)
+		privateGroup.GET("/na/notes/detail/:uuid", ginx.WrapResponse(n.NaNoteDetail))                                 // 获取文章详情信息(包含评论)
+		privateGroup.GET("/notes/detail/:uuid", ginx.WrapJWT[jwt.UserClaims](n.NoteDetail))                           // 获取文章详情信息(包含评论)
 		privateGroup.GET("/feed/notes", ginx.WrapQueryBody[types.FeedNoteQueryForm](n.FeedNoteListCtl))               // 获取推荐文章列表  后续要改成feed流模式
 
 		// 点赞收藏相关
@@ -122,7 +123,8 @@ func InitNoteController(app *internal.App) *controller.NoteCtl {
 	noteRepo := repo.NewNoteRepo(noteDao, userDao, imgDao, app.Cfg.Server)
 	interactiveCache := cache.NewInteractiveCache(app.Cli)
 	interactiveDao := dao.NewInteractiveDao(app.DB)
-	intrRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao)
+	likeLogDAO := dao.NewLikeLogDAO(app.DB)
+	intrRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao, likeLogDAO)
 	svc := service.NewNoteSvcImpl(noteRepo, app.Lg, intrRepo)
 	return controller.NewNoteCtl(svc, app.Cfg)
 }
@@ -141,7 +143,8 @@ func SetupInteracticeController(app *internal.App) *controller.InteractiveCtl {
 	userRepo := repo.NewUserRepoInterface(userDao)
 	interactiveCache := cache.NewInteractiveCache(app.Cli)
 	interactiveDao := dao.NewInteractiveDao(app.DB)
-	interactiveRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao)
+	likeLogDAO := dao.NewLikeLogDAO(app.DB)
+	interactiveRepo := repo.NewInteractiveRepo(interactiveCache, interactiveDao, likeLogDAO)
 	notifyDao := dao.NewNotificationDao(app.DB)
 	notifyRepo := repo.NewNotifyRepo(notifyDao)
 	interactiveSvc := service.NewInteractiveSvc(interactiveRepo, notifyRepo, userRepo)

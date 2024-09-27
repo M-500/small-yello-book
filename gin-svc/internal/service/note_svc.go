@@ -175,10 +175,14 @@ func (n *noteSvcImpl) GetNoteDetail(ctx context.Context, userId, noteID string) 
 	}
 
 	// 判断用户是否点赞收藏
-
+	liked, err := n.interactiveRepo.IsLikedByUser(ctx, userId, noteID, "note")
+	if err != nil {
+		n.lg.Warn("get user like status failed", ylog.String("userId", userId), ylog.String("noteId", noteID))
+	}
+	detail.IsLiked = liked
 	// 将该文章添加到用户的浏览记录中
 
-	return domain.DNote{}, err
+	return detail, err
 }
 
 func (n *noteSvcImpl) ListNote(ctx context.Context, status int, offset int, limit int) ([]domain.DNote, int, error) {
