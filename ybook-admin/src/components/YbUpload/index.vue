@@ -4,7 +4,10 @@
       <el-upload class="upload-box"
                  drag
                  :action="uploadUrl"
+                 :limit="1"
+                 :on-change="handleChange"
                  :on-success="handlePreview"
+                 :accept="accept"
                  multiple>
         <el-icon class="el-icon--upload">
           <upload-filled />
@@ -17,25 +20,15 @@
       </el-upload>
     </div>
     <div class="tips-wrap">
-      <div class="tip">
+      <div class="tip"
+           v-for="(item,index) in tipList"
+           :key="index">
         <div class="box">
-          <p class="tip-title">视频大小</p>
-          <p class="tip-content">支持时长60分钟以内，</p>
-          <p class="tip-content">最大20GB的视频文件</p>
-        </div>
-      </div>
-      <div class="tip">
-        <div class="box">
-          <p class="tip-title">视频格式</p>
-          <p class="tip-content">支持常用视频格式</p>
-          <p class="tip-content">推荐使用mp4、mov</p>
-        </div>
-      </div>
-      <div class="tip">
-        <div class="box">
-          <p class="tip-title">视频分辨率</p>
-          <p class="tip-content">推荐上传720P(1280*720)及以上视频，</p>
-          <p class="tip-content">超过1080P的视频用网页端上传画质更清晰</p>
+          <p class="tip-title">{{ item.title }}</p>
+          <p class="tip-content"
+             v-for="(i,k) in item.content"
+             :key="k">{{ i }}</p>
+          <!-- <p class="tip-content">最大20GB的视频文件</p> -->
         </div>
       </div>
     </div>
@@ -47,10 +40,11 @@ import type { UploadProps } from 'element-plus';
 import { ref }  from 'vue';
 import { defineEmits } from 'vue';
 import { defineProps } from 'vue';
-const emit = defineEmits(['updateData']);
+const emit = defineEmits(['updateData','updateFile']);
 import { computed } from 'vue';
 // 获取环境变量中的 VITE_SERVER
 const serverUrl = import.meta.env.VITE_SERVER;
+
 
 const uploadUrl = computed(() => {
   return `${serverUrl}/api/v1/file/upload`;
@@ -68,12 +62,26 @@ defineProps({
 	btnTitle: {
 		type: String,
 		required: true
+	},
+	accept: {
+		type: String,
+		default: 'image/*'
+	},
+	tipList: {
+		type: Array,
+		default: () => []
 	}
 })
+// 处理文件上传
+const handleChange = (file) => {
+	emit('updateFile', file.raw)
+}
 
-const handlePreview: UploadProps['onSuccess'] = (uploadFile) => {
-	coverImgUrl.value = uploadFile.data
+
+const handlePreview: UploadProps['onSuccess'] = (data) => {
+	coverImgUrl.value = data.data
 	emit('updateData', coverImgUrl.value)
+	
 }
 </script>
 

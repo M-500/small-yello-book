@@ -9,13 +9,18 @@
           <el-tab-pane label="上传视频"
                        name="first">
             <YbUpload mark="拖拽或者点击上传视频"
-                      @updateData="handleUpdateData"
+                      @updateData="handlerUpdateVideo"
+                      @updateFile="handlerUpdateFile"
+                      :tipList="videoTips"
+                      accept="video/*"
                       btnTitle="上传视频"></YbUpload>
           </el-tab-pane>
           <el-tab-pane label="上传图文"
                        name="second">
             <YbUpload mark="拖拽图片到此或点击上传"
                       @updateData="handleUpdateData"
+                      :tipList="imageTips"
+                      accept="image/*"
                       btnTitle="上传图片"></YbUpload>
           </el-tab-pane>
         </el-tabs>
@@ -33,202 +38,92 @@
               <ArrowLeft />
             </el-icon>
           </span>
-          <span>
+          <span v-if="noteType === 'image'">
             发布图文
           </span>
+          <span v-else>
+            发布视频
+          </span>
         </div>
-
-        <div class="content">
-          <div class="media-area-new">
-            <div class="img-list">
-              <div class="top">
-                <div class="title-area">
-                  <div class="title">图片编辑</div>
-                  <div class="status">(1/18)</div>
-                </div>
-                <span class="reset-upload"
-                      @click="handleResetUpload">清空并重新上传</span>
-              </div>
-              <div class="img-upload-area">
-                <ImgUpload :coverImge="coverImgeUrl"
-                           @itemImgListChanged="handleImgListChanged"></ImgUpload>
-              </div>
-              <div class="title-input">
-                <el-input v-model="pubNotForm.noteTitle"
-                          style="width: 240px"
-                          maxlength="20"
-                          placeholder="填写标题，可能会有更多赞哦~"
-                          show-word-limit
-                          type="text" />
-              </div>
-              <div class="topic-container">
-                <el-input v-model="pubNotForm.noteContent"
-                          style="width: 240px"
-                          :rows="2"
-                          tabindex="0"
-                          maxlength="100"
-                          show-word-limit
-                          type="textarea"
-                          placeholder="填写更全面的描述信息，让更多的人看到你吧！" />
-              </div>
-              <div class="setting">
-                发布设置
-              </div>
-              <div class="formbox">
-                <div class="flexbox">
-                  <div class="_title">自主申明</div>
-                  <el-select v-model="pubNotForm.statement"
-                             placeholder="点击设置笔记声明"
-                             size="default"
-                             suffix-icon=""
-                             style="width: 420px">
-                    <el-option v-for="item in options"
-                               :key="item.value"
-                               :label="item.label"
-                               :value="item.value" />
-                  </el-select>
-                </div>
-                <div class="flexbox">
-                  <div class="_title">权限设置</div>
-                  <el-radio-group v-model="pubNotForm.private">
-                    <el-radio :value="true"
-                              size="large">
-                      <span>公开</span>
-                      <span class="see">(所有人可见)</span>
-                    </el-radio>
-                    <el-radio :value="false"
-                              size="large">
-                      <span>私有</span>
-                      <span class="see">(仅自己可见)</span>
-                    </el-radio>
-                  </el-radio-group>
-                </div>
-                <div class="flexbox">
-                  <div class="_title">发布时间</div>
-                  <el-radio-group v-model="pubNotForm.publishTime"
-                                  @change="handlePublishTimeChange">
-                    <el-radio :label="currentTimestamp"
-                              size="large">
-                      立即发布
-                    </el-radio>
-                    <el-radio :label="0"
-                              size="large">
-                      定时发布
-                    </el-radio>
-                  </el-radio-group>
-                </div>
-              </div>
-
-              <div class="submit">
-                <div class="submit-wrap">
-                  <el-button size="large"
-                             color="#ff2442"
-                             @click="handlePublish"
-                             class="push">发布</el-button>
-                  <el-button size="large"
-                             class="cancel">取消</el-button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ImagePub v-if="noteType === 'image'"
+                  :coverImgeUrl="coverImgeUrl" />
+        <VideoPub v-else
+                  :videoFile="videoFile"
+                  :videoUrl="videoUrl" />
       </el-card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from 'vue'
-import type { publishNoteForm,image } from '@/api/note/type'
-import { publishNote } from '@/api/note'
+import { reactive, ref, watch } from 'vue'
 import type {  TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
-import ImgUpload from '@/components/ImgUpload/index.vue'
 import type { UploadUserFile } from 'element-plus'
 import { useRouter } from 'vue-router'
+import ImagePub from './imagePub.vue'
+import VideoPub from './videoPub.vue'
+import { da } from 'element-plus/es/locales.mjs'
 
 let $router = useRouter()
+const noteType = ref('image')
 const activeName = ref('first')
-
-const coverImgeUrl = ref("")  // 来自yb-upload组件的属性
-const imgList = ref<UploadUserFile[]>([])  // 来自img-upload组件的属性 
-// const noteTitle = ref('')
-const value = ref('')
 const step1 = ref(true)
-
-const currentTimestamp = Math.floor(Date.now() / 1000);
-
-function handlePublishTimeChange(value:any) {
-  if (value === currentTimestamp) {
-    pubNotForm.publishTime = value;
-  } else {
-    pubNotForm.publishTime = value;
-  }
-}
-
-const options = [
+const videoTips = ref([
+	{
+		title: '视频大小',
+		content: ['支持时长60分钟以内，', '最大20GB的视频文件']
+	},
+	{
+		title: '视频格式',
+		content: ['支持常用视频格式', '推荐使用mp4、mov']
+	},
+	{
+		title: '视频分辨率',
+		content: ['推荐上传720P(1280*720)及以上视频，', '超过1080P的视频用网页端上传画质更清晰']
+	}
+]);
+const imageTips = ref([
   {
-    value: 'VIRTUAL-ENTERTAINMENT',
-    label: '虚拟演绎，仅供娱乐',
+    title: '图片大小',
+    content: ['支持JPG、PNG、GIF格式', '最大20MB的图片文件']
   },
   {
-    value: 'AI-MERGER',
-    label: '笔记含AI合成内容',
+    title: '图片格式',
+    content: ['支持上传的图片格式，', '推荐使用png、jpg、jpeg、webp']
+  },
+  {
+    title: '图片分辨率',
+    content: ['推荐上传宽高比为3:4、分辨率不低于720*960的照片，', '超过1280P的图片用网页端上传画质更清晰']
   }
-]
+]);
 
-const pubNotForm:publishNoteForm = reactive({
-  noteTitle: '库里起飞',
-  noteContent: '就是库里咯',
-  private: true,
-  statement: '',
-  publishTime: 0,
-  contentType: 1,
-  imgList: imgList.value as image[]
-})
-
-const handlePublish = () => {
-  // console.log("hahahah ",imgList)
-  pubNotForm.imgList = imgList.value.map(item => ({ url: item.url, name: item.name }));
-  publishNote(pubNotForm).then(res => {
-    console.log(res)
-
-    // TODO 发布成功后跳转到笔记管理页面
-    $router.push('/notes-manager')
-  }).catch(err => {
-    console.log(err)
-  })
-}
-
-
+const coverImgeUrl = ref('')
+const videoUrl = ref('')
+const videoFile = ref<UploadUserFile | null>(null)
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
 function handleUpdateData(data: string) {
   step1.value = false
+  noteType.value = 'image'
   coverImgeUrl.value = data
-  // 追加写入到imgList
-  imgList.value.push({
-    url: data,
-    name: 'coverImge',
-  })
-  console.log('imgList', imgList.value)
 }
 
-function handleResetUpload() {
-  console.log('清空并重新上传')
-  imgList.value = []
+function handlerUpdateVideo(data: string) {
+  step1.value = false
+  noteType.value = 'video'
+  videoUrl.value=data
+  console.log('videoUrl',videoUrl.value)
 }
 
-function handleImgListChanged(data: UploadUserFile[]) {
-  console.log("子组件传回来的",data)
-  imgList.value = data
-  // console.log('我干你娘', pubNotForm)
+const handlerUpdateFile = (file: UploadUserFile) => {
+  // 将视频文件传递给子组件
+  videoFile.value = file
+  console.log("妈的",videoFile.value)
 }
-
 function goback (){
-  imgList.value = []
   coverImgeUrl.value = ""
   step1.value = true
 }
@@ -361,7 +256,26 @@ function goback (){
   }
 }
 
-
+.el-card{
+	height: 100%;
+	.header{
+		line-height: 28px;
+		font-size: 20px;
+		font-weight: 900;
+		margin-bottom: 24px;
+		display: flex;
+		align-items: center; /* 垂直居中 */
+		// justify-content: center; /* 水平居中 */
+		.icon{
+			display: flex;
+			align-content: center;
+			margin-right: 4px; /* 图标和文字之间的间距 */
+			width: 20px;
+			height: 20px;
+		}
+	}
+	
+}
 .el-tabs__header{
   margin-bottom: 28px;
   font-size: 20px;

@@ -19,6 +19,10 @@ const router = createRouter({
       component: Layout,
       children: [
         {
+          path: '/',
+          redirect: '/home'
+        },
+        {
           path: '/publish',
           name: 'publish',
           component: PublishView
