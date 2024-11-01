@@ -60,7 +60,8 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 		//privateGroup.POST("/roles", ginx.WrapJsonBody[types.CreateRoleReq](r.CreateRoleCtl))  // 创建角色
 		//privateGroup.DELETE("/roles/:id", ginx.WrapResponse(r.DeleteRoleCtl))                 // 删除角色
 		//privateGroup.PUT("/roles", ginx.WrapJsonBody[types.UpdateRoleReq](r.UpdateRoleCtl))   //	更新角色
-		privateGroup.POST("/notes", ginx.WrapJsonBodyAndClaims[types.CreateNoteForm, jwt.UserClaims](n.CreateNoteCtl)) // 发布文章
+		privateGroup.POST("/notes/image", ginx.WrapJsonBodyAndClaims[types.CreateNoteForm, jwt.UserClaims](n.CreateNoteCtl)) // 发布图文
+		privateGroup.POST("/notes/video", ginx.WrapJsonBodyAndClaims[types.CreateNoteForm, jwt.UserClaims](n.CreateNoteCtl)) // 发布视频
 		privateGroup.PUT("/notes/:uuid/pass", ginx.WrapResponse(n.PassNoteCtl))
 		privateGroup.GET("/notes", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListCtl))                            // 获取文章列表
 		privateGroup.GET("notes/:uuid/published", ginx.WrapQueryBody[types.QueryNoteForm](n.NoteListByUserPublished)) // 获取某个用户已经发表的文章信息

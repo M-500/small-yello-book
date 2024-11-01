@@ -11,4 +11,5 @@ type ConfigInstance struct {
 	Logs     cfg.LogCfg      `mapstructure:"logs"`
 	Server   cfg.ServerCfg   `mapstructure:"server"`
 	Jwt      cfg.JwtCfg      `mapstructure:"jwt"`
+	Minio cfg.MinioCfg `mapstructure:"minio"`
 }

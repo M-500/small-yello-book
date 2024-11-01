@@ -8,10 +8,11 @@ import (
 )
 
 type CreateNoteForm struct {
-	NoteTitle   string    `form:"noteTitle" json:"noteTitle" binding:"required"`               // 标记
-	ContentType int       `form:"contentType" json:"contentType" binding:"required,oneof=1 2"` // 文章类型，图文/视频
-	NoteContent string    `form:"noteContent" json:"noteContent"  binding:"required"`          // 内容
-	ImgList     []ImgItem `form:"imgList" json:"imgList" binding:"required"`                   // 图片列表
+	NoteTitle     string    `form:"noteTitle" json:"noteTitle" binding:"required"`               // 标记
+	ContentType   int       `form:"contentType" json:"contentType" binding:"required,oneof=1 2"` // 文章类型，图文/视频
+	CoverImageUrl string    `form:"coverImageUrl" json:"coverImageUrl" binding:""`               // 封面图
+	NoteContent   string    `form:"noteContent" json:"noteContent"  binding:"required"`          // 内容
+	ImgList       []ImgItem `form:"imgList" json:"imgList" binding:"required"`                   // 图片列表
 	//Address     string    `form:"address" json:"address"`
 	Statement   string `form:"statement" json:"statement" binding:"required"` // 自主声明  1.原创 2.转载 3.其他
 	PublishTime uint   `form:"publishTime" json:"publishTime"`                // 发布时间
