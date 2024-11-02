@@ -133,10 +133,11 @@ const mediaVal = ref({
 	url:props.videoUrl
 })
 const pubNotForm:publishNoteForm = reactive({
-  noteTitle: '库里起飞',
-  noteContent: '就是库里咯',
+  noteTitle: '',
+  noteContent: '',
   private: true,
   statement: '',
+	coverImageUrl:coverImage, 
   publishTime: 0,
   contentType: 2,
   imgList: [],

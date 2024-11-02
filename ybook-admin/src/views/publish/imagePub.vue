@@ -130,6 +130,7 @@ const pubNotForm:publishNoteForm = reactive({
   noteContent: '就是库里咯',
   private: true,
   statement: '',
+	coverImageUrl: '',
   publishTime: 0,
   contentType: 1,
   imgList: imgList.value as imageForm[]

@@ -3,6 +3,7 @@ export interface publishNoteForm {
   noteContent: string
   imgList: imageForm[]
   statement: string
+  coverImageUrl: string
   publishTime: number
   private: boolean
   contentType: number

@@ -35,11 +35,12 @@ func main() {
 		return
 	}
 	app := &internal.App{
-		Engine: nil,
-		DB:     db,
-		Cli:    redisCli,
-		Lg:     logger,
-		Cfg:    config,
+		Engine:      nil,
+		DB:          db,
+		Cli:         redisCli,
+		Lg:          logger,
+		Cfg:         config,
+		MinioClient: initialize.MustSetupMinio(&config.Minio),
 	}
 	app.Engine = web.SetupWebEngine(app)
 

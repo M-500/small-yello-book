@@ -5,6 +5,7 @@ import (
 	"gin-svc/internal/conf"
 	"gin-svc/pkg/ginx"
 	"github.com/gin-gonic/gin"
+	"github.com/minio/minio-go/v7"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -13,36 +14,55 @@ import (
 )
 
 type FileController struct {
-	cfg *conf.ConfigInstance
+	cfg     *conf.ConfigInstance
+	mClient *minio.Client
 }
 
-func NewFileController(cfg *conf.ConfigInstance) *FileController {
+func NewFileController(cfg *conf.ConfigInstance, client *minio.Client) *FileController {
 	return &FileController{
-		cfg: cfg,
+		cfg:     cfg,
+		mClient: client,
 	}
 }
 
 func (f *FileController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
-	file, err := ctx.FormFile("file")
+	file, header, err := ctx.Request.FormFile("file")
 	if err != nil {
 		return ginx.Error(http.StatusBadRequest, "Failed to get file"), err
 	}
 	// Create static directory if it doesn't exist
-	staticDir := "static"
-	if _, err := os.Stat(staticDir); os.IsNotExist(err) {
-		os.Mkdir(staticDir, os.ModePerm)
+	bucketName := f.cfg.Minio.BucketName
+	objectName := fmt.Sprintf("%d_%s", time.Now().Unix(), header.Filename)
+	exists, err := f.mClient.BucketExists(ctx, bucketName)
+	if err != nil {
+		return ginx.Error(http.StatusInternalServerError, "Failed to check bucket"), err
 	}
-	// Save the file to the static directory
-	filename := fmt.Sprintf("%d_%s", time.Now().Unix(), file.Filename)
-	filePath := filepath.Join(staticDir, filename)
-	if err := ctx.SaveUploadedFile(file, filePath); err != nil {
-		return ginx.Error(http.StatusInternalServerError, "Failed to save file"), err
+	if !exists {
+		if err := f.mClient.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{}); err != nil {
+			return ginx.Error(http.StatusInternalServerError, "Failed to create bucket"), err
+		}
 	}
-
-	// Return the file access URL
-	fileURL := fmt.Sprintf("/%s/%s", staticDir, filename)
-	url := f.cfg.Server.FileUploadHost + fileURL
+	// 将文件上传到 MinIO
+	_, err = f.mClient.PutObject(ctx, bucketName, objectName, file, header.Size, minio.PutObjectOptions{
+		ContentType: header.Header.Get("Content-Type"),
+	})
+	// 上传成功，返回文件访问 URL
+	url := fmt.Sprintf("http://%s/%s/%s", f.cfg.Minio.Endpoint, bucketName, objectName)
 	return ginx.SuccessJson(url), nil
+	//staticDir := "static"
+	//if _, err := os.Stat(staticDir); os.IsNotExist(err) {
+	//	os.Mkdir(staticDir, os.ModePerm)
+	//}
+	//// Save the file to the static directory
+	//filename := fmt.Sprintf("%d_%s", time.Now().Unix(), file.Filename)
+	//filePath := filepath.Join(staticDir, filename)
+	//if err := ctx.SaveUploadedFile(file, filePath); err != nil {
+	//	return ginx.Error(http.StatusInternalServerError, "Failed to save file"), err
+	//}
+	// Return the file access URL
+	//fileURL := fmt.Sprintf("/%s/%s", staticDir, filename)
+	//url := f.cfg.Server.FileUploadHost + fileURL
+	//return ginx.SuccessJson(url), nil
 }
 
 func (f *FileController) ReadFileCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {

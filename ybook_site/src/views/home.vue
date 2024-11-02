@@ -69,6 +69,7 @@ onMounted(() => {
 		.note_container{
 			display: flex; // flex布局
       flex-wrap: wrap; // 自动换行
+      align-items: flex-start; // 顶部对齐
       justify-content: flex-start; // 两端对齐
       gap: 20px;  // 间距
 

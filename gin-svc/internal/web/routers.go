@@ -84,7 +84,7 @@ func SetupWebEngine(app *internal.App) *gin.Engine {
 	return engine
 }
 func InitFileController(app *internal.App) *controller.FileController {
-	return controller.NewFileController(app.Cfg)
+	return controller.NewFileController(app.Cfg, app.MinioClient)
 }
 
 func InitUserController(app *internal.App) *controller.UserController {

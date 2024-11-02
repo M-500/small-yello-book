@@ -37,3 +37,10 @@ email:
   port: 25
   addr: "18574945291@163.com"
   secret_key: "PNNSCQKYTCCBCIIN"
+
+minio:
+  endpoint: "127.0.0.1:9000"
+  access_key_id: "root"
+  secret_access_key: "wulinlin"
+  bucket_name: "ybook"
+  use_ssl: false

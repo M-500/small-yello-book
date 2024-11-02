@@ -7,24 +7,22 @@ import (
 	"github.com/minio/minio-go/v7/pkg/credentials"
 )
 
-
-func SetupMinio(c *cfg.MinioCfg)(*minio.Client,error){
+// 初始化minio的客户端
+func SetupMinio(c *cfg.MinioCfg) (*minio.Client, error) {
 	minioClient, err := minio.New(c.Endpoint, &minio.Options{
 		Creds:  credentials.NewStaticV4(c.AccessKeyID, c.SecretAccessKey, ""),
 		Secure: c.UseSSL,
 	})
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
-	return minioClient,nil
+	return minioClient, nil
 }
 
-
-func MustSetupMinio(c *cfg.MinioCfg)*minio.Client {
-	client,err:=SetupMinio(c)
-	if err!=nil{
+func MustSetupMinio(c *cfg.MinioCfg) *minio.Client {
+	client, err := SetupMinio(c)
+	if err != nil {
 		panic(err)
 	}
 	return client
 }
-
