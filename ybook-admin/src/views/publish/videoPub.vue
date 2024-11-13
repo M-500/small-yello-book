@@ -336,7 +336,7 @@ function generateVideoCover(file: File): Promise<Blob | null> {
 						overflow: hidden;
 						img{
 							height: 100%;
-              // width: 100%;
+              width: 100%;
               // 填充模式
               object-fit: cover;
 						}
