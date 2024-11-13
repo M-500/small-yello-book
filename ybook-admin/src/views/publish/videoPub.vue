@@ -107,9 +107,17 @@
     </div>
 
     <div class="preview">
-      <div class="phone-wrapper">
-        <p style="height: 544px;">hah</p>
-      </div>
+      <video_phone :videoUrl="mediaVal.url"
+                   :coverImgUrl="coverImage" />
+      <!-- <div class="phone-wrapper">
+        <img src="@/assets/imgs/phone_bg.png"
+             alt="">
+        <p style="height: 544px;">hah</p> 
+        <div class="cover-base">
+          <img :src="coverImage"
+               alt="">
+        </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -117,6 +125,7 @@
 <script setup lang="ts">
 import { reactive,ref,watch,watchEffect, defineProps } from "vue"
 import type { publishNoteForm,imageForm } from '@/api/note/type'
+import video_phone from "./compents/video_phone.vue"
 import { publishNote } from '@/api/note'
 import {uploadFile} from '@/api/file'
 const props = defineProps({
@@ -325,8 +334,11 @@ function generateVideoCover(file: File): Promise<Blob | null> {
 						height: 100px;
 						border-radius: 6px;
 						overflow: hidden;
-						.coverImage{
+						img{
 							height: 100%;
+              // width: 100%;
+              // 填充模式
+              object-fit: cover;
 						}
 					}
 					.content{
@@ -441,11 +453,30 @@ function generateVideoCover(file: File): Promise<Blob | null> {
 		top: 0;
 		.phone-wrapper{
 			width: 100%;
-			height: 100%;
 			position: relative;
-			background-image: url('@/assets/imgs/phone_bg.png');
+			// background-image: url('@/assets/imgs/phone_bg.png');
 			background-size: 100% 100%;
+      height: 544px;
 			overflow: hidden;
+      z-index: 1000;
+      // 在最上层
+      z-index: 1;
+      .cover-base{
+        z-index: 100;
+        width: 100%;
+        // height: 100%;
+        padding: 1.5px;
+        border-radius: 34px;
+        background: #000;
+        z-index: 2;
+        // 在父元素的下层
+        img{
+          z-index: 111;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
 		}
 	}
 }</style>
