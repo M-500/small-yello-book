@@ -14,6 +14,8 @@
       </video>
       <img src="@/assets/imgs/play.png"
            class="play"
+           v-show="!isPlay"
+           @click="playVideo"
            alt="">
     </div>
 
@@ -21,12 +23,21 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue"
-
+import { defineProps, ref } from "vue"
+const isPlay = ref(false)
 const props = defineProps({
   videoUrl: String,
   coverImgUrl: String
 })
+
+const playVideo = () => {
+  isPlay.value = true
+  const video = document.querySelector('video')
+  video.play()
+  video.addEventListener('ended', () => {
+    isPlay.value = false
+  })
+}
 </script>
 
 <style lang="scss" scoped>
