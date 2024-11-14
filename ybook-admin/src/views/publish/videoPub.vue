@@ -13,8 +13,8 @@
               <div class="basic-info">
                 <div class="title">优秀的封面会吸引更多人浏览笔记</div>
                 <div class="info">
-                  <div>视频大小：529.21 KB</div>
-                  <div>视频时长：2.54s</div>
+                  <div class="info-bar">视频大小：529.21 KB</div>
+                  <div class="info-bar">视频时长：2.54s</div>
                 </div>
               </div>
               <div class="operator">
@@ -212,59 +212,7 @@ function handlePublishTimeChange (value:number) {
     pubNotForm.publishTime = value;
   }
 }
-// 随机选择视频中的一帧作为封面
-// function generateVideoCover(file: File): Promise<string | null> {
-//   return new Promise((resolve, reject) => {
-//     // 创建 video 和 canvas 元素
-//     const videoElement = document.createElement('video');
-//     const canvas = document.createElement('canvas');
-//     const context = canvas.getContext('2d');
 
-//     if (!context) {
-//       reject('Canvas context not supported');
-//       return;
-//     }
-
-//     // 为 video 元素设置文件 URL
-//     videoElement.src = URL.createObjectURL(file);
-//     videoElement.load();
-
-//     // 监听视频元数据加载完毕的事件
-//     videoElement.onloadedmetadata = () => {
-//       const randomTime = Math.random() * videoElement.duration; // 随机时间点
-//       videoElement.currentTime = randomTime;
-
-//       // 监听视频 seek 事件
-//       videoElement.onseeked = () => {
-//         // 设置 canvas 尺寸为视频的宽高
-//         canvas.width = videoElement.videoWidth;
-//         canvas.height = videoElement.videoHeight;
-
-//         // 将当前帧绘制到 canvas 上
-//         context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-
-//         // 将 canvas 内容转换为 base64 格式的图片
-				
-//         coverImage.value = canvas.toDataURL('image/jpeg');
-//         // resolve(coverImage.value);
-// 				// console.log("mabi ",coverImage)
-// 				// const videoCoverElement = document.getElementById('coverImg');
-// 				// if (!videoCoverElement) {
-// 				// 	console.log('没有找到元素')
-// 				// 	return;
-// 				// }
-// 				// videoCoverElement.style.backgroundImage = `url(${coverImage.value})`; // 将封面图设置为背景图
-//         // // 释放 URL 对象，防止内存泄露
-//         URL.revokeObjectURL(videoElement.src);
-//       };
-//     };
-
-//     // 处理视频加载错误
-//     videoElement.onerror = (error) => {
-//       reject('Failed to load video file');
-//     };
-//   });
-// }
 
 function generateVideoCover(file: File): Promise<Blob | null> {
   return new Promise((resolve, reject) => {
@@ -365,23 +313,29 @@ function generateVideoCover(file: File): Promise<Blob | null> {
 								justify-content: flex-start;
 								margin-top: 6px;
     						width: 100%;
-								div{
+								.info-bar{
 									color: rgba(0, 0, 0, .45);
 									font-family: PingFang SC;
 									font-size: 12px;
 									font-style: normal;
 									font-weight: 400;
 									line-height: 22px;
+                  // 如果不是第一个元素，就添加左边距
+                  &:not(:first-child){
+                    margin-left: 24px;
+                  }
 								}
+                
 							}
 						}
 						.operator{
 							display: flex;
-							flex-direction: column;
+							// flex-direction: column;
 							width: 160px;
 							align-items: center;
 							span{
 								text-align: center;
+                cursor: pointer;
 								font-family: PingFang SC;
 								font-size: 14px;
 								font-style: normal;

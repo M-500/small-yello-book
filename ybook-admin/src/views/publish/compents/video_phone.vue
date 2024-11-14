@@ -18,7 +18,6 @@
            @click="playVideo"
            alt="">
     </div>
-
   </div>
 </template>
 
