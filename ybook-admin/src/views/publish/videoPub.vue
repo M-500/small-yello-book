@@ -18,7 +18,8 @@
                 </div>
               </div>
               <div class="operator">
-                <span style="color: rgb(255, 36, 66);">修改封面</span>
+                <span style="color: rgb(255, 36, 66);"
+                      @click="dialogVisible = true">修改封面</span>
                 <span style="color: rgb(255, 36, 66);">替换视频</span>
               </div>
             </div>
@@ -107,18 +108,29 @@
     </div>
 
     <div class="preview">
+      <!-- 视频预览 -->
       <video_phone :videoUrl="mediaVal.url"
                    :coverImgUrl="coverImage" />
-      <!-- <div class="phone-wrapper">
-        <img src="@/assets/imgs/phone_bg.png"
-             alt="">
-        <p style="height: 544px;">hah</p> 
-        <div class="cover-base">
-          <img :src="coverImage"
-               alt="">
-        </div>
-      </div> -->
     </div>
+
+    <el-dialog v-model="dialogVisible"
+               title="设置封面"
+               width="500">
+      <div class="cover-choice-container">
+        <video_edit :videoUrl="mediaVal.url"
+                    :coverImgUrl="coverImage"
+                    @update:coverImgUrl="coverImage = $event" />
+      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="primary"
+                     @click="dialogVisible = false">
+            Confirm
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -126,6 +138,7 @@
 import { reactive,ref,watch,watchEffect, defineProps } from "vue"
 import type { publishNoteForm,imageForm } from '@/api/note/type'
 import video_phone from "./compents/video_phone.vue"
+import video_edit from "./compents/video_edit.vue"
 import { publishNote } from '@/api/note'
 import {uploadFile} from '@/api/file'
 const props = defineProps({
@@ -135,7 +148,7 @@ const props = defineProps({
   },
 	videoFile:Object,
 })
-console.log('props',props.videoUrl)
+const dialogVisible = ref(false)
 const coverImage = ref('')
 const mediaVal = ref({
 	name:'',
@@ -170,7 +183,7 @@ watch(() => props.videoUrl,(newFile) => {
   },
   { deep: true } // 使用 deep 选项，监听对象内部变化
 )
-// 监听到文件的变化
+// 监听到文件的变化  生成封面图上传到后台
 watchEffect(() => {
   const file = props.videoFile
 	console.log("wo diiu ")
@@ -205,6 +218,7 @@ const handlePublish = () => {
   })
 }
 const currentTimestamp = Math.floor(Date.now() / 1000);
+
 function handlePublishTimeChange (value:number) {
   if (value === currentTimestamp) {
     pubNotForm.publishTime = value;
@@ -213,7 +227,7 @@ function handlePublishTimeChange (value:number) {
   }
 }
 
-
+// 生成视频封面图
 function generateVideoCover(file: File): Promise<Blob | null> {
   return new Promise((resolve, reject) => {
     const videoElement = document.createElement('video');

@@ -37,6 +37,15 @@ const playVideo = () => {
     isPlay.value = false
   })
 }
+
+const pause = () => {
+  console.log('pause111')
+  const video = document.querySelector('video')
+  if (isPlay.value) {
+    video.pause()
+    isPlay.value = false
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -95,11 +104,10 @@ video::-webkit-media-controls-enclosure{
 			position: relative;
 			border-bottom-left-radius: 0;
 			border-bottom-right-radius: 0;
-			object-fit: contain;
+			object-fit: contain; // 视频保持原始宽高比，不拉伸
 			z-index: 110;
 			object-position: center center;
 			cursor: pointer;
-			object-fit: cover;
 		}
 		.play {
 			width: 40px;

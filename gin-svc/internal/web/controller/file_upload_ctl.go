@@ -49,20 +49,6 @@ func (f *FileController) UploadImgCtl(ctx *gin.Context) (result ginx.JsonResult,
 	// 上传成功，返回文件访问 URL
 	url := fmt.Sprintf("http://%s/%s/%s", f.cfg.Minio.Endpoint, bucketName, objectName)
 	return ginx.SuccessJson(url), nil
-	//staticDir := "static"
-	//if _, err := os.Stat(staticDir); os.IsNotExist(err) {
-	//	os.Mkdir(staticDir, os.ModePerm)
-	//}
-	//// Save the file to the static directory
-	//filename := fmt.Sprintf("%d_%s", time.Now().Unix(), file.Filename)
-	//filePath := filepath.Join(staticDir, filename)
-	//if err := ctx.SaveUploadedFile(file, filePath); err != nil {
-	//	return ginx.Error(http.StatusInternalServerError, "Failed to save file"), err
-	//}
-	// Return the file access URL
-	//fileURL := fmt.Sprintf("/%s/%s", staticDir, filename)
-	//url := f.cfg.Server.FileUploadHost + fileURL
-	//return ginx.SuccessJson(url), nil
 }
 
 func (f *FileController) ReadFileCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {

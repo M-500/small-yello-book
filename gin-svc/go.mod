@@ -5,6 +5,7 @@ go 1.22
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
 	github.com/DanPlayer/randomname v1.0.1
+	github.com/anaskhan96/go-password-encoder v0.0.0-20201010210601-c765b799fd72
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/locales v0.14.1

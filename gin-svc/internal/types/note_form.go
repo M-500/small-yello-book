@@ -19,6 +19,16 @@ type CreateNoteForm struct {
 	Private     bool   `json:"private" form:"private" binding:"required"`     // 是否私密
 }
 
+type CreateVideoNoteForm struct {
+	NoteTitle     string `form:"noteTitle" json:"noteTitle" binding:"required"`      // 标记
+	CoverImageUrl string `form:"coverImageUrl" json:"coverImageUrl" binding:""`      // 封面图
+	VideoUrl      string `form:"videoUrl" json:"videoUrl" binding:"required"`        // 视频地址
+	NoteContent   string `form:"noteContent" json:"noteContent"  binding:"required"` // 内容
+	Statement     string `form:"statement" json:"statement" binding:"required"`      // 自主声明  1.原创 2.转载 3.其他
+	PublishTime   uint   `form:"publishTime" json:"publishTime"`                     // 发布时间
+	Private       bool   `json:"private" form:"private" binding:"required"`          // 是否私密
+}
+
 type ImgItem struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`

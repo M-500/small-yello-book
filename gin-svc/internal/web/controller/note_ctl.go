@@ -31,6 +31,17 @@ func (n *NoteCtl) CreateNoteCtl(ctx *gin.Context, req types.CreateNoteForm, uc j
 	return ginx.Success(), nil
 }
 
+// CreateVideoNoteCtl
+//
+//	@Description: 创建视频笔记
+//	@receiver n
+//	@param ctx
+//	@return result
+//	@return err
+func (n *NoteCtl) CreateVideoNoteCtl(ctx *gin.Context, req types.CreateVideoNoteForm, uc jwt.UserClaims) (result ginx.JsonResult, err error) {
+	return ginx.Success(), nil
+}
+
 func (n *NoteCtl) PassNoteCtl(ctx *gin.Context) (result ginx.JsonResult, err error) {
 	uuid := ctx.Param("uuid")
 	if utils.IsBlank(uuid) {
