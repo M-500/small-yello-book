@@ -35,12 +35,12 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import type { UploadProps } from 'element-plus';
-import { ref }  from 'vue';
+<script setup>
+import { UploadProps } from 'element-plus';
+import { ref } from 'vue';
 import { defineEmits } from 'vue';
 import { defineProps } from 'vue';
-const emit = defineEmits(['updateData','updateFile']);
+const emit = defineEmits(['updateData', 'updateFile']);
 import { computed } from 'vue';
 // 获取环境变量中的 VITE_SERVER
 const serverUrl = import.meta.env.VITE_SERVER;
@@ -54,34 +54,34 @@ const coverImgUrl = ref('')
 
 
 defineProps({
-	// 接受父组件传递的参数
-	mark: {
-		type: String,
-		default: ''
-	},
-	btnTitle: {
-		type: String,
-		required: true
-	},
-	accept: {
-		type: String,
-		default: 'image/*'
-	},
-	tipList: {
-		type: Array,
-		default: () => []
-	}
+  // 接受父组件传递的参数
+  mark: {
+    type: String,
+    default: ''
+  },
+  btnTitle: {
+    type: String,
+    required: true
+  },
+  accept: {
+    type: String,
+    default: 'image/*'
+  },
+  tipList: {
+    type: Array,
+    default: () => []
+  }
 })
 // 处理文件上传
 const handleChange = (file) => {
-	emit('updateFile', file.raw)
+  emit('updateFile', file.raw)
 }
 
 
-const handlePreview: UploadProps['onSuccess'] = (data) => {
-	coverImgUrl.value = data.data
-	emit('updateData', coverImgUrl.value)
-	
+const handlePreview = (data) => {
+  coverImgUrl.value = data.data
+  emit('updateData', coverImgUrl.value)
+
 }
 </script>
 

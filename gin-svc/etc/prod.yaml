@@ -22,7 +22,7 @@ jwt:
 
 
 database:
-  dsn: "root:root@tcp(127.0.0.1:13306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "admin:admin@123@tcp(10.150.101.114:3306)/ybook-pord?charset=utf8mb4&parseTime=True&loc=Local"
   max_idle_conn: 10  # 最大空闲连接数
   max_open_conn: 10  # 最大连接数
 

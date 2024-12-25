@@ -228,7 +228,7 @@ function handlePublishTimeChange (value:number) {
 }
 
 // 生成视频封面图
-function generateVideoCover(file: File): Promise<Blob | null> {
+function generateVideoCover(file) {
   return new Promise((resolve, reject) => {
     const videoElement = document.createElement('video');
     const canvas = document.createElement('canvas');

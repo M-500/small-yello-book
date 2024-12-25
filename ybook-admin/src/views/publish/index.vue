@@ -55,11 +55,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { reactive, ref, watch } from 'vue'
-import type {  TabsPaneContext } from 'element-plus'
+import { TabsPaneContext } from 'element-plus'
 import YbUpload from '@/components/YbUpload/index.vue'
-import type { UploadUserFile } from 'element-plus'
+import { UploadUserFile } from 'element-plus'
 import { useRouter } from 'vue-router'
 import ImagePub from './imagePub.vue'
 import VideoPub from './videoPub.vue'
@@ -70,18 +70,18 @@ const noteType = ref('image')
 const activeName = ref('first')
 const step1 = ref(true)
 const videoTips = ref([
-	{
-		title: '视频大小',
-		content: ['支持时长60分钟以内，', '最大20GB的视频文件']
-	},
-	{
-		title: '视频格式',
-		content: ['支持常用视频格式', '推荐使用mp4、mov']
-	},
-	{
-		title: '视频分辨率',
-		content: ['推荐上传720P(1280*720)及以上视频，', '超过1080P的视频用网页端上传画质更清晰']
-	}
+  {
+    title: '视频大小',
+    content: ['支持时长60分钟以内，', '最大20GB的视频文件']
+  },
+  {
+    title: '视频格式',
+    content: ['支持常用视频格式', '推荐使用mp4、mov']
+  },
+  {
+    title: '视频分辨率',
+    content: ['推荐上传720P(1280*720)及以上视频，', '超过1080P的视频用网页端上传画质更清晰']
+  }
 ]);
 const imageTips = ref([
   {
@@ -100,30 +100,30 @@ const imageTips = ref([
 
 const coverImgeUrl = ref('')
 const videoUrl = ref('')
-const videoFile = ref<UploadUserFile | null>(null)
+const videoFile = ref(null)
 
-const handleClick = (tab: TabsPaneContext, event: Event) => {
+const handleClick = (tab, event) => {
   console.log(tab, event)
 }
-function handleUpdateData(data: string) {
+function handleUpdateData (data) {
   step1.value = false
   noteType.value = 'image'
   coverImgeUrl.value = data
 }
 
-function handlerUpdateVideo(data: string) {
+function handlerUpdateVideo (data) {
   step1.value = false
   noteType.value = 'video'
-  videoUrl.value=data
-  console.log('videoUrl',videoUrl.value)
+  videoUrl.value = data
+  console.log('videoUrl', videoUrl.value)
 }
 
-const handlerUpdateFile = (file: UploadUserFile) => {
+const handlerUpdateFile = (filters) => {
   // 将视频文件传递给子组件
   videoFile.value = file
-  console.log("妈的",videoFile.value)
+  console.log("妈的", videoFile.value)
 }
-function goback (){
+function goback () {
   coverImgeUrl.value = ""
   step1.value = true
 }

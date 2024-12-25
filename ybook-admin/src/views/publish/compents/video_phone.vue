@@ -62,8 +62,8 @@ video::-webkit-media-controls-timeline {
 }
 //所有控件
 video::-webkit-media-controls-enclosure{ 
-        display: none;
-    }
+    display: none;
+}
 
 .video-container {
 	position: relative;

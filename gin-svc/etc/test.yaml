@@ -1,8 +1,8 @@
 
 server:
-  addr: 8023
+  addr: 8122
   mode: "debug"
-  file_upload_host: "http://192.168.1.106:8023"
+  file_upload_host: "http://127.0.0.1:8122"
 
 logs:
   is_dev: true
@@ -15,20 +15,20 @@ logs:
 
 jwt:
   secret: "k6CswdUm77WKcbM68UQUuxVsHSpTCwgK"
-  expire: 360000000
+  expire: 3600
   jwt_header_key: "Authorization"
   jwt_prefix: "Bearer"
 
 
 
 database:
-  dsn: "root:root@tcp(127.0.0.1:13306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"
+  dsn: "root:root@tcp(127.0.0.1:3306)/y_book?charset=utf8mb4&parseTime=True&loc=Local"
   max_idle_conn: 10  # 最大空闲连接数
   max_open_conn: 10  # 最大连接数
 
 redis:
   addr: "127.0.0.1"
-  port: 16379
+  port: 6379
   db: 1
   password: ""
 
